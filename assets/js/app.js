@@ -593,8 +593,8 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
   function detectUrgentExposure(text, explicitChoice) {
     if (explicitChoice === "money" || explicitChoice === "access") return true;
     const normalized = String(text).toLowerCase().replace(/\s+/g," ");
-    const actionFirst = /\b(?:sudah|telah|terlanjur|tadi)\b\s+(?:saya\s+)?(?:transfer|mentransfer|membayar|bayar|mengirim|kirim|memberi|membagikan|kasih|memasang|install)(?:.{0,28})(?:uang|dana|otp|pin|password|kata sandi|kode|apk|aplikasi)?/;
-    const objectFirst = /(?:uang|dana)\s+\b(?:sudah|telah)\b\s+(?:terkirim|ditransfer)|(?:otp|pin|password|kata sandi|kode)\s+(?:tadi\s+)?(?:sudah\s+)?(?:saya\s+)?(?:beri|berikan|bagikan|kasih)|kehilangan akses/;
+    const actionFirst = /\b(?:sudah|telah|terlanjur|tadi)\b\s+(?:saya\s+)?(?:transfer|mentransfer|membayar|bayar|mengirim|kirim|memberi|membagikan|kasih|memasang|install|instal|menginstal|menginstall)(?:.{0,35})(?:uang|dana|otp|pin|password|kata sandi|kode|apk|aplikasi)?/;
+    const objectFirst = /(?:uang|dana)(?:.{0,28})\b(?:sudah|telah)\b\s+(?:terkirim|ditransfer|hilang)|(?:otp|pin|password|kata sandi|kode)\s+(?:tadi\s+)?(?:sudah\s+)?(?:saya\s+)?(?:beri|berikan|bagikan|kasih)|kehilangan akses/;
     return actionFirst.test(normalized) || objectFirst.test(normalized);
   }
 
@@ -722,6 +722,11 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       }catch(_){return {invalid:true,signals:[],note:"Format link (URL) tidak dapat dibaca."};}
     }
 
+    let consultHistory = [];
+    let currentExposure = "none";
+    let activePersona = null;
+    let activeCredibility = null;
+
     function localResult(raw,exposure,urgent=false,submittedUrl=""){
       const low=raw.toLowerCase();
       const scored=DATA.cards.map(card=>({card,score:[card.title,card.summary,...card.channels,...card.contexts,...card.tactics,card.requestedAction].join(" ").toLowerCase().split(/\W+/).filter(word=>word.length>3&&low.includes(word)).length})).sort((left,right)=>right.score-left.score);
@@ -735,6 +740,20 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       const urlAnalysis=inspectUrlLocally(submittedUrl);
       if(urlAnalysis?.signals?.length)clues.unshift(...urlAnalysis.signals.map(signal=>signal.label));
       const localAssessment=urgent||matches.length||urlAnalysis?.signals?.length?"warning_signs":submittedUrl?"verify_independently":"insufficient_information";
+      const persona = urgent
+        ? { id: "korban_mendesak", label: "Kondisi Mendesak", description: "Telah mengirimkan uang atau data rahasia." }
+        : { id: "warga_umum", label: "Warga Umum", description: "Panduan keselamatan digital terarah." };
+      const credibility = {
+        score: urgent ? 95 : clues.length ? 70 : 20,
+        level: urgent ? "tinggi" : clues.length ? "waspada" : "aman_bersyarat",
+        label: urgent ? "Tingkat Risiko Indikasi: Tinggi (95%)" : clues.length ? "Tingkat Risiko Indikasi: Waspada (70%)" : "Tingkat Risiko Indikasi: Rendah (20%)",
+        indicators: clues.slice(0, 4)
+      };
+      const followUpSuggestions = [
+        "Bagaimana cara memastikan keaslian pihak yang menghubungi saya?",
+        "Apa langkah pengamanan akun yang perlu saya lakukan sekarang?",
+        "Ke mana saya bisa melaporkan nomor atau tautan mencurigakan ini?"
+      ];
       return {
         mode:urgent?"urgent":"rules",
         assessment:localAssessment,
@@ -747,6 +766,9 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         relatedCards:matches,
         officialLinks:[],
         urlAnalysis,
+        persona,
+        credibility,
+        followUpSuggestions,
         redaction:{applied:redactSensitive(raw)!==raw,count:0,categories:[]},
         notice:urgent?"Cabang darurat berjalan lokal dan tidak dikirim ke model.":"Layanan AI tidak dapat dijangkau; hasil ini berasal dari aturan lokal WargaSiaga.",
         disclaimer:"Hasil ini adalah panduan awal, bukan sertifikasi aman, keputusan hukum, atau verifikasi identitas.",
@@ -755,7 +777,99 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     }
 
     function renderList(items){return `<ul>${(Array.isArray(items)?items:[]).map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>`;}
-    function renderAssessment(payload){
+    function attachHelpdeskEvents(){
+      const followupForm=document.getElementById("helpdesk-followup-form");
+      const followupInput=document.getElementById("helpdesk-followup-input");
+      const dialogueMessages=document.getElementById("dialogue-messages");
+      const suggestionsChips=document.getElementById("suggestions-chips");
+      const resetBtn=document.getElementById("helpdesk-reset-btn");
+      const sendBtn=document.getElementById("helpdesk-send-btn");
+      if(!followupForm||!followupInput)return;
+
+      document.querySelectorAll(".suggestion-chip").forEach(btn=>{
+        btn.addEventListener("click",()=>{
+          followupInput.value=btn.dataset.question;
+          followupForm.requestSubmit();
+        });
+      });
+
+      resetBtn?.addEventListener("click",()=>{
+        consultHistory=[];
+        input.value="";
+        urlInput.value="";
+        count.textContent="0";
+        result.classList.add("hidden");
+        result.innerHTML="";
+        input.focus();
+        input.scrollIntoView({behavior:"smooth",block:"center"});
+      });
+
+      followupForm.addEventListener("submit",async e=>{
+        e.preventDefault();
+        const query=followupInput.value.trim();
+        if(!query)return;
+        followupInput.value="";
+        sendBtn.disabled=true;
+
+        const userBubble=document.createElement("div");
+        userBubble.className="chat-bubble user";
+        userBubble.innerHTML=`<div>${escapeHtml(query)}</div><span class="bubble-meta">Pertanyaan Anda</span>`;
+        dialogueMessages.appendChild(userBubble);
+
+        const loadingBubble=document.createElement("div");
+        loadingBubble.className="chat-bubble assistant";
+        loadingBubble.innerHTML=`<div><span class="loading-spinner" aria-hidden="true" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:6px"></span>Menganalisis konsultasi lanjutan...</div><span class="bubble-meta">${icon("bot")} Asisten WargaSiaga</span>`;
+        dialogueMessages.appendChild(loadingBubble);
+        dialogueMessages.scrollTop=dialogueMessages.scrollHeight;
+
+        try{
+          const response=await fetch("api/consult",{
+            method:"POST",
+            headers:{"Content-Type":"application/json","Accept":"application/json"},
+            body:JSON.stringify({
+              text:query,
+              history:consultHistory,
+              exposure:currentExposure,
+              persona:activePersona?.id,
+              consent:consent.checked
+            })
+          });
+          const followUpPayload=await response.json();
+          if(!response.ok)throw new Error(followUpPayload?.error?.message||"Layanan belum dapat memproses pertanyaan.");
+
+          const actionsHtml=followUpPayload.nextActions?.length?`<div style="margin-top:6px;font-size:12px;opacity:0.95"><strong>Langkah disarankan:</strong><ul style="margin:4px 0 0 16px;padding:0">${followUpPayload.nextActions.map(a=>`<li>${escapeHtml(a)}</li>`).join("")}</ul></div>`:"";
+          loadingBubble.innerHTML=`<div><strong>${escapeHtml(followUpPayload.headline||"Panduan Lanjutan")}</strong>: ${escapeHtml(followUpPayload.summary)}</div>${actionsHtml}<span class="bubble-meta">${icon("bot")} Asisten WargaSiaga</span>`;
+
+          consultHistory.push({role:"user",content:query});
+          consultHistory.push({role:"assistant",content:`${followUpPayload.headline}. ${followUpPayload.summary}`});
+
+          if(Array.isArray(followUpPayload.followUpSuggestions)&&followUpPayload.followUpSuggestions.length){
+            suggestionsChips.innerHTML=followUpPayload.followUpSuggestions.map(q=>`<button class="suggestion-chip" type="button" data-question="${escapeHtml(q)}">${escapeHtml(q)}</button>`).join("");
+            document.querySelectorAll(".suggestion-chip").forEach(btn=>{
+              btn.addEventListener("click",()=>{
+                followupInput.value=btn.dataset.question;
+                followupForm.requestSubmit();
+              });
+            });
+          }
+        }catch(err){
+          loadingBubble.innerHTML=`<div>${escapeHtml(err.message||"Tidak dapat memuat respons lanjutan. Periksa koneksi Anda.")}</div><span class="bubble-meta">${icon("bot")} Sistem</span>`;
+        }finally{
+          sendBtn.disabled=false;
+          dialogueMessages.scrollTop=dialogueMessages.scrollHeight;
+        }
+      });
+    }
+
+    function renderAssessment(payload, originalInput = ""){
+      activePersona = payload.persona || { label: "Warga Umum", description: "Panduan keselamatan digital terarah." };
+      activeCredibility = payload.credibility || null;
+      const userText = originalInput || input.value.trim() || urlInput.value.trim() || "Pemeriksaan awal situasi";
+      consultHistory = [
+        { role: "user", content: userText },
+        { role: "assistant", content: `${payload.headline || ""}. ${payload.summary || ""}` }
+      ];
+
       const modeLabels={ai:"Pemeriksaan awal dengan AI",rules:"Panduan tanpa AI",urgent:"Prioritaskan tindakan"};
       const urgent=payload.mode==="urgent";
       const related=(Array.isArray(payload.relatedCards)?payload.relatedCards:[]).map(item=>DATA.cards.find(card=>card.id===item.id)).filter(Boolean);
@@ -779,6 +893,68 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       const officialActions=official.map(link=>`<a class="btn btn-secondary" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link.label)} ${icon("external")}</a>`).join("");
       const redaction=payload.redaction?.applied?`${Number(payload.redaction.count)||"Beberapa"} bagian sensitif disamarkan sebelum dikirim ke layanan AI${payload.redaction.categories?.length?`: ${payload.redaction.categories.map(escapeHtml).join(", ")}`:""}.`:"Tidak ada pola data sensitif yang terdeteksi otomatis. Tetap periksa kembali teks Anda.";
       const urlPanel=payload.urlAnalysis?`<div class="url-analysis"><div><span class="analysis-mode">${icon("globeLock")} Link tidak dibuka</span><h3 class="result-title">${icon("link")} Pemeriksaan bentuk link (URL)</h3><code>${escapeHtml(payload.urlAnalysis.display||payload.urlAnalysis.host||"Link tidak valid")}</code></div>${payload.urlAnalysis.signals?.length?renderList(payload.urlAnalysis.signals.map(signal=>signal.label)):"<p>Tidak ada tanda yang terlihat dari bentuk link.</p>"}<p class="small muted">${escapeHtml(payload.urlAnalysis.note||"")}</p></div>`:"";
+      
+      const helpdeskSectionHtml = `
+        <section class="consult-helpdesk-session" id="consult-helpdesk-session" aria-label="Sesi Konsultasi Lanjutan">
+          <div class="helpdesk-session-header">
+            <div class="helpdesk-persona-badge">
+              <span class="persona-pill"><span class="persona-icon">${icon("shieldCheck")}</span><strong>Persona: ${escapeHtml(activePersona.label || "Warga Umum")}</strong></span>
+              <small class="persona-desc">${escapeHtml(activePersona.description || "Panduan keselamatan digital disesuaikan untuk situasi Anda.")}</small>
+            </div>
+            ${activeCredibility ? `
+            <div class="credibility-gauge-box">
+              <div class="gauge-top">
+                <span class="gauge-label">${icon("scanSearch")} <strong>${escapeHtml(activeCredibility.label || "Tingkat Risiko Indikasi")}</strong></span>
+                <span class="gauge-badge risk-${activeCredibility.level || 'waspada'}">${escapeHtml(activeCredibility.level === 'tinggi' ? 'Risiko Tinggi' : activeCredibility.level === 'waspada' ? 'Waspada' : 'Perlu Verifikasi')}</span>
+              </div>
+              <div class="gauge-bar-wrap" role="progressbar" aria-valuenow="${activeCredibility.score || 50}" aria-valuemin="0" aria-valuemax="100">
+                <div class="gauge-bar-fill risk-${activeCredibility.level || 'waspada'}" style="width:${activeCredibility.score || 50}%"></div>
+              </div>
+              ${activeCredibility.indicators?.length ? `
+              <div class="credibility-signals">
+                ${activeCredibility.indicators.map(ind => `<span class="signal-tag">${icon("alert")} ${escapeHtml(ind)}</span>`).join("")}
+              </div>` : ""}
+            </div>` : ""}
+          </div>
+
+          <div class="helpdesk-dialogue" id="helpdesk-dialogue" role="log" aria-live="polite">
+            <div class="dialogue-lead">
+              <span class="dialogue-lead-title">${icon("chat")} Percakapan Bantuan dan Konsultasi</span>
+              <small>Lanjutkan pertanyaan Anda di bawah ini untuk panduan langkah demi langkah.</small>
+            </div>
+            <div class="dialogue-messages" id="dialogue-messages">
+              <div class="chat-bubble user">
+                <div>${escapeHtml(userText)}</div>
+                <span class="bubble-meta">Pertanyaan Anda</span>
+              </div>
+              <div class="chat-bubble assistant">
+                <div><strong>${escapeHtml(payload.headline || "Hasil Pemeriksaan")}</strong>: ${escapeHtml(payload.summary || "")}</div>
+                <span class="bubble-meta">${icon("bot")} Asisten WargaSiaga</span>
+              </div>
+            </div>
+          </div>
+
+          ${Array.isArray(payload.followUpSuggestions) && payload.followUpSuggestions.length ? `
+          <div class="helpdesk-quick-suggestions" id="helpdesk-suggestions">
+            <span class="suggestions-label">${icon("sparkles")} Pertanyaan yang dapat Anda tanyakan selanjutnya:</span>
+            <div class="suggestions-chips" id="suggestions-chips">
+              ${payload.followUpSuggestions.map(q => `<button class="suggestion-chip" type="button" data-question="${escapeHtml(q)}">${escapeHtml(q)}</button>`).join("")}
+            </div>
+          </div>` : `<div class="helpdesk-quick-suggestions hidden" id="helpdesk-suggestions"><div class="suggestions-chips" id="suggestions-chips"></div></div>`}
+
+          <form class="helpdesk-followup-form" id="helpdesk-followup-form">
+            <div class="followup-input-wrap">
+              <label for="helpdesk-followup-input" class="sr-only">Tanyakan situasi lanjutan</label>
+              <textarea id="helpdesk-followup-input" class="followup-textarea" rows="2" maxlength="1000" placeholder="Tanyakan kelanjutan: contoh, cek rekening bank, cara lapor polisi, atau verifikasi pesan baru..."></textarea>
+              <div class="followup-actions">
+                <button class="btn btn-secondary btn-sm" id="helpdesk-reset-btn" type="button">${icon("trash")} Selesai dan Periksa Baru</button>
+                <button class="btn btn-primary btn-sm" id="helpdesk-send-btn" type="submit">${icon("arrow")} Kirim Pertanyaan</button>
+              </div>
+            </div>
+            <div class="helpdesk-error-msg hidden" id="helpdesk-error" role="alert"></div>
+          </form>
+        </section>`;
+
       result.innerHTML=`
         <div class="assessment-head${urgent?' urgent-result':''}">
           <div class="result-meta"><span class="analysis-mode">${icon(urgent?"alert":"badgeCheck")} ${escapeHtml(modeLabels[payload.mode]||"Panduan awal")}</span></div>
@@ -790,8 +966,10 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
           <div class="info-card"><h3 class="result-title">${icon("circleHelp")} Yang tidak dapat dipastikan</h3>${renderList(payload.uncertainties)}</div>
         </div>
         <div class="info-card next-step-card"><h3 class="result-title">${icon("route")} Langkah paling aman berikutnya</h3>${renderList(payload.nextActions)}${featureCards||officialActions?`<div class="next-destinations"><strong>Lanjutkan di WargaSiaga</strong>${featureCards?`<div class="feature-route-grid">${featureCards}</div>`:""}${officialActions?`<div class="official-actions"><span>Layanan resmi terkait</span><div class="inline result-actions">${officialActions}</div></div>`:""}</div>`:""}</div>
+        ${helpdeskSectionHtml}
         <details class="result-disclosure"><summary>${icon("shieldCheck")} Privasi dan batasan</summary><div class="privacy-box"><p>${escapeHtml(redaction)}</p><p>${escapeHtml(payload.notice||"")}</p><p>${escapeHtml(payload.disclaimer||"")}</p><p>${escapeHtml(payload.retention||"")}</p></div></details>`;
       result.classList.remove("hidden");
+      attachHelpdeskEvents();
       result.focus({preventScroll:true});
       result.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
     }
@@ -800,6 +978,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       event.preventDefault();
       await healthCheck;
       const raw=input.value.trim(), submittedUrl=urlInput.value.trim(), exposure=new FormData(form).get("exposure"), urgent=detectUrgentExposure(raw,exposure);
+      currentExposure = exposure || "none";
       const invalid=[];
       if(!exposure)invalid.push(...exposureFields);
       if(!raw&&!submittedUrl)invalid.push(input,urlInput);
@@ -810,7 +989,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         return;
       }
       clearError();
-      if(urgent){renderAssessment(localResult(raw,exposure,true,submittedUrl));return;}
+      if(urgent){renderAssessment(localResult(raw,exposure,true,submittedUrl), raw);return;}
       submit.disabled=true;
       form.setAttribute("aria-busy","true");
       result.innerHTML=`<div class="ai-loading"><span class="loading-spinner" aria-hidden="true"></span><div><strong>Memeriksa tanda dengan aman…</strong><span>Data sensitif yang terdeteksi akan disamarkan sebelum dikirim ke layanan AI.</span></div></div>`;
@@ -820,9 +999,9 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         const response=await fetch("api/consult",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({text:raw,url:submittedUrl,exposure,consent:consent.checked}),signal:controller.signal});
         const payload=await response.json().catch(()=>null);
         if(!response.ok)throw new Error(payload?.error?.message||"Layanan belum dapat memproses permintaan.");
-        renderAssessment(payload);
+        renderAssessment(payload, raw);
       }catch(_){
-        renderAssessment(localResult(raw,exposure,false,submittedUrl));
+        renderAssessment(localResult(raw,exposure,false,submittedUrl), raw);
       }finally{
         clearTimeout(timeout);
         submit.disabled=false;

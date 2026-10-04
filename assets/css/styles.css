@@ -520,7 +520,7 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
 .choice span { display:block; color:var(--muted); font-size:12px; }
 .selection-summary { min-height:20px; margin:14px 0 0; color:var(--brand-deep); font-size:13px; font-weight:700; }
 .form-actions { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:10px; margin-top:25px; padding-top:20px; border-top:1px solid var(--line); }
-.form-error { margin:0 0 18px; padding:14px 16px; border:1px solid #fda29b; border-left:4px solid var(--urgent); border-radius:11px; color:#7a271a; background:#fef3f2; font-size:14px; font-weight:650; }
+.form-error, .helpdesk-error-msg { margin:0 0 18px; padding:14px 16px; border:1px solid #fda29b; border-left:4px solid var(--urgent); border-radius:11px; color:#7a271a; background:#fef3f2; font-size:14px; font-weight:650; }
 .question-required-error { margin:1px 0 0; color:#b42318; font-size:12px; font-weight:750; }
 .conditional-field { margin-top:12px; padding:14px; border:1px solid #d7dce0; border-radius:12px; background:#f8fafb; }
 .privacy-box { padding:16px; border-radius:13px; color:#365b78; background:#eef7ff; font-size:13px; }
@@ -857,6 +857,350 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
   .toast { left:12px; right:12px; bottom:82px; max-width:none; }
   .exposure-options { grid-template-columns:1fr; }
   .status-explainer, .service-grid { grid-template-columns:1fr; }
+  .helpdesk-session-header { flex-direction:column; align-items:stretch; }
+  .followup-actions { flex-direction:column; width:100%; }
+  .followup-actions .btn { width:100%; }
+}
+
+/* ==========================================================================
+   Helpdesk Multi-Turn Consultation & Credibility Checker System
+   ========================================================================== */
+.consult-helpdesk-session {
+  margin-top: 24px;
+  padding: 24px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfaff 100%);
+  border: 1px solid rgba(122, 90, 248, 0.22);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 12px 36px -12px rgba(122, 90, 248, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.helpdesk-session-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(122, 90, 248, 0.12);
+  flex-wrap: wrap;
+}
+
+.helpdesk-persona-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 380px;
+}
+
+.persona-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(122, 90, 248, 0.12) 0%, rgba(105, 65, 198, 0.08) 100%);
+  color: var(--brand);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid rgba(122, 90, 248, 0.25);
+}
+
+.persona-pill .persona-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.persona-desc {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.credibility-gauge-box {
+  min-width: 260px;
+  flex: 1;
+  max-width: 420px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 12px);
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.gauge-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.gauge-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #334155;
+}
+
+.gauge-label svg {
+  width: 14px;
+  height: 14px;
+  color: var(--brand);
+}
+
+.gauge-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.gauge-badge.risk-tinggi {
+  background: #fef3f2;
+  color: #b42318;
+  border: 1px solid #fecdca;
+}
+
+.gauge-badge.risk-waspada {
+  background: #fffaeb;
+  color: #b54708;
+  border: 1px solid #fedf89;
+}
+
+.gauge-badge.risk-aman_bersyarat,
+.gauge-badge.risk-perlu_verifikasi {
+  background: #ecfdf3;
+  color: #027a48;
+  border: 1px solid #a6f4c5;
+}
+
+.gauge-bar-wrap {
+  width: 100%;
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.gauge-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.gauge-bar-fill.risk-tinggi {
+  background: linear-gradient(90deg, #f79009 0%, #f04438 100%);
+}
+
+.gauge-bar-fill.risk-waspada {
+  background: linear-gradient(90deg, #fdb022 0%, #f79009 100%);
+}
+
+.gauge-bar-fill.risk-aman_bersyarat,
+.gauge-bar-fill.risk-perlu_verifikasi {
+  background: linear-gradient(90deg, #12b76a 0%, #039855 100%);
+}
+
+.credibility-signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.signal-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  background: #f8fafc;
+  color: #475467;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.signal-tag svg {
+  width: 12px;
+  height: 12px;
+  color: #f79009;
+}
+
+.helpdesk-dialogue {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 12px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dialogue-lead {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.dialogue-lead-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.dialogue-lead-title svg {
+  width: 16px;
+  height: 16px;
+}
+
+.dialogue-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.chat-bubble {
+  max-width: 82%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  word-break: break-word;
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #7a5af8 0%, #6941c6 100%);
+  color: #ffffff;
+  border-bottom-right-radius: 3px;
+  box-shadow: 0 4px 12px rgba(122, 90, 248, 0.2);
+}
+
+.chat-bubble.assistant {
+  align-self: flex-start;
+  background: #f8fafc;
+  color: #1e293b;
+  border: 1px solid rgba(122, 90, 248, 0.18);
+  border-bottom-left-radius: 3px;
+}
+
+.bubble-meta {
+  font-size: 10px;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chat-bubble.user .bubble-meta {
+  color: rgba(255, 255, 255, 0.85);
+  justify-content: flex-end;
+}
+
+.chat-bubble.assistant .bubble-meta {
+  color: #64748b;
+}
+
+.helpdesk-quick-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.suggestions-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475467;
+}
+
+.suggestions-label svg {
+  width: 14px;
+  height: 14px;
+  color: var(--brand);
+}
+
+.suggestions-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.suggestion-chip {
+  background: #ffffff;
+  border: 1px solid rgba(122, 90, 248, 0.25);
+  color: #344054;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.suggestion-chip:hover {
+  background: rgba(122, 90, 248, 0.08);
+  border-color: var(--brand);
+  color: var(--brand);
+  transform: translateY(-1px);
+}
+
+.helpdesk-followup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.followup-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 12px);
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+}
+
+.followup-textarea {
+  width: 100%;
+  border: 0;
+  outline: none;
+  resize: vertical;
+  min-height: 52px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #1e293b;
+  background: transparent;
+}
+
+.followup-textarea::placeholder {
+  color: #94a3b8;
+}
+
+.followup-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 @media (prefers-reduced-motion: reduce) {

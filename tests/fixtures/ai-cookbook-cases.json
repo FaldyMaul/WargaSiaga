@@ -1,0 +1,246 @@
+[
+  {
+    "id": "cb-bank-otp-01",
+    "category": "bank-otp",
+    "label": "scam",
+    "expectedPersona": "warga_umum",
+    "expectedCard": "bank-otp",
+    "minRiskLevel": "tinggi",
+    "text": "Halo bapak, kami dari Call Center Bank BCA mengabarkan ada transaksi mencurigakan Rp5 juta di akun Anda. Sebutkan 6 digit kode OTP yang kami kirimkan sekarang agar kartu tidak diblokir permanen."
+  },
+  {
+    "id": "cb-job-deposit-01",
+    "category": "job-deposit",
+    "label": "scam",
+    "expectedPersona": "pencari_kerja",
+    "expectedCard": "job-deposit",
+    "minRiskLevel": "tinggi",
+    "text": "Lowongan kerja paruh waktu freelance online. Tugas hanya like video YouTube dan follow toko. Komisi Rp450.000 per hari langsung cair setelah Anda transfer deposit awal Rp200.000 untuk aktivasi akun."
+  },
+  {
+    "id": "cb-marketplace-01",
+    "category": "marketplace-diversion",
+    "label": "scam",
+    "expectedPersona": "pelaku_usaha",
+    "expectedCard": "marketplace-diversion",
+    "minRiskLevel": "tinggi",
+    "text": "Saya pembeli di toko online Anda, saya sudah bayar tapi saldo tertahan di sistem. Tolong buka link kurir ini di WhatsApp dan isi data nomor kartu debit Anda agar dana langsung masuk."
+  },
+  {
+    "id": "cb-investment-01",
+    "category": "investment-return",
+    "label": "scam",
+    "expectedPersona": "warga_umum",
+    "expectedCard": "investment-return",
+    "minRiskLevel": "tinggi",
+    "text": "Peluang investasi trading emas dan kripto resmi. Dijamin profit pasti 35% setiap 3 hari tanpa risiko kerugian. Kuota terbatas hanya untuk 10 orang pertama yang transfer hari ini."
+  },
+  {
+    "id": "cb-apk-phishing-01",
+    "category": "apk-phishing",
+    "label": "scam",
+    "expectedPersona": "warga_umum",
+    "expectedCard": "apk-phishing",
+    "minRiskLevel": "tinggi",
+    "text": "Paket Anda tertahan di gudang karena alamat kurang lengkap. Silakan instal file Surat_Jalan_Paket.apk yang kami lampirkan untuk melihat detail resi dan konfirmasi pengiriman."
+  },
+  {
+    "id": "cb-family-emergency-01",
+    "category": "family-emergency",
+    "label": "scam",
+    "expectedPersona": "lansia_keluarga",
+    "expectedCard": "family-emergency",
+    "minRiskLevel": "tinggi",
+    "text": "Ibu, ini nomor baru anak saya. HP saya hilang di stasiun dan dompet tertinggal. Saya butuh transfer Rp1,5 juta segera ke rekening teman saya untuk biaya taksi dan obat, jangan telepon dulu karena saya di klinik."
+  },
+  {
+    "id": "cb-prize-refund-01",
+    "category": "prize-refund",
+    "label": "scam",
+    "expectedPersona": "warga_umum",
+    "expectedCard": "prize-refund",
+    "minRiskLevel": "tinggi",
+    "text": "Selamat! Nomor Anda terpilih memenangkan hadiah undian uang tunai Rp50 juta dari program Gebyar Poin. Untuk klaim hadiah, silakan bayar biaya administrasi pajak pemenang sebesar Rp750 ribu ke rekening bendahara."
+  },
+  {
+    "id": "cb-invoice-redirection-01",
+    "category": "invoice-redirection",
+    "label": "scam",
+    "expectedPersona": "pelaku_usaha",
+    "expectedCard": "invoice-redirection",
+    "minRiskLevel": "tinggi",
+    "text": "Pemberitahuan perubahan rekening tagihan: Kami dari pemasok bahan baku menginformasikan bahwa rekening BCA perusahaan sedang audit. Harap transfer invoice pembayaran barang bulan ini ke rekening Mandiri atas nama direktur baru."
+  },
+  {
+    "id": "cb-recovery-scam-01",
+    "category": "recovery-scam",
+    "label": "scam",
+    "expectedPersona": "korban_mendesak",
+    "expectedCard": "recovery-scam",
+    "minRiskLevel": "tinggi",
+    "text": "Saya tim IT cyber crime independen. Kami bisa melacak dan menarik kembali uang Anda yang hilang tertipu pinjol atau trading kemarin dalam 1 jam, syaratnya bayar uang muka jasa penarikan Rp500 ribu sekarang."
+  },
+  {
+    "id": "cb-illegal-loan-01",
+    "category": "illegal-online-loan",
+    "label": "scam",
+    "expectedPersona": "warga_umum",
+    "expectedCard": "illegal-online-loan",
+    "minRiskLevel": "tinggi",
+    "text": "Pinjaman kilat tanpa BI checking langsung cair Rp10 juta dalam 5 menit cukup KTP. Unduh aplikasi lewat link ini dan izinkan akses seluruh kontak telepon serta galeri foto Anda."
+  },
+  {
+    "id": "cb-game-reward-01",
+    "category": "game-reward-account",
+    "label": "scam",
+    "expectedPersona": "pelajar_remaja",
+    "expectedCard": "game-reward-account",
+    "minRiskLevel": "tinggi",
+    "text": "Event diamond Mobile Legends gratis 10000 diamond dan skin epic. Masuk ke situs event-diamond-mlbb.xyz lalu masukkan email, kata sandi akun Moonton, dan nomor WhatsApp Anda untuk klaim."
+  },
+  {
+    "id": "cb-romance-investment-01",
+    "category": "romance-investment",
+    "label": "scam",
+    "expectedPersona": "warga_umum",
+    "expectedCard": "romance-scam",
+    "minRiskLevel": "tinggi",
+    "text": "Kenalan saya dari aplikasi kencan sudah 2 bulan sangat perhatian dan panggil sayang. Sekarang dia mengajak saya membuka akun di platform kripto luar negeri dan menyuruh saya deposit Rp10 juta agar kita punya modal menikah nanti."
+  },
+  {
+    "id": "cb-deepfake-01",
+    "category": "deepfake-impersonation",
+    "label": "scam",
+    "expectedPersona": "lansia_keluarga",
+    "expectedCard": "deepfake-impersonation",
+    "minRiskLevel": "tinggi",
+    "text": "Paman saya menerima pesan suara di WhatsApp yang suaranya persis seperti keponakannya, bilang sedang ditahan di kantor polisi dan minta uang damai segera ditransfer ke rekening Bripka Joko."
+  },
+  {
+    "id": "cb-safe-bank-app",
+    "category": "benign-bank",
+    "label": "benign",
+    "expectedPersona": "warga_umum",
+    "expectedCard": null,
+    "minRiskLevel": "aman_bersyarat",
+    "text": "Saya membuka aplikasi BCA Mobile resmi yang sudah terpasang di HP saya sendiri untuk melihat riwayat mutasi bulanan. Tidak ada yang menelepon dan tidak ada kode yang diminta."
+  },
+  {
+    "id": "cb-safe-job-portal",
+    "category": "benign-job",
+    "label": "benign",
+    "expectedPersona": "pencari_kerja",
+    "expectedCard": null,
+    "minRiskLevel": "aman_bersyarat",
+    "text": "Saya melamar posisi staf administrasi melalui portal karier resmi LinkedIn perusahaan, mengikuti tes tertulis di kantor, dan tidak ada biaya pendaftaran atau permintaan deposit sama sekali."
+  },
+  {
+    "id": "cb-safe-store-purchase",
+    "category": "benign-marketplace",
+    "label": "benign",
+    "expectedPersona": "pelaku_usaha",
+    "expectedCard": null,
+    "minRiskLevel": "aman_bersyarat",
+    "text": "Pelanggan membeli barang di etalase toko Tokopedia kami dan pembayaran sudah otomatis terverifikasi sistem di aplikasi tanpa perlu kirim link di luar platform."
+  },
+  {
+    "id": "cb-safe-family-chat",
+    "category": "benign-family",
+    "label": "benign",
+    "expectedPersona": "lansia_keluarga",
+    "expectedCard": null,
+    "minRiskLevel": "aman_bersyarat",
+    "text": "Anak saya mengirim pesan di grup keluarga menanyakan kabar bapak ibu di kampung dan mengingatkan jadwal arisan keluarga minggu depan."
+  },
+  {
+    "id": "cb-safe-school-assignment",
+    "category": "benign-student",
+    "label": "benign",
+    "expectedPersona": "pelajar_remaja",
+    "expectedCard": null,
+    "minRiskLevel": "aman_bersyarat",
+    "text": "Teman sekelas di kampus mengirimkan materi presentasi kelompok dalam bentuk file PDF dan dokumen tugas kuliah lewat Google Drive resmi universitas."
+  },
+  {
+    "id": "cb-safe-security-article",
+    "category": "benign-education",
+    "label": "benign",
+    "expectedPersona": "warga_umum",
+    "expectedCard": null,
+    "minRiskLevel": "aman_bersyarat",
+    "text": "Saya sedang membaca artikel edukasi tentang pentingnya menjaga kerahasiaan kode OTP, bahaya instalasi file APK sembarangan, dan cara cek rekening di Komdigi."
+  },
+  {
+    "id": "cb-urgent-loss-01",
+    "category": "urgent-loss",
+    "label": "urgent",
+    "expectedPersona": "korban_mendesak",
+    "expectedCard": null,
+    "minRiskLevel": "tinggi",
+    "text": "Saya panik sekali, uang Rp4 juta sudah saya transfer ke rekening penipu tadi dan dia sekarang memblokir nomor saya.",
+    "exposure": "money"
+  },
+  {
+    "id": "cb-urgent-access-01",
+    "category": "urgent-access",
+    "label": "urgent",
+    "expectedPersona": "korban_mendesak",
+    "expectedCard": "bank-otp",
+    "minRiskLevel": "tinggi",
+    "text": "Saya tadi tidak sadar memberikan kode OTP dan PIN mobile banking saya kepada penelepon yang mengaku petugas bank.",
+    "exposure": "access"
+  },
+  {
+    "id": "cb-multiturn-job-01",
+    "category": "multiturn-job",
+    "label": "scam",
+    "expectedPersona": "pencari_kerja",
+    "expectedCard": "job-deposit",
+    "minRiskLevel": "tinggi",
+    "text": "Jika perusahaannya bilang uang deposit itu akan dikembalikan setelah tugas rating pertama selesai, apakah itu masih aman?",
+    "history": [
+      { "role": "user", "content": "Saya ditawari kerja paruh waktu tapi diminta transfer deposit Rp300 ribu." },
+      { "role": "assistant", "content": "Permintaan deposit sebelum bekerja patut dicurigai sebagai modus penipuan tugas komisi." }
+    ]
+  },
+  {
+    "id": "cb-multiturn-bank-01",
+    "category": "multiturn-bank",
+    "label": "scam",
+    "expectedPersona": "warga_umum",
+    "expectedCard": "bank-otp",
+    "minRiskLevel": "tinggi",
+    "text": "Nomor pengirimnya mengaku dari nomor WhatsApp centang hijau tapi minta klik link, bagaimana cara lapornya ke bank?",
+    "history": [
+      { "role": "user", "content": "Ada pesan WA dari bank meminta saya verifikasi data akun." },
+      { "role": "assistant", "content": "Bank resmi tidak pernah meminta nasabah verifikasi data rahasia melalui pesan singkat." }
+    ]
+  },
+  {
+    "id": "cb-edge-no-urgency",
+    "category": "edge-case",
+    "label": "scam",
+    "expectedPersona": "pelajar_remaja",
+    "expectedCard": "game-reward-account",
+    "minRiskLevel": "tinggi",
+    "text": "Ada akun Instagram menawarkan giveaway diamond tanpa bayar uang, tapi syaratnya harus login dengan akun Google dan kata sandi di bio profilnya."
+  },
+  {
+    "id": "cb-edge-delivery-receipt",
+    "category": "edge-case",
+    "label": "benign",
+    "expectedPersona": "warga_umum",
+    "expectedCard": null,
+    "minRiskLevel": "aman_bersyarat",
+    "text": "Kurir JNE mengantarkan paket barang ke alamat rumah dan meminta tanda tangan bukti penerimaan barang fisik di lembar kertas kurir."
+  },
+  {
+    "id": "cb-edge-invest-formal",
+    "category": "edge-case",
+    "label": "benign",
+    "expectedPersona": "warga_umum",
+    "expectedCard": null,
+    "minRiskLevel": "aman_bersyarat",
+    "text": "Saya membaca prospektus reksa dana pasar uang dari manajer investasi yang terdaftar resmi di OJK melalui aplikasi bibit resmi."
+  }
+]
