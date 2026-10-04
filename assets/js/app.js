@@ -40,6 +40,15 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     elderly:"Bila perlu, periksa bersama orang yang dipercaya tanpa memberikan kendali akun, PIN, OTP, atau perangkat."
   };
   const AGE_IMAGES = { kids:ageKidsUrl, teens:ageTeensUrl, adults:ageAdultsUrl, elderly:ageElderlyUrl };
+  const MODUS_CATEGORIES = [
+    { id:"all", label:"Semua Kategori", icon:"search", count:13 },
+    { id:"banking", label:"Perbankan & Akun", icon:"shieldCheck", desc:"OTP, rekening, dan pemulihan dana", cardIds:["bank-otp", "recovery-scam"] },
+    { id:"job-investment", label:"Kerja & Investasi", icon:"briefcase", desc:"Deposit lowongan dan janji untung", cardIds:["job-deposit", "investment-return"] },
+    { id:"malware-phishing", label:"Pesan & File Bahaya", icon:"link", desc:"APK, link phising, dan deepfake AI", cardIds:["apk-phishing", "deepfake-impersonation"] },
+    { id:"commerce", label:"Jual-Beli & Bisnis", icon:"bag", desc:"Transaksi luar platform & tagihan invoice", cardIds:["marketplace-diversion", "invoice-redirection"] },
+    { id:"social-family", label:"Keluarga & Relasi", icon:"users", desc:"Panggilan darurat dan manipulasi asmara", cardIds:["family-emergency", "romance-scam"] },
+    { id:"prize-loan", label:"Hadiah & Pinjaman", icon:"gift", desc:"Undian, reward game, dan pinjol ilegal", cardIds:["prize-refund", "game-reward-account", "illegal-online-loan"] }
+  ];
   const ACCOUNT_SECRET_LITERACY = {
     imageUrl:literacyKeysUrl,
     page:20,
@@ -156,9 +165,10 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
 
   function modusCard(card) {
     const imageUrl=GUIDE_IMAGE_URLS[card.id];
-    return `<article class="modus-card" data-accent="${card.accent}" data-card-id="${card.id}" data-search="${[card.title,card.summary,...card.channels,...card.contexts,...card.tactics].join(" ").toLowerCase()}">
-      <div class="card-accent"></div>${imageUrl?`<a class="modus-card-media" data-guide-link href="modus-detail.html?id=${card.id}" tabindex="-1" aria-hidden="true"><img src="${imageUrl}" width="1280" height="853" alt="" loading="lazy"><span class="risk-badge">Perlu diwaspadai</span></a>`:""}<div class="modus-card-body"><div class="card-top"><span class="card-icon">${icon(card.icon)}</span>${imageUrl?"":'<span class="risk-badge">Perlu diwaspadai</span>'}</div>
-      <h3><a data-guide-link href="modus-detail.html?id=${card.id}">${card.title}</a></h3><p>${card.summary}</p><div class="card-audience">${icon("users")}<span>${card.ageGroups.map(value=>AGE_GROUPS.find(group=>group.value===value)?.label).filter(Boolean).join(" · ")}</span></div><div class="tag-row">${card.channels.slice(0,2).map(x=>`<span class="tag">${x}</span>`).join("")}</div>
+    const category = MODUS_CATEGORIES.find(c => c.cardIds?.includes(card.id)) || MODUS_CATEGORIES[1];
+    return `<article class="modus-card" data-accent="${card.accent}" data-category="${category.id}" data-card-id="${card.id}" data-search="${[card.title,card.summary,category.label,...card.channels,...card.contexts,...card.tactics].join(" ").toLowerCase()}">
+      <div class="card-accent"></div>${imageUrl?`<a class="modus-card-media" data-guide-link href="modus-detail.html?id=${card.id}" tabindex="-1" aria-hidden="true"><img src="${imageUrl}" width="1280" height="853" alt="" loading="lazy"><span class="risk-badge">Perlu diwaspadai</span><span class="card-category-pill">${icon(category.icon)} ${category.label}</span></a>`:""}<div class="modus-card-body"><div class="card-top"><div class="card-header-left"><span class="card-icon">${icon(card.icon)}</span><button class="card-category-badge" type="button" data-filter-category="${category.id}" title="Filter kategori ${category.label}">${icon(category.icon)} <span>${category.label}</span></button></div>${imageUrl?"":'<span class="risk-badge">Perlu diwaspadai</span>'}</div>
+      <h3><a data-guide-link href="modus-detail.html?id=${card.id}">${card.title}</a></h3><p>${card.summary}</p><div class="card-evidence-callout">${icon("scanText")}<span>Dilengkapi contoh chat HP & 3 tanda bahaya</span></div><div class="card-audience">${icon("users")}<span>${card.ageGroups.map(value=>AGE_GROUPS.find(group=>group.value===value)?.label).filter(Boolean).join(" · ")}</span></div><div class="tag-row">${card.channels.slice(0,2).map(x=>`<span class="tag">${x}</span>`).join("")}</div>
       <div class="card-footer"><a class="text-link" data-guide-link href="modus-detail.html?id=${card.id}">Buka panduan${icon("arrow")}</a></div></div></article>`;
   }
 
@@ -196,15 +206,35 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     const channels = [...new Set(DATA.cards.flatMap(c=>c.channels))].sort();
     const contexts = [...new Set(DATA.cards.flatMap(c=>c.contexts))].sort();
     return shell(`
-      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Kenali Modus"]])}<span class="eyebrow">Katalog panduan</span><h1 class="section-title">Cari modus yang mirip</h1><p class="section-copy">Pilih kelompok usia, lalu cari berdasarkan pesan atau situasi.</p></div><div class="page-hero-visual ratio-3-2 catalog-hero-visual"><img src="${modusLibraryUrl}" width="1536" height="1024" alt="" aria-hidden="true"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Sudah terlanjur?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
+      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Kenali Modus"]])}<span class="eyebrow">Katalog panduan</span><h1 class="section-title">Cari modus yang mirip</h1><p class="section-copy">Pilih kelompok usia atau kategori, lalu cari berdasarkan pesan atau situasi.</p></div><div class="page-hero-visual ratio-3-2 catalog-hero-visual"><img src="${modusLibraryUrl}" width="1536" height="1024" alt="" aria-hidden="true"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Sudah terlanjur?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
       <section class="section-sm"><div class="container"><fieldset class="age-selector" id="age-selector" aria-describedby="age-selector-help"><legend><span class="eyebrow">Langkah 1</span><strong>Panduan ini untuk siapa?</strong></legend><p id="age-selector-help">Pilih usia orang yang menghadapi situasi ini. Pilihan hanya memfilter panduan dan tidak disimpan.</p><div class="age-options">${AGE_GROUPS.map((group,index)=>`<label><input type="radio" name="age" value="${group.value}"${index===0?" checked":""}><span>${group.value==="all"?`<span class="age-portrait age-all">${icon("users")}</span>`:`<img class="age-portrait" src="${AGE_IMAGES[group.value]}" width="640" height="640" alt="" loading="lazy">`}<span class="age-option-copy"><strong>${group.label}</strong>${group.description?`<small>${group.description}</small>`:""}</span></span></label>`).join("")}</div></fieldset></div></section>
       <section class="section-sm catalog-section"><div class="container filter-shell">
         <aside class="filter-panel" id="filter-panel" aria-label="Filter modus"><div class="spread"><strong>Filter panduan</strong><button class="btn btn-ghost" id="reset-filter" type="button">Hapus filter</button></div>
           <div class="filter-group"><span class="filter-title">Cara dihubungi</span>${channels.map(v=>`<label class="check"><input type="checkbox" name="channel" value="${v}"><span>${v}</span></label>`).join("")}</div>
           <div class="filter-group"><span class="filter-title">Situasi saya</span>${contexts.map(v=>`<label class="check"><input type="checkbox" name="context" value="${v}"><span>${v}</span></label>`).join("")}</div>
         </aside>
-        <div><div class="catalog-step-label"><span class="eyebrow">Langkah 2</span><strong>Cari atau gunakan filter tambahan</strong></div><div class="search-box">${icon("search")}<label class="sr-only" for="modus-search">Cari modus</label><input id="modus-search" type="search" placeholder="Cari: lowongan, OTP, marketplace…" autocomplete="off"><button class="search-clear hidden" id="search-clear" type="button" aria-label="Hapus pencarian">${icon("close")}</button></div>
-          <h2 class="sr-only" id="catalog-heading">Daftar panduan modus</h2><div class="result-toolbar"><span class="result-count" id="result-count" role="status" aria-live="polite">${DATA.cards.length} panduan ditemukan</span><button class="btn btn-secondary mobile-filter" id="filter-toggle" type="button" aria-expanded="false" aria-controls="filter-panel">${icon("filter")} Filter</button></div><div class="active-filters hidden" id="active-filters" aria-label="Filter aktif"></div>
+        <div>
+          <div class="category-classification" role="region" aria-label="Klasifikasi kategori penipuan">
+            <div class="category-header">
+              <span class="eyebrow">Langkah 2</span>
+              <strong>Pilih Kategori Kasus</strong>
+              <span class="category-hint">Klasifikasi 13 modus utama untuk mempermudah pencarian</span>
+            </div>
+            <div class="category-chip-group" id="category-chip-group" role="tablist" aria-label="Pilih kategori modus">
+              ${MODUS_CATEGORIES.map((cat, idx) => `
+                <button class="category-tab${idx === 0 ? " active" : ""}" type="button" role="tab" data-category-id="${cat.id}" aria-selected="${idx === 0 ? "true" : "false"}">
+                  <span class="cat-icon">${icon(cat.icon)}</span>
+                  <span class="cat-label">${cat.label}</span>
+                  <span class="cat-count">${cat.cardIds ? cat.cardIds.length : DATA.cards.length}</span>
+                </button>
+              `).join("")}
+            </div>
+          </div>
+          <div class="catalog-step-label"><span class="eyebrow">Langkah 3</span><strong>Cari atau gunakan filter tambahan</strong></div>
+          <div class="search-box">${icon("search")}<label class="sr-only" for="modus-search">Cari modus</label><input id="modus-search" type="search" placeholder="Cari: lowongan, OTP, marketplace…" autocomplete="off"><button class="search-clear hidden" id="search-clear" type="button" aria-label="Hapus pencarian">${icon("close")}</button></div>
+          <h2 class="sr-only" id="catalog-heading">Daftar panduan modus</h2>
+          <div class="result-toolbar"><span class="result-count" id="result-count" role="status" aria-live="polite">${DATA.cards.length} panduan ditemukan</span><button class="btn btn-secondary mobile-filter" id="filter-toggle" type="button" aria-expanded="false" aria-controls="filter-panel">${icon("filter")} Filter</button></div>
+          <div class="active-filters hidden" id="active-filters" aria-label="Filter aktif"></div>
           <div class="cards-grid catalog-grid" id="modus-grid">${DATA.cards.map(modusCard).join("")}</div>
         </div>
       </div></section>
@@ -291,8 +321,9 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
   }
 
   function supportPage() {
+    const familyImageUrl = GUIDE_IMAGE_URLS["family-emergency"] || "";
     return shell(`
-      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Bantu orang lain"]])}<span class="eyebrow icon-label">${icon("users")} Dukungan tanpa menghakimi</span><h1 class="section-title">Bantu orang terdekat tetap aman</h1><p class="section-copy">Mulai dari rasa khawatir, lalu periksa bersama. Jangan menyalahkan atau memaksa.</p></div><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Uang sudah terkirim?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></section>
+      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Bantu orang lain"]])}<span class="eyebrow icon-label">${icon("users")} Dukungan tanpa menghakimi</span><h1 class="section-title">Bantu orang terdekat tetap aman</h1><p class="section-copy">Mulai dari rasa khawatir, lalu periksa bersama. Jangan menyalahkan atau memaksa.</p></div><div class="page-hero-visual ratio-3-2"><img src="${familyImageUrl}" width="1280" height="853" alt="Dua orang berdiskusi tenang memeriksa pesan mencurigakan" loading="lazy"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Uang sudah terkirim?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
       <section class="section-sm"><div class="narrow"><div class="support-callout"><span class="support-callout-icon">${icon("chat")}</span><div><span class="eyebrow">Kalimat pembuka</span><blockquote>“Saya khawatir karena ada permintaan uang mendadak. Boleh kita periksa bersama sebelum melanjutkan?”</blockquote></div></div></div></section>
       <section class="section-sm" style="padding-top:0"><div class="container"><span class="eyebrow">Tiga langkah</span><h2 class="section-title">Dampingi, periksa, lalu bertindak</h2><div class="steps support-steps"><article class="step"><span class="step-num">1</span><h3>Dengarkan dulu</h3><p>Tanyakan apa yang terjadi dan apa yang sudah dilakukan. Hindari kalimat “kok bisa percaya?”.</p></article><article class="step"><span class="step-num">2</span><h3>Periksa bersama</h3><p>Hentikan pembayaran. Hubungi orang atau lembaga melalui nomor resmi yang dicari sendiri.</p></article><article class="step"><span class="step-num">3</span><h3>Amankan bila perlu</h3><p>Jika uang, OTP, kata sandi, atau akses sudah diberikan, buka langkah bantuan tanpa menunggu analisis AI.</p></article></div></div></section>
       <section class="section-sm surface-section"><div class="container support-grid"><div class="support-list"><span class="support-list-icon positive">${icon("check")}</span><div><h2>Yang membantu</h2><ul><li>Tetap tenang dan jaga privasi orang tersebut.</li><li>Simpan bukti tanpa meneruskannya ke grup publik.</li><li>Tawarkan bantuan menghubungi bank atau layanan resmi.</li></ul></div></div><div class="support-list"><span class="support-list-icon caution">${icon("close")}</span><div><h2>Yang sebaiknya dihindari</h2><ul><li>Menyalahkan, mempermalukan, atau mengambil alih paksa.</li><li>Menghubungi balik pelaku untuk berdebat.</li><li>Membayar pihak yang menjanjikan dana pasti kembali.</li></ul></div></div></div></section>
@@ -450,6 +481,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     const search = document.getElementById("modus-search");
     const checks = [...document.querySelectorAll("#filter-panel input[type=checkbox]")];
     const ageChoices = [...document.querySelectorAll('#age-selector input[name="age"]')];
+    const catTabs = [...document.querySelectorAll(".category-tab")];
     const count = document.getElementById("result-count");
     const clear = document.getElementById("search-clear");
     const activeFilters = document.getElementById("active-filters");
@@ -459,18 +491,48 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     const requestedAge=params.get("age");
     const initialAge=ageChoices.find(choice=>choice.value===requestedAge) || ageChoices.find(choice=>choice.value==="all");
     if(initialAge)initialAge.checked=true;
+
+    let selectedCategory = params.get("category") || "all";
+    if (!MODUS_CATEGORIES.some(c => c.id === selectedCategory)) selectedCategory = "all";
+
+    function updateCategoryTabs() {
+      catTabs.forEach(tab => {
+        const isMatch = tab.dataset.categoryId === selectedCategory;
+        tab.classList.toggle("active", isMatch);
+        tab.setAttribute("aria-selected", String(isMatch));
+      });
+    }
+    updateCategoryTabs();
+
     function apply() {
       const q = search.value.trim().toLowerCase();
       const selectedAge=ageChoices.find(choice=>choice.checked)?.value || "all";
       const selectedChannels = checks.filter(x=>x.name==="channel"&&x.checked).map(x=>x.value);
       const selectedContexts = checks.filter(x=>x.name==="context"&&x.checked).map(x=>x.value);
+      const currentCat = MODUS_CATEGORIES.find(c => c.id === selectedCategory);
+
       let shown = 0;
-      DATA.cards.forEach(card => { const el = grid.querySelector(`[data-card-id="${card.id}"]`); const detailParams=new URLSearchParams({id:card.id});if(selectedAge!=="all")detailParams.set("age",selectedAge);el.querySelectorAll("[data-guide-link]").forEach(link=>link.setAttribute("href",`modus-detail.html?${detailParams}`)); const matchQ = !q || el.dataset.search.includes(q); const matchAge=selectedAge==="all" || card.ageGroups?.includes(selectedAge); const matchChannel = !selectedChannels.length || selectedChannels.some(x=>card.channels.includes(x)); const matchContext = !selectedContexts.length || selectedContexts.some(x=>card.contexts.includes(x)); const visible = matchQ&&matchAge&&matchChannel&&matchContext; el.classList.toggle("hidden",!visible); if(visible) shown++; });
+      DATA.cards.forEach(card => {
+        const el = grid.querySelector(`[data-card-id="${card.id}"]`);
+        if (!el) return;
+        const detailParams=new URLSearchParams({id:card.id});
+        if(selectedAge!=="all")detailParams.set("age",selectedAge);
+        el.querySelectorAll("[data-guide-link]").forEach(link=>link.setAttribute("href",`modus-detail.html?${detailParams}`));
+        const matchQ = !q || el.dataset.search.includes(q);
+        const matchAge=selectedAge==="all" || card.ageGroups?.includes(selectedAge);
+        const matchCategory = selectedCategory === "all" || (currentCat?.cardIds?.includes(card.id));
+        const matchChannel = !selectedChannels.length || selectedChannels.some(x=>card.channels.includes(x));
+        const matchContext = !selectedContexts.length || selectedContexts.some(x=>card.contexts.includes(x));
+        const visible = matchQ&&matchAge&&matchCategory&&matchChannel&&matchContext;
+        el.classList.toggle("hidden",!visible);
+        if(visible) shown++;
+      });
       grid.querySelector(".empty-state")?.remove();
       if (!shown) grid.insertAdjacentHTML("beforeend",`<div class="empty-state"><span class="empty-icon">${icon("search")}</span><h2>Tidak ada panduan yang cocok</h2><p>Coba istilah lebih umum atau hapus salah satu filter. Jika sudah ada kerugian, buka bantuan sekarang.</p><a class="btn btn-urgent" href="bantuan-darurat.html">Bantuan sekarang</a></div>`);
       count.textContent = `${shown} panduan ditemukan`; clear.classList.toggle("hidden",!q);
       const chips = [
         ...(selectedAge!=="all" ? [{ key:"age", value:selectedAge, label:`Usia: ${AGE_GROUPS.find(group=>group.value===selectedAge)?.label || selectedAge}` }] : []),
+        ...(selectedCategory!=="all" ? [{ key:"category", value:selectedCategory, label:`Kategori: ${currentCat?.label || selectedCategory}` }] : []),
         ...(q ? [{ key:"q", value:q, label:`Pencarian: ${search.value.trim()}` }] : []),
         ...selectedChannels.map(value=>({ key:"channel", value, label:value })),
         ...selectedContexts.map(value=>({ key:"context", value, label:value }))
@@ -479,15 +541,34 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       activeFilters.classList.toggle("hidden", !chips.length);
       const next = new URLSearchParams();
       if(selectedAge!=="all")next.set("age",selectedAge);
+      if(selectedCategory!=="all")next.set("category",selectedCategory);
       if (q) next.set("q", search.value.trim());
       selectedChannels.forEach(value=>next.append("channel",value));
       selectedContexts.forEach(value=>next.append("context",value));
       history.replaceState(null,"",`${location.pathname}${next.size ? `?${next}` : ""}`);
     }
+
+    catTabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        selectedCategory = tab.dataset.categoryId || "all";
+        updateCategoryTabs();
+        apply();
+      });
+    });
+
+    grid.addEventListener("click", event => {
+      const badge = event.target.closest("[data-filter-category]");
+      if (badge) {
+        selectedCategory = badge.dataset.filterCategory || "all";
+        updateCategoryTabs();
+        apply();
+      }
+    });
+
     search.addEventListener("input",apply); checks.forEach(c=>c.addEventListener("change",apply)); ageChoices.forEach(choice=>choice.addEventListener("change",apply));
     clear.addEventListener("click",()=>{search.value="";search.focus();apply();});
-    document.getElementById("reset-filter").addEventListener("click",()=>{checks.forEach(c=>c.checked=false);const allAge=ageChoices.find(choice=>choice.value==="all");if(allAge)allAge.checked=true;search.value="";search.focus();apply();});
-    activeFilters.addEventListener("click",event=>{const button=event.target.closest("[data-filter-key]");if(!button)return;if(button.dataset.filterKey==="q")search.value="";else if(button.dataset.filterKey==="age"){const allAge=ageChoices.find(choice=>choice.value==="all");if(allAge)allAge.checked=true;}else{const target=checks.find(check=>check.name===button.dataset.filterKey&&check.value===button.dataset.filterValue);if(target)target.checked=false;}apply();});
+    document.getElementById("reset-filter").addEventListener("click",()=>{checks.forEach(c=>c.checked=false);const allAge=ageChoices.find(choice=>choice.value==="all");if(allAge)allAge.checked=true;selectedCategory="all";updateCategoryTabs();search.value="";search.focus();apply();});
+    activeFilters.addEventListener("click",event=>{const button=event.target.closest("[data-filter-key]");if(!button)return;if(button.dataset.filterKey==="q")search.value="";else if(button.dataset.filterKey==="age"){const allAge=ageChoices.find(choice=>choice.value==="all");if(allAge)allAge.checked=true;}else if(button.dataset.filterKey==="category"){selectedCategory="all";updateCategoryTabs();}else{const target=checks.find(check=>check.name===button.dataset.filterKey&&check.value===button.dataset.filterValue);if(target)target.checked=false;}apply();});
     document.getElementById("filter-toggle")?.addEventListener("click",e=>{const panel=document.getElementById("filter-panel");const open=panel.classList.toggle("open");e.currentTarget.setAttribute("aria-expanded",String(open));e.currentTarget.innerHTML=`${icon("filter")} ${open?"Tutup filter":"Filter"}`;});
     apply();
   }

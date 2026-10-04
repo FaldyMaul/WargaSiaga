@@ -281,6 +281,32 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
 .card-footer { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:auto; padding-top:14px; border-top:1px solid #edf0f1; }
 .card-footer .small { color:var(--muted); }
 
+.card-header-left { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.card-category-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border:1px solid #dcd5fb; border-radius:999px; color:var(--brand-deep); background:var(--violet-soft); font-size:11px; font-weight:750; cursor:pointer; transition:all var(--duration-fast) var(--ease-standard); }
+.card-category-badge:hover { border-color:var(--brand); background:#ede9fe; transform:translateY(-1px); }
+.card-category-badge svg { width:13px; height:13px; }
+.card-category-pill { position:absolute; right:12px; top:12px; display:inline-flex; align-items:center; gap:5px; padding:4px 9px; border-radius:999px; color:#fff; background:rgba(16,24,40,.82); font-size:11px; font-weight:750; backdrop-filter:blur(8px); box-shadow:0 2px 8px rgba(16,24,40,.18); }
+.card-category-pill svg { width:12px; height:12px; }
+.card-evidence-callout { display:flex; align-items:center; gap:8px; margin-top:12px; padding:8px 12px; border:1px solid rgba(122,90,248,.16); border-radius:10px; background:linear-gradient(135deg,#f9f8ff 0%,#f0fbf8 100%); color:#344054; font-size:12px; font-weight:650; }
+.card-evidence-callout svg { width:16px; height:16px; flex:0 0 auto; color:var(--brand); }
+
+.category-classification { margin:0 0 20px; padding:18px 20px; border:1px solid var(--line); border-radius:var(--radius); background:#fff; box-shadow:var(--shadow-sm); }
+.category-header { display:flex; align-items:baseline; flex-wrap:wrap; gap:8px 12px; margin-bottom:14px; }
+.category-header .eyebrow { margin:0; }
+.category-hint { color:var(--muted); font-size:13px; }
+.category-chip-group { display:flex; flex-wrap:wrap; gap:8px; }
+.category-tab { min-height:42px; display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border:1px solid #d0d7de; border-radius:999px; background:#fff; color:#344054; font-size:13px; font-weight:650; cursor:pointer; transition:all var(--duration-fast) var(--ease-standard); }
+.category-tab:hover { border-color:#aa9af2; background:var(--violet-soft); color:var(--brand-deep); }
+.category-tab.active { border-color:var(--brand); background:linear-gradient(135deg,#7a5af8 0%,#6938ef 100%); color:#ffffff; box-shadow:0 2px 8px rgba(122,90,248,.28); }
+.category-tab svg { width:15px; height:15px; }
+.cat-count { display:inline-block; padding:2px 7px; border-radius:999px; font-size:11px; font-weight:800; background:#f0f2f5; color:#475467; }
+.category-tab.active .cat-count { background:rgba(255,255,255,.25); color:#ffffff; }
+
+.emergency-hotline-pills { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+.hotline-pill { display:inline-flex; align-items:center; gap:8px; padding:9px 15px; border:1px solid rgba(255,255,255,.3); border-radius:999px; color:#fff; background:rgba(255,255,255,.12); font-size:13px; backdrop-filter:blur(8px); transition:background var(--duration-fast) var(--ease-standard); }
+.hotline-pill:hover { background:rgba(255,255,255,.24); border-color:#fff; }
+.hotline-pill svg { width:16px; height:16px; flex:0 0 auto; color:#ffd2c7; }
+
 .filter-shell { display:grid; grid-template-columns:270px minmax(0,1fr); gap:24px; align-items:start; }
 .catalog-section { padding-top:0; }
 .catalog-step-label { display:flex; align-items:baseline; gap:10px; margin:0 0 12px; }
@@ -765,6 +791,9 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
   .age-selector legend .eyebrow { display:block; margin:0 0 4px; }
   .age-options { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .age-options label:first-child { grid-column:1/-1; }
+  .category-classification { padding:14px; }
+  .category-header { flex-direction:column; gap:2px; }
+  .category-tab { min-height:38px; padding:5px 11px; font-size:12px; }
   .catalog-step-label { align-items:flex-start; flex-direction:column; gap:4px; }
   .urgent-banner { grid-template-columns:auto 1fr; }
   .urgent-banner .btn { grid-column:1/-1; width:100%; }
