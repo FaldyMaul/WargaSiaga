@@ -302,21 +302,63 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
 
   function urgentPage() {
     return shell(`
-      <section class="emergency-hero compact-emergency"><div class="container">${crumb([["Bantuan sekarang"]])}<span class="eyebrow highlight-pill urgent">Tindakan Cepat Tanggap</span><h1>Amankan <span class="text-gradient-urgent">Uang & Akun</span> Sekarang</h1><p class="section-copy">Pilih yang sudah terjadi untuk menampilkan langkah penanganan yang tepat.</p></div></section>
-      <section class="section-sm"><div class="container"><div class="form-card incident-picker"><h2>Apa yang sudah terjadi?</h2><div class="choice-grid" id="incident-choices">
+      <section class="emergency-hero compact-emergency"><div class="container">${crumb([["Bantuan sekarang"]])}<span class="eyebrow highlight-pill urgent-hero-pill">${icon("alert")} Tindakan Cepat Tanggap</span><h1>Amankan <span class="emergency-title-highlight">Uang dan Akses Akun</span> Sekarang</h1><p class="section-copy emergency-hero-copy">Pilih peristiwa yang sudah terjadi untuk menampilkan urutan penanganan darurat, hotline bank, dan generator laporan resmi.</p></div></section>
+      <section class="section-sm" style="padding-bottom:0">
+        <div class="container">
+          <div class="emergency-flow-card">
+            <div class="flow-card-head">
+              <span class="eyebrow highlight-pill amber">${icon("clock")} Panduan Waktu Emas (Golden Time)</span>
+              <h2>Alur Penanganan Darurat 15 Menit Pertama</h2>
+              <p>Lakukan langkah penyelamatan cepat secara berurutan untuk mengisolasi akun dan membatasi potensi kerugian sebelum melapor ke pihak berwenang.</p>
+            </div>
+            <div class="flow-steps-grid">
+              <div class="flow-step-box">
+                <div class="flow-step-badge">Fase 1 · 0 sampai 5 Mnt</div>
+                <div class="flow-step-icon-wrap">${icon("lock")}</div>
+                <h3>Putuskan Koneksi</h3>
+                <p>Aktifkan Mode Pesawat jika memasang APK. Kunci kartu di aplikasi jika nomor kartu sempat dibagikan.</p>
+              </div>
+              <div class="flow-arrow-divider">${icon("arrow")}</div>
+              <div class="flow-step-box">
+                <div class="flow-step-badge">Fase 2 · 5 sampai 10 Mnt</div>
+                <div class="flow-step-icon-wrap">${icon("phone")}</div>
+                <h3>Hubungi Bank</h3>
+                <p>Telepon call center resmi bank untuk blokir rekening penerima pelaku dan amankan rekening Anda.</p>
+              </div>
+              <div class="flow-arrow-divider">${icon("arrow")}</div>
+              <div class="flow-step-box">
+                <div class="flow-step-badge">Fase 3 · 10 sampai 15 Mnt</div>
+                <div class="flow-step-icon-wrap">${icon("file")}</div>
+                <h3>Amankan Bukti</h3>
+                <p>Tangkapan layar nomor rekening pelaku, bukti transfer, chat WhatsApp, dan tautan sebelum dihapus.</p>
+              </div>
+              <div class="flow-arrow-divider">${icon("arrow")}</div>
+              <div class="flow-step-box">
+                <div class="flow-step-badge">Fase 4 · Lanjutan</div>
+                <div class="flow-step-icon-wrap">${icon("shieldCheck")}</div>
+                <h3>Eskalasi Resmi</h3>
+                <p>Kirim laporan resmi ke IASC OJK 157, Patroli Siber Polri 110, dan portal Komdigi CekRekening.id.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section-sm"><div class="container"><div class="form-card incident-picker"><h2>Apa yang sudah terjadi?</h2><p class="section-copy" style="margin-bottom:16px">Tandai situasi yang sedang Anda alami untuk memfilter urutan tindakan paling mendesak.</p><div class="choice-grid" id="incident-choices">
         <label class="choice"><input type="checkbox" value="money"><span><strong>Uang sudah terkirim</strong><span>Transfer bank, dompet digital, kartu, atau kripto</span></span></label>
         <label class="choice"><input type="checkbox" value="otp"><span><strong>OTP / kata sandi dibagikan</strong><span>Kode masuk, PIN, atau data kartu</span></span></label>
         <label class="choice"><input type="checkbox" value="app"><span><strong>Aplikasi / file dipasang</strong><span>APK, kendali jarak jauh, atau izin perangkat</span></span></label>
         <label class="choice"><input type="checkbox" value="identity"><span><strong>Data identitas dikirim</strong><span>Foto identitas atau data pribadi penting</span></span></label>
       </div><p class="selection-summary" id="incident-summary" role="status" aria-live="polite">Semua langkah penting ditampilkan.</p></div></div></section>
       <section class="section-sm" style="padding-top:0"><div class="container detail-layout"><div><span class="eyebrow highlight-pill">Urutan tindakan</span><h2 class="section-title">Lakukan sekarang</h2><div class="emergency-steps" id="emergency-steps">
-        <article class="emergency-step" data-for="money otp"><div><h2>Hubungi penyedia pembayaran</h2><p>Gunakan aplikasi, nomor pada kartu, atau situs resmi yang Anda cari sendiri. Minta pengamanan akun dan transaksi.</p></div></article>
-        <article class="emergency-step" data-for="otp"><div><h2>Amankan akun</h2><p>Dari perangkat tepercaya: ganti kata sandi, keluarkan sesi lain, dan periksa data pemulihan.</p></div></article>
-        <article class="emergency-step" data-for="app"><div><h2>Batasi perangkat</h2><p>Putuskan koneksi bila ada kendali mencurigakan. Amankan akun dari perangkat lain.</p></div></article>
-        <article class="emergency-step" data-for="identity"><div><h2>Catat data yang dibagikan</h2><p>Amankan akun terkait dan waspadai penyamaran lanjutan.</p></div></article>
-        <article class="emergency-step" data-for="all"><div><h2>Simpan bukti</h2><p>Simpan waktu, transaksi, akun, percakapan, dan link (URL). Jangan unggah data sensitif ke publik.</p></div></article>
-        <article class="emergency-step" data-for="all"><div><h2>Gunakan jalur resmi</h2><p>Pilih layanan sesuai kasus. Kerugian transaksi juga dapat memerlukan laporan polisi.</p></div></article>
-      </div></div><aside class="side-stack"><div class="side-card"><h3>Tautan resmi</h3><a class="source-link" href="https://iasc.ojk.go.id/" target="_blank" rel="noopener noreferrer">${icon("external")}<span>IASC OJK dan Satgas PASTI<br><span class="muted">Kerugian transaksi finansial</span></span></a><a class="source-link" href="https://cekrekening.id/" target="_blank" rel="noopener noreferrer">${icon("external")}<span>CekRekening resmi Komdigi<br><span class="muted">Cek/laporkan rekening</span></span></a><a class="source-link" href="https://aduannomor.id/" target="_blank" rel="noopener noreferrer">${icon("external")}<span>AduanNomor resmi Komdigi<br><span class="muted">Cek/laporkan nomor</span></span></a><a class="source-link" href="https://aduankonten.id/" target="_blank" rel="noopener noreferrer">${icon("external")}<span>AduanKonten resmi Komdigi<br><span class="muted">Laporkan konten berbahaya</span></span></a></div><details class="side-card side-disclosure"><summary>Batas layanan ${icon("arrow")}</summary><div class="side-disclosure-body"><p>WargaSiaga tidak membekukan transaksi, memulihkan dana, atau membuat laporan resmi. Hasil penanganan tidak dapat dijamin.</p></div></details></aside></div></section>
+        <article class="emergency-step" data-for="money otp"><div><h2>Hubungi penyedia pembayaran</h2><p>Gunakan nomor darurat call center bank atau aplikasi resmi yang Anda cari sendiri. Segera minta pengamanan akun dan pemblokiran darurat rekening penerima pelaku.</p><div class="emergency-bank-hotlines"><span class="hotline-title">${icon("phone")} Hotline Panggilan Darurat Bank Nasional (Bebas Biaya atau Tarif Lokal):</span><div class="bank-pill-row"><a class="bank-call-pill" href="tel:1500888"><strong>Halo BCA</strong> 1500888</a><a class="bank-call-pill" href="tel:14000"><strong>Mandiri Call</strong> 14000</a><a class="bank-call-pill" href="tel:1500017"><strong>BRI Contact</strong> 1500017</a><a class="bank-call-pill" href="tel:1500046"><strong>BNI Call</strong> 1500046</a><a class="bank-call-pill" href="tel:14040"><strong>BSI Call</strong> 14040</a></div></div></div></article>
+        <article class="emergency-step" data-for="otp"><div><h2>Amankan akun</h2><p>Dari perangkat tepercaya: ganti kata sandi atau PIN akun perbankan, keluarkan semua sesi login aktif lainnya di perangkat lain, dan periksa nomor pemulihan akun.</p></div></article>
+        <article class="emergency-step" data-for="app"><div><h2>Batasi perangkat</h2><p>Segera putuskan koneksi internet dan aktifkan Mode Pesawat seketika bila ada file aplikasi asing terpasang. Amankan akun perbankan dari ponsel lain yang bersih.</p></div></article>
+        <article class="emergency-step" data-for="identity"><div><h2>Catat data yang dibagikan</h2><p>Dokumentasikan data spesifik yang sempat terkirim (misalnya NIK, nomor rekening, foto KTP) untuk mengantisipasi potensi penipuan identitas atau pinjaman online fiktif.</p></div></article>
+        <article class="emergency-step" data-for="all"><div><h2>Simpan bukti</h2><p>Simpan waktu transaksi, mutasi bank, nomor rekening tujuan, riwayat percakapan chat, dan tautan (URL). Jangan membagikan dokumen sensitif ke ruang publik.</p></div></article>
+        <article class="emergency-step" data-for="all"><div><h2>Gunakan jalur resmi</h2><p>Pilih layanan otoritas sesuai kerugian. Untuk kerugian finansial, segera laporkan ke IASC OJK 157 dan kepolisian terdekat untuk pembuatan Berita Acara Pemeriksaan (BAP).</p></div></article>
+      </div></div><aside class="side-stack"><div class="side-card urgent-official-card"><h3>${icon("phone")} Panggilan Darurat</h3><div class="quick-call-stack"><a class="quick-call-item urgent-police" href="tel:110"><span class="call-icon">${icon("phone")}</span><div><strong>Polisi Darurat 110</strong><span>Layanan 24 jam bebas pulsa</span></div></a><a class="quick-call-item urgent-ojk" href="tel:157"><span class="call-icon">${icon("phone")}</span><div><strong>Kontak OJK 157</strong><span>IASC & Satgas PASTI</span></div></a></div></div><div class="side-card"><h3>Tautan resmi</h3><a class="source-link" href="https://iasc.ojk.go.id/" target="_blank" rel="noopener noreferrer">${icon("external")}<span>IASC OJK dan Satgas PASTI<br><span class="muted">Kerugian transaksi finansial</span></span></a><a class="source-link" href="https://cekrekening.id/" target="_blank" rel="noopener noreferrer">${icon("external")}<span>CekRekening resmi Komdigi<br><span class="muted">Cek dan laporkan rekening</span></span></a><a class="source-link" href="https://aduannomor.id/" target="_blank" rel="noopener noreferrer">${icon("external")}<span>AduanNomor resmi Komdigi<br><span class="muted">Cek dan laporkan nomor</span></span></a><a class="source-link" href="https://aduankonten.id/" target="_blank" rel="noopener noreferrer">${icon("external")}<span>AduanKonten resmi Komdigi<br><span class="muted">Laporkan konten berbahaya</span></span></a></div><details class="side-card side-disclosure"><summary>Batas layanan ${icon("arrow")}</summary><div class="side-disclosure-body"><p>WargaSiaga tidak membekukan transaksi, memulihkan dana, atau membuat laporan resmi. Hasil penanganan tidak dapat dijamin.</p></div></details></aside></div></section>
+      <section class="section-sm" style="padding-top:0"><div class="container"><div class="call-script-card"><div class="call-script-header"><span class="eyebrow highlight-pill">${icon("chat")} Rekomendasi Narasi Telepon</span><h2>Apa yang Harus Dikatakan Saat Menghubungi Call Center Bank atau Polisi?</h2><p>Banyak korban merasa cemas atau bingung saat tersambung dengan petugas call center. Gunakan template kalimat terstruktur di bawah ini agar petugas bank dapat langsung melakukan tindakan pemblokiran.</p></div><div class="script-quote-box"><div class="script-quote-label">${icon("phone")} Naskah Percakapan Siap Baca:</div><blockquote id="call-script-text">“Selamat siang Petugas, saya nasabah yang baru saja menjadi korban transaksi penipuan perbankan. Saya memohon bantuan darurat untuk pemblokiran segera pada nomor rekening tujuan penipu serta isolasi akun rekening saya agar saldo tidak berpindah lebih jauh. Saya memegang bukti mutasi transfer dan tangkapan layar percakapan lengkap untuk keperluan investigasi.”</blockquote><div class="script-actions"><button class="btn btn-secondary btn-sm" type="button" id="btn-copy-call-script">${icon("copy")} Salin Naskah Bicara</button></div></div></div></div></section>
+      <section class="section-sm" style="padding-top:0"><div class="container"><div class="official-draft-card"><div class="draft-card-header"><span class="eyebrow highlight-pill teal">${icon("file")} Generator Draf Laporan Resmi</span><h2>Buat Draf Laporan Otomatis ke OJK dan Kepolisian</h2><p>Lengkapi formulir ringkas berikut. Sistem otomatis merangkai format email aduan dan chat WhatsApp resmi berstandar baku sehingga Anda dapat langsung mengirimkannya ke otoritas terkait.</p></div><div class="draft-form-grid"><div class="field"><label for="draft-reporter-name">Nama Pelapor (Opsional)</label><input type="text" id="draft-reporter-name" placeholder="Contoh: Budi Santoso" value=""></div><div class="field"><label for="draft-suspect-bank">Bank dan Nomor Rekening Pelaku</label><input type="text" id="draft-suspect-bank" placeholder="Contoh: BCA 1234567890 an Tersangka" value=""></div><div class="field"><label for="draft-suspect-amount">Perkiraan Nominal Kerugian</label><input type="text" id="draft-suspect-amount" placeholder="Contoh: Rp 2.500.000" value=""></div><div class="field"><label for="draft-suspect-contact">Nomor WhatsApp atau Kontak Pelaku</label><input type="text" id="draft-suspect-contact" placeholder="Contoh: 081234567890" value=""></div><div class="field field-full"><label for="draft-chronology">Ringkasan Kronologi Singkat Kejadian</label><textarea id="draft-chronology" rows="3" placeholder="Ceritakan singkat peristiwa: misalnya menerima pesan undangan APK lalu saldo tabungan terpotong..."></textarea></div></div><div class="draft-preview-wrap"><div class="draft-preview-label"><span>${icon("scanText")} <strong>Pratinjau Draf Aduan Resmi</strong></span></div><pre class="draft-preview-box" id="draft-preview-text"></pre></div><div class="draft-action-buttons"><a class="btn btn-primary" id="btn-email-ojk" href="#" target="_blank" rel="noopener noreferrer">${icon("external")} Buka Email Resmi OJK (konsumen@ojk.go.id)</a><a class="btn btn-secondary" id="btn-email-polri" href="#" target="_blank" rel="noopener noreferrer">${icon("external")} Buka Email Patroli Siber Polri</a><a class="btn btn-secondary" id="btn-wa-ojk" href="#" target="_blank" rel="noopener noreferrer">${icon("chat")} Kirim WhatsApp ke OJK 157</a><button class="btn btn-secondary" id="btn-copy-draft" type="button">${icon("copy")} Salin Draf Laporan</button></div></div></div></section>
       <section class="section-sm no-print"><div class="container"><div class="cta-band"><div class="cta-band-grid"><div><h2>Simpan urutan langkah ini</h2><p>Cetak atau simpan halaman tanpa perlu membuat akun.</p></div><button class="btn btn-secondary" type="button" id="print-page">${icon("file")} Cetak panduan</button></div></div></div></section>`);
   }
 
@@ -888,6 +930,19 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         location.assign("lapor.html");
       });
 
+      document.getElementById("btn-escalate-urgent")?.addEventListener("click", () => {
+        const rawText = input.value.trim() || "";
+        const urgentPrefill = {
+          incidents: ["money", "otp"],
+          bank: (rawText.match(/(?:bca|bri|mandiri|bni|bsi|jago|seabank|dana|ovo|gopay)\s*\d{8,18}/i) || [])[0] || "",
+          contact: (rawText.match(/(?:\+?62|0)8[1-9][0-9]{6,11}/) || [])[0] || "",
+          chronology: rawText || payload.summary || ""
+        };
+        try {
+          sessionStorage.setItem("ws-urgent-prefill", JSON.stringify(urgentPrefill));
+        } catch (_) {}
+      });
+
       resetBtn?.addEventListener("click",()=>{
         consultHistory=[];
         input.value="";
@@ -1069,6 +1124,18 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
           </div>
           <button class="btn btn-primary btn-sm" id="btn-escalate-report" type="button">${icon("file")} Buat Laporan Warga ${icon("arrow")}</button>
         </div>
+        ${(urgent || (activeCredibility && (activeCredibility.level === "tinggi" || activeCredibility.score >= 50))) ? `
+        <div class="consult-urgent-escalation-card">
+          <div class="consult-urgent-content">
+            <span class="highlight-pill urgent">${icon("alert")} Butuh Tindakan Cepat</span>
+            <h3>Sudah Terlanjur Transfer Uang atau Membagikan Kode Rahasia?</h3>
+            <p>Jangan menunda. Akses bantuan darurat untuk panduan telepon call center bank, naskah bicara resmi, dan draf email aduan ke OJK 157.</p>
+          </div>
+          <div class="consult-urgent-actions">
+            <a class="btn btn-urgent btn-sm" id="btn-escalate-urgent" href="bantuan-darurat.html">${icon("phone")} Bantuan Darurat & Draf Laporan ${icon("arrow")}</a>
+            <a class="btn btn-secondary btn-sm" href="tel:157">${icon("phone")} Telepon OJK 157</a>
+          </div>
+        </div>` : ""}
         ${helpdeskSectionHtml}
         <details class="result-disclosure"><summary>${icon("shieldCheck")} Privasi dan batasan</summary><div class="privacy-box"><p>${escapeHtml(redaction)}</p><p>${escapeHtml(payload.notice||"")}</p><p>${escapeHtml(payload.disclaimer||"")}</p><p>${escapeHtml(payload.retention||"")}</p></div></details>`;
       result.classList.remove("hidden");
@@ -1117,8 +1184,121 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     const choices=[...document.querySelectorAll("#incident-choices input")]; if(!choices.length)return;
     const steps=[...document.querySelectorAll("#emergency-steps .emergency-step")];
     const summary=document.getElementById("incident-summary");
-    function update(){const chosen=choices.filter(x=>x.checked).map(x=>x.value);let visible=0;steps.forEach(s=>{const tags=s.dataset.for.split(" ");const hidden=chosen.length>0&&!tags.includes("all")&&!tags.some(x=>chosen.includes(x));s.classList.toggle("hidden",hidden);if(!hidden)visible++;});summary.textContent=chosen.length?`${visible} langkah yang relevan ditampilkan.`:"Semua langkah penting ditampilkan.";}
-    choices.forEach(c=>c.addEventListener("change",update)); document.getElementById("print-page")?.addEventListener("click",()=>{toast("Membuka dialog cetak…");window.print();});
+    function update(){
+      const chosen=choices.filter(x=>x.checked).map(x=>x.value);
+      let visible=0;
+      steps.forEach(s=>{
+        const tags=s.dataset.for.split(" ");
+        const hidden=chosen.length>0&&!tags.includes("all")&&!tags.some(x=>chosen.includes(x));
+        s.classList.toggle("hidden",hidden);
+        if(!hidden)visible++;
+      });
+      summary.textContent=chosen.length?`${visible} langkah yang relevan ditampilkan.`:"Semua langkah penting ditampilkan.";
+    }
+    choices.forEach(c=>c.addEventListener("change",update));
+    document.getElementById("print-page")?.addEventListener("click",()=>{toast("Membuka dialog cetak…");window.print();});
+
+    // Copy call script
+    document.getElementById("btn-copy-call-script")?.addEventListener("click", () => {
+      const scriptText = document.getElementById("call-script-text")?.textContent || "";
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(scriptText);
+      }
+      toast("Naskah percakapan telepon berhasil disalin ke papan klip.");
+    });
+
+    // Official draft generator
+    const repName = document.getElementById("draft-reporter-name");
+    const suspBank = document.getElementById("draft-suspect-bank");
+    const suspAmount = document.getElementById("draft-suspect-amount");
+    const suspContact = document.getElementById("draft-suspect-contact");
+    const suspChrono = document.getElementById("draft-chronology");
+    const previewBox = document.getElementById("draft-preview-text");
+    const btnEmailOjk = document.getElementById("btn-email-ojk");
+    const btnEmailPolri = document.getElementById("btn-email-polri");
+    const btnWaOjk = document.getElementById("btn-wa-ojk");
+    const btnCopyDraft = document.getElementById("btn-copy-draft");
+
+    function renderOfficialDraft() {
+      if (!previewBox) return "";
+      const name = repName?.value.trim() || "[Nama Pelapor atau Korban]";
+      const bank = suspBank?.value.trim() || "[Bank dan Nomor Rekening Pelaku]";
+      const amount = suspAmount?.value.trim() || "[Perkiraan Nominal Kerugian]";
+      const contact = suspContact?.value.trim() || "[Nomor WhatsApp atau Kontak Pelaku]";
+      const chrono = suspChrono?.value.trim() || "[Kronologi singkat kejadian transaksi penipuan]";
+
+      const dateStr = new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(new Date());
+
+      const text = `Kepada Yth.
+Otoritas Jasa Keuangan (OJK) / Satgas PASTI / Layanan Konsumen 157
+dan Direktorat Tindak Pidana Siber Bareskrim Polri
+
+Perihal: Laporan Dugaan Tindak Pidana Penipuan Transaksi Keuangan Digital
+
+Dengan hormat,
+Saya yang bertanda tangan di bawah ini:
+Nama Pelapor: ${name}
+Tanggal Kejadian: ${dateStr}
+
+Bermaksud menyampaikan laporan dugaan penipuan transaksi digital dengan rincian data terduga pelaku sebagai berikut:
+- Rekening Tujuan Pelaku: ${bank}
+- Kontak WhatsApp atau Telepon Pelaku: ${contact}
+- Estimasi Kerugian Finansial: ${amount}
+
+Kronologi Singkat:
+${chrono}
+
+Mohon bantuan dan koordinasi pihak berwenang untuk pemblokiran rekening tujuan pelaku melalui sistem IASC OJK serta proses penegakan hukum kepolisian.
+
+Terima kasih atas perhatian dan perlindungan kepada konsumen.`;
+
+      previewBox.textContent = text;
+
+      const subject = `Laporan Penipuan Transaksi Keuangan - ${bank}`;
+      if (btnEmailOjk) {
+        btnEmailOjk.href = `mailto:konsumen@ojk.go.id?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+      }
+      if (btnEmailPolri) {
+        btnEmailPolri.href = `mailto:patrolisiber@polri.go.id?subject=${encodeURIComponent("Laporan Aduan Siber Penipuan - " + bank)}&body=${encodeURIComponent(text)}`;
+      }
+      if (btnWaOjk) {
+        btnWaOjk.href = `https://wa.me/6281157157157?text=${encodeURIComponent("Halo Layanan OJK 157, saya ingin menyampaikan laporan dugaan penipuan transaksi keuangan:\n\n" + text)}`;
+      }
+      return text;
+    }
+
+    [repName, suspBank, suspAmount, suspContact, suspChrono].forEach(el => {
+      el?.addEventListener("input", renderOfficialDraft);
+    });
+
+    btnCopyDraft?.addEventListener("click", () => {
+      const text = renderOfficialDraft();
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text);
+      }
+      toast("Draf laporan resmi berhasil disalin ke papan klip.");
+    });
+
+    // Check prefill from AI consultation
+    try {
+      const rawPrefill = sessionStorage.getItem("ws-urgent-prefill");
+      if (rawPrefill) {
+        const prefill = JSON.parse(rawPrefill);
+        sessionStorage.removeItem("ws-urgent-prefill");
+        if (Array.isArray(prefill.incidents)) {
+          choices.forEach(ch => {
+            if (prefill.incidents.includes(ch.value)) ch.checked = true;
+          });
+          update();
+        }
+        if (suspBank && prefill.bank) suspBank.value = prefill.bank;
+        if (suspContact && prefill.contact) suspContact.value = prefill.contact;
+        if (suspChrono && prefill.chronology) suspChrono.value = prefill.chronology;
+        toast("Data dari konsultasi AI telah dipindahkan ke draf laporan darurat.");
+      }
+    } catch (_) {}
+
+    renderOfficialDraft();
   }
 
   function initReport() {
