@@ -1,0 +1,30 @@
+WARGASIAGA IMAGE ASSET INDEX
+
+Generated and integrated:
+1. wargasiaga-home-check.webp
+   Prompt: 01-home-check-image-prompt.txt
+   Placement: home hero scenario card
+
+2. wargasiaga-ai-inputs.webp
+   Prompt: 02-ai-inputs-image-prompt.txt
+   Placement: AI consultation hero
+
+3. wargasiaga-community.webp
+   Prompt: 03-community-image-prompt.txt
+   Placement: community-pattern reports hero
+
+Prompt-ready future assets:
+4. wargasiaga-emergency-steps.webp
+   Prompt: 04-emergency-steps-image-prompt.txt
+
+5. wargasiaga-modus-library.webp
+   Prompt: 05-modus-library-image-prompt.txt
+
+Shared visual rules:
+- Purple #7A5AF8 remains the brand accent, never the entire background.
+- Supporting colors: teal #2A9D8F, sky blue #DDECF7, amber #E9A23B, slate, and warm off-white.
+- No text inside illustrations; all product copy remains real HTML.
+- No logos, government insignia, private information, or watermarks.
+- Use calm and practical safety imagery; avoid fear, shame, and victim-blaming.
+- Export production images as WebP, ideally 70–180 KB at a maximum width of 1280 px.
+- Keep source generations separately if future editing is expected.

@@ -1,0 +1,25 @@
+WARGASIAGA IMAGE GENERATION PROMPT
+
+Target filename: wargasiaga-home-check.webp
+Recommended source size: 1536 × 1024 px, landscape 3:2
+Website placement: home hero scenario card
+Status: generated and integrated
+
+Use case: stylized-concept
+Asset type: responsive website hero illustration for an Indonesian public-safety web app
+Primary request: A calm Indonesian adult seated at a small home table, thoughtfully checking a suspicious chat message on a smartphone while a subtle protective shield and magnifying-glass motif suggests careful verification.
+Scene/backdrop: Bright contemporary home corner with a plant, soft window light, and simple geometric shapes; culturally neutral Indonesian everyday setting.
+Subject: One approachable adult with natural proportions, phone held safely at chest level, calm focused expression; no fear or panic.
+Style/medium: Premium editorial 3D illustration with softly rounded forms, refined matte materials, modern fintech/public-service aesthetic, sophisticated but human.
+Composition/framing: Landscape 3:2. Keep the subject near the center with clean margins. The image must remain readable when cropped to approximately 16:9 and displayed at 320–560 px wide.
+Lighting/mood: Soft daylight, reassuring, trustworthy, calm.
+Color palette: Warm off-white and cool slate foundation. Use TailAdmin purple #7A5AF8 only as an accent. Support it with muted teal #2A9D8F, soft sky blue #DDECF7, and small amber #E9A23B details.
+Constraints: No text, letters, numbers, logos, brand marks, watermark, device-screen text, or private information. No alarmist red glow. No purple background. Correct hands and fingers.
+Avoid: Monochrome purple, cyberpunk, dark hacker imagery, police imagery, government insignia, photorealistic faces, clutter, fear, victim-blaming.
+
+Crop guidance:
+- Preserve the face, phone, shield, and magnifying glass.
+- Safe focal area: central 70% of the canvas.
+- Do not place critical details within 8% of any edge.
+
+Alt-text decision: Decorative in the current layout; use alt="" because nearby copy already explains the action.

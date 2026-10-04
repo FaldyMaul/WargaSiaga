@@ -1,0 +1,25 @@
+WARGASIAGA IMAGE GENERATION PROMPT
+
+Target filename when generated: wargasiaga-emergency-steps.webp
+Recommended source size: 1536 × 1024 px, landscape 3:2
+Suggested placement: emergency page, above the ordered action list
+Status: prompt ready; not currently generated or referenced
+
+Use case: stylized-concept
+Asset type: website support illustration for urgent account and payment protection
+Primary request: A calm Indonesian adult taking immediate practical safety actions after a suspected scam: calling a verified bank number from a card, securing an account on a trusted laptop, and organizing transaction evidence in one clear visual sequence.
+Scene/backdrop: Simple desk scene with a phone, bank card turned face down with no readable details, laptop with abstract lock symbol, and a paper folder for evidence.
+Subject: One adult acting confidently and methodically. The emphasis is control and recovery, not panic.
+Style/medium: Premium editorial 3D illustration, matte materials, rounded public-service visual language.
+Composition/framing: Landscape 3:2 with a left-to-right action flow but no arrows or written labels. Central safe area for responsive cropping.
+Lighting/mood: Clear daylight, focused, reassuring, urgent without alarmism.
+Color palette: Warm off-white and slate base, deep muted red #B54732 only for small urgent accents, teal #2A9D8F for verified actions, restrained purple #7A5AF8 on one minor element.
+Constraints: No text, letters, numbers, bank logos, card numbers, account information, government marks, watermark, sirens, police, money piles, tears, or fear.
+Avoid: Dominant red, dominant purple, dramatic crisis lighting, hacker imagery, victim-blaming.
+
+Crop guidance:
+- Preserve phone, lock symbol, and evidence folder.
+- Keep hands anatomically correct and away from image edges.
+- Must remain understandable at 360 px wide.
+
+Alt-text suggestion if informative: "Seseorang menghubungi kanal resmi, mengamankan akun, dan menyimpan bukti."

@@ -1,0 +1,25 @@
+WARGASIAGA IMAGE GENERATION PROMPT
+
+Target filename: wargasiaga-community.webp
+Recommended source size: 1536 × 1024 px, landscape 3:2
+Website placement: community-pattern reports page hero
+Status: generated and integrated
+
+Use case: stylized-concept
+Asset type: website illustration for community safety and transparency
+Primary request: A small diverse group of Indonesian neighbors across generations calmly helping one another verify a suspicious message. One person points to a phone while others compare information using a notebook and a simple shield symbol.
+Scene/backdrop: Welcoming neighborhood community room with daylight, subtle tropical plants, clean uncluttered surfaces.
+Subject: Four people, mixed ages and genders, collaborative and respectful body language. No one is portrayed as helpless, ashamed, or blamed.
+Style/medium: Premium editorial 3D illustration with softly rounded forms and refined matte materials; modern civic-tech aesthetic.
+Composition/framing: Landscape 3:2, compact group centered with clean margins. It must remain useful as a responsive banner cropped to approximately 16:9.
+Lighting/mood: Warm daylight, inclusive, reassuring, practical.
+Color palette: Warm off-white, cool slate, muted teal #2A9D8F and sky blue #DDECF7 as main supporting colors; restrained purple #7A5AF8 accents; small amber #E9A23B details.
+Constraints: No text, letters, numbers, logos, government insignia, watermark, purple background, warning sirens, fear, panic, or visible private information on devices.
+Avoid: Monochrome purple, corporate stock-photo poses, photorealism, cybercrime clichés, crowded composition, victim-blaming.
+
+Crop guidance:
+- Preserve all four faces and the phone.
+- Shield may be cropped slightly, but people must not be cut at the eyes or hands.
+- Keep critical content in the central 75%.
+
+Alt-text decision: Decorative in the current layout; use alt="".

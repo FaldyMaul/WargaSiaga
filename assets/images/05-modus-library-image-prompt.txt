@@ -1,0 +1,25 @@
+WARGASIAGA IMAGE GENERATION PROMPT
+
+Target filename when generated: wargasiaga-modus-library.webp
+Recommended source size: 1536 × 1024 px, landscape 3:2
+Suggested placement: modus catalogue hero or empty-search state
+Status: prompt ready; not currently generated or referenced
+
+Use case: stylized-concept
+Asset type: educational website illustration for a scam-pattern library
+Primary request: A visual library of scam patterns represented by an open reference book, magnifying glass, message bubble, parcel, briefcase, and shield arranged as a clear learning toolkit.
+Scene/backdrop: Bright neutral tabletop or abstract study surface with generous whitespace.
+Subject: One open book in the center with the supporting objects arranged around it; no people required.
+Style/medium: Premium editorial 3D illustration with matte, softly rounded objects and restrained detail.
+Composition/framing: Landscape 3:2, central cluster, balanced negative space, strong silhouettes at thumbnail size.
+Lighting/mood: Soft daylight, educational, approachable, organized.
+Color palette: Cool slate and warm white foundation, teal #2A9D8F and sky blue #DDECF7 as primary supporting colors, amber #E9A23B for the parcel/briefcase, restrained purple #7A5AF8 only on a small bookmark or magnifier handle.
+Constraints: No text on the book, no letters, numbers, logos, brands, QR codes, readable labels, watermark, or dominant purple surface.
+Avoid: Threatening imagery, dark web aesthetics, warning overload, police symbols, clutter.
+
+Crop guidance:
+- Preserve the book, magnifying glass, and shield in the central 70%.
+- Parcel and briefcase may move closer inward for mobile cropping.
+- Avoid important detail near the corners.
+
+Alt-text suggestion if informative: "Buku panduan dengan simbol pesan, paket, pekerjaan, pencarian, dan perlindungan."

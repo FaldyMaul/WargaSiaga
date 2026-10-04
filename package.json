@@ -1,0 +1,33 @@
+{
+  "name": "wargasiaga-frontend",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Multi-page WargaSiaga application with a guarded server-side AI consultation",
+  "scripts": {
+    "icons:build": "node scripts/build-lucide-icons.mjs",
+    "dev": "node server/index.mjs",
+    "dev:watch": "node --watch server/index.mjs",
+    "build": "vite build",
+    "preview": "npm run build && node server/index.mjs --production",
+    "start": "node server/index.mjs --production",
+    "test": "node tests/validate.js",
+    "test:api": "node tests/api-integration.js",
+    "test:ai:live": "node tests/live-ai-smoke.js",
+    "test:quality:url": "node tests/url-quality-eval.js",
+    "test:quality:ai": "node tests/ai-quality-eval.js",
+    "test:quality": "npm run test:quality:url && npm run test:quality:ai",
+    "test:browser": "node tests/browser-smoke.js",
+    "test:preview": "npm run build && node tests/preview-smoke.js",
+    "test:all": "npm test && npm run test:api && npm run build && npm run test:browser && node tests/preview-smoke.js"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "devDependencies": {
+    "vite": "8.3.2"
+  },
+  "dependencies": {
+    "@tesseract.js-data/ind": "^1.0.0",
+    "tesseract.js": "^7.0.0"
+  }
+}

@@ -1,0 +1,25 @@
+WARGASIAGA IMAGE GENERATION PROMPT
+
+Target filename: wargasiaga-ai-inputs.webp
+Recommended source size: 1536 × 864 px, landscape 16:9
+Website placement: AI consultation page hero
+Status: generated and integrated
+
+Use case: stylized-concept
+Asset type: website section illustration for an AI safety consultation
+Primary request: A friendly digital-safety assistant represented by an abstract glowing shield orb carefully examining a smartphone message, a URL link symbol, and a screenshot frame with a magnifying glass.
+Scene/backdrop: Clean light neutral studio backdrop with layered paper-like panels and subtle depth.
+Subject: A central protective shield orb connected to three visual inputs: textless chat bubble, chain link, and image frame. Keep all elements abstract and non-branded.
+Style/medium: Premium editorial 3D illustration, soft rounded geometry, matte surfaces, sophisticated public-service product design.
+Composition/framing: Wide landscape 16:9, centered visual cluster, generous safe margins. Must work as a compact banner cropped to 340 × 150 px.
+Lighting/mood: Clean softbox lighting, calm, analytical, reassuring.
+Color palette: Warm white and cool slate base, restrained purple #7A5AF8 accents, muted teal #2A9D8F, soft sky blue #DDECF7, tiny amber #E9A23B highlights.
+Constraints: No text, letters, numbers, logos, trademarks, watermark, purple background, red warning glow, or photorealistic people.
+Avoid: Cyberpunk, hacker hoodies, binary code, surveillance cameras, floating text, clutter.
+
+Crop guidance:
+- Keep all three input symbols visible in the central 78%.
+- Shield remains the primary focal point.
+- Avoid thin details that disappear below 300 px width.
+
+Alt-text decision: Decorative in the current layout; use alt="".
