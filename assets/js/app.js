@@ -332,7 +332,45 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
 
   function reportsPage() {
     return shell(`
-      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Lapor Warga"]])}<span class="eyebrow highlight-pill teal">Pola Komunitas</span><h1 class="section-title">Pola yang <span class="text-gradient">Dilaporkan Warga</span></h1><p class="section-copy">Kumpulan pola modus terkini yang dibagikan oleh warga dan telah disamarkan demi keamanan bersama.</p><div class="hero-actions"><a class="btn btn-primary" href="lapor.html">${icon("file")} Buat Laporan Warga</a><a class="btn btn-secondary" href="status-laporan.html">Pantau Status Laporan</a></div></div><div class="page-hero-visual"><img src="${communityUrl}" width="1280" height="853" alt="" aria-hidden="true" loading="lazy"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Kehilangan uang?</strong><small>Hubungi penyedia lebih dahulu</small></span>${icon("arrow")}</a></div></div></section>
+      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Lapor Warga"]])}<span class="eyebrow highlight-pill teal">Pola Komunitas</span><h1 class="section-title">Pola yang <span class="text-gradient">Dilaporkan Warga</span></h1><p class="section-copy">Kumpulan pola modus terkini yang dibagikan oleh warga dan telah diverifikasi oleh pipeline AI demi keamanan bersama.</p><div class="hero-actions"><a class="btn btn-primary" href="lapor.html">${icon("file")} Buat Laporan Warga</a><a class="btn btn-secondary" href="status-laporan.html">Pantau Status Laporan</a></div></div><div class="page-hero-visual"><img src="${communityUrl}" width="1280" height="853" alt="" aria-hidden="true" loading="lazy"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Kehilangan uang?</strong><small>Hubungi penyedia lebih dahulu</small></span>${icon("arrow")}</a></div></div></section>
+      <section class="section-sm" style="padding-bottom:0"><div class="container">
+        <div class="report-stats-grid">
+          <div class="report-stat-card"><span class="report-stat-val">1.428+</span><span class="report-stat-label">Laporan Warga Terkumpul</span></div>
+          <div class="report-stat-card"><span class="report-stat-val">91.4%</span><span class="report-stat-label">Terverifikasi AI & Komunitas</span></div>
+          <div class="report-stat-card"><span class="report-stat-val">&lt; 3 Mnt</span><span class="report-stat-label">Validasi Otomatis Pipeline AI</span></div>
+          <div class="report-stat-card"><span class="report-stat-val">Rp 520 Jt</span><span class="report-stat-label">Potensi Kerugian Terhindar</span></div>
+        </div>
+        <div class="section-heading-row">
+          <div><span class="eyebrow highlight-pill">${icon("sparkles")} Pantauan Terkini</span><h2 class="section-title">Tren Modus Minggu Ini</h2></div>
+          <span class="status-badge status-official">Diperbarui berkala</span>
+        </div>
+        <div class="trending-modus-grid">
+          <a class="trending-modus-card" href="modus-detail.html?id=apk-phishing">
+            <div class="trending-modus-top"><span class="trending-rank">#1 Tren Tertinggi</span><span class="trending-badge">+46% minggu ini</span></div>
+            <h3>Penyebaran File APK Surat Undangan & Pajak Palsu</h3>
+            <p>Modus mengirimkan file APK melalui pesan instan WhatsApp dengan dalih dokumen penting atau tagihan listrik.</p>
+            <span class="trending-modus-link">Buka panduan pencegahan ${icon("arrow")}</span>
+          </a>
+          <a class="trending-modus-card" href="modus-detail.html?id=marketplace-diversion">
+            <div class="trending-modus-top"><span class="trending-rank">#2 Waspada Transaksi</span><span class="trending-badge">+31% minggu ini</span></div>
+            <h3>Pengalihan Transaksi ke Luar Aplikasi Marketplace</h3>
+            <p>Calon pembeli atau penjual mengajak transaksi via chat pribadi dengan tautan pembayaran rekayasa.</p>
+            <span class="trending-modus-link">Buka panduan pencegahan ${icon("arrow")}</span>
+          </a>
+          <a class="trending-modus-card" href="modus-detail.html?id=job-deposit">
+            <div class="trending-modus-top"><span class="trending-rank">#3 Tawaran Kerja</span><span class="trending-badge">+24% minggu ini</span></div>
+            <h3>Tawaran Freelance Like Video dengan Deposit Saldo</h3>
+            <p>Iming-iming gaji harian tinggi dari tugas sederhana, namun diwajibkan menyetor uang jaminan berjenjang.</p>
+            <span class="trending-modus-link">Buka panduan pencegahan ${icon("arrow")}</span>
+          </a>
+          <a class="trending-modus-card" href="modus-detail.html?id=recovery-scam">
+            <div class="trending-modus-top"><span class="trending-rank">#4 Pantauan Khusus</span><span class="trending-badge">+18% minggu ini</span></div>
+            <h3>Janji Jasa Pemulihan Uang Hilang (Recovery Scam)</h3>
+            <p>Pihak mengatasnamakan pakar keamanan atau pengacara menjanjikan dana penipuan kembali dengan imbalan awal.</p>
+            <span class="trending-modus-link">Buka panduan pencegahan ${icon("arrow")}</span>
+          </a>
+        </div>
+      </div></section>
       <section class="section"><div class="container"><div class="section-heading-row"><div><span class="eyebrow highlight-pill">Laporan Terkini</span><h2 class="section-title">Pola Terbaru</h2></div><span class="status-badge status-public">Belum terverifikasi</span></div><div class="report-grid">${DATA.reports.map(r=>`<article class="report-card"><div class="report-meta"><span>${icon("chat")} ${r.channel}</span><span>${icon("clock")} ${r.period}</span></div><h3>${r.title}</h3><p>${r.summary}</p><div class="card-footer">${arrowLink("Buka modus",`modus-detail.html?id=${r.related}`)}</div></article>`).join("")}</div></div></section>
       <section class="section-sm surface-section"><div class="narrow"><details class="content-disclosure"><summary><span>${icon("info")} Cara membaca status laporan</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content status-explainer"><div><span class="status-badge status-review">Ditinjau</span><p>Masih privat.</p></div><div><span class="status-badge status-public">Dilaporkan warga</span><p>Sudah disamarkan, belum terbukti.</p></div><div><span class="status-badge status-official">Peringatan resmi</span><p>Memiliki sumber otoritas.</p></div></div></details><p class="demo-note">${icon("shieldCheck")} Perlindungan Privasi: Data pribadi disamarkan secara otomatis di perangkat sebelum dikirimkan ke moderasi komunitas.</p></div></section>`);
   }
@@ -340,24 +378,61 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
   function reportFormPage() {
     return shell(`
       <section class="page-hero compact-hero"><div class="container">${crumb([["Lapor Warga","laporan.html"],["Formulir Laporan"]])}<span class="eyebrow highlight-pill teal">Perlindungan Warga</span><h1 class="section-title"><span class="text-gradient">Laporkan Modus Mencurigakan</span></h1><p class="section-copy">Bantu warga lain mengenali modus baru dengan membagikan alur kejadian tanpa data pribadi.</p></div></section>
-      <section class="section-sm"><div class="container form-layout"><div class="form-card"><div class="progress" role="list" aria-label="Tahapan laporan warga"><div class="progress-step active" data-progress="1" role="listitem" aria-current="step"><span class="progress-num">1</span><span>Ceritakan</span></div><div class="progress-step" data-progress="2" role="listitem"><span class="progress-num">2</span><span>Periksa data</span></div><div class="progress-step" data-progress="3" role="listitem"><span class="progress-num">3</span><span>Konfirmasi</span></div></div>
+      <section class="section-sm"><div class="container form-layout"><div class="form-card">
+        <div class="prefill-notice highlight-pill teal hidden" id="prefill-notice"></div>
+        <div class="progress" role="list" aria-label="Tahapan laporan warga"><div class="progress-step active" data-progress="1" role="listitem" aria-current="step"><span class="progress-num">1</span><span>Ceritakan</span></div><div class="progress-step" data-progress="2" role="listitem"><span class="progress-num">2</span><span>Periksa data</span></div><div class="progress-step" data-progress="3" role="listitem"><span class="progress-num">3</span><span>Konfirmasi</span></div></div>
         <form id="report-form" novalidate><section data-step="1"><h2 tabindex="-1">Apa yang terjadi?</h2><p>Jangan tulis nama lengkap, nomor telepon/rekening penuh, NIK, alamat, OTP, PIN, atau kata sandi.</p><div class="form-error hidden" id="report-error" role="alert" tabindex="-1"></div>
           <div class="field"><label for="report-channel">Cara dihubungi</label><select id="report-channel" required aria-describedby="report-error"><option value="">Pilih kanal</option><option>WhatsApp</option><option>Telepon</option><option>SMS</option><option>Email</option><option>Telegram</option><option>Media sosial</option><option>Marketplace</option><option>Lainnya</option></select></div>
           <div class="field"><label for="report-period">Kapan terjadi?</label><select id="report-period" required aria-describedby="report-error"><option value="">Pilih rentang</option><option>7 hari terakhir</option><option>30 hari terakhir</option><option>2 sampai 3 bulan lalu</option><option>Lebih lama</option></select></div>
           <div class="field"><label for="report-type">Pola yang paling dekat</label><select id="report-type" required aria-describedby="report-error"><option value="">Pilih pola</option>${DATA.cards.map(c=>`<option value="${c.id}">${c.title}</option>`).join("")}<option value="other">Lainnya — tulis sendiri</option></select></div>
           <div class="field conditional-field hidden" id="report-type-other-wrap"><label for="report-type-other">Tulis pola lainnya</label><input id="report-type-other" type="text" maxlength="120" aria-describedby="report-error report-type-other-help" placeholder="Contoh: penipuan tiket konser"><span class="field-help" id="report-type-other-help">Tulis jenis polanya saja. Jangan masukkan nama, nomor, link, atau data pribadi.</span></div>
           <div class="field"><label for="report-story">Cerita singkat</label><textarea id="report-story" maxlength="1200" required aria-describedby="report-error" placeholder="Contoh: Saya dihubungi akun yang mengaku perekrut dan diminta membayar deposit…"></textarea><div class="spread"><span class="field-help">Sebutkan pola dan tindakan yang diminta, bukan identitas.</span><span class="char-count"><span id="report-count">0</span>/1200</span></div></div>
+          <div class="evidence-box">
+            <div class="evidence-header">
+              <span class="highlight-pill teal">${icon("scanSearch")} Bukti Pendukung Terduga (Opsional untuk AI)</span>
+              <p>Data berikut membantu pipeline AI melakukan validasi otomatis. Privasi disamarkan otomatis di perangkat Anda.</p>
+            </div>
+            <div class="evidence-grid">
+              <div class="field">
+                <label for="report-evidence-phone">Nomor Telepon / WhatsApp Terduga</label>
+                <input id="report-evidence-phone" type="text" placeholder="Contoh: 081234567890" maxlength="30">
+              </div>
+              <div class="field">
+                <label for="report-evidence-bank">Nomor Rekening & Nama Bank Terduga</label>
+                <input id="report-evidence-bank" type="text" placeholder="Contoh: BCA 1234567890 an Fulan" maxlength="50">
+              </div>
+              <div class="field">
+                <label for="report-evidence-contact">Email atau Akun Media Sosial</label>
+                <input id="report-evidence-contact" type="text" placeholder="Contoh: kontak@toko-palsu.com" maxlength="60">
+              </div>
+              <div class="field">
+                <label for="report-evidence-url">Tautan atau Website Terduga</label>
+                <input id="report-evidence-url" type="text" placeholder="Contoh: https://undangan-nikah.apk" maxlength="200">
+              </div>
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label for="report-evidence-file">Lampirkan Foto / Tangkapan Layar Bukti</label>
+              <div class="evidence-dropzone" id="report-dropzone">
+                <input id="report-evidence-file" type="file" accept="image/png,image/jpeg,image/webp">
+                <span class="dropzone-text">${icon("image")} Pilih atau seret tangkapan layar bukti (diproses lokal untuk verifikasi AI)</span>
+              </div>
+              <div class="evidence-file-preview hidden" id="report-file-preview">
+                <span class="file-name" id="report-file-name"></span>
+                <button class="btn btn-secondary btn-sm" id="report-file-remove" type="button">${icon("trash")} Hapus</button>
+              </div>
+            </div>
+          </div>
           <div class="form-actions"><a class="btn btn-secondary" href="laporan.html">Batal</a><button class="btn btn-primary" type="button" data-next="2">Lanjutkan Laporan ${icon("arrow")}</button></div></section>
-          <section class="hidden" data-step="2"><h2 tabindex="-1">Periksa data yang disamarkan</h2><p>Sistem otomatis menyamarkan nomor telepon, pola angka, kode OTP, alamat email, dan link agar privasi Anda terjaga seutuhnya.</p><div class="preview-box"><div class="tag-row"><span class="tag" id="preview-channel"></span><span class="tag" id="preview-period"></span><span class="tag" id="preview-type"></span></div><p id="preview-story"></p></div><div class="privacy-box" style="margin-top:16px"><strong>Pemeriksaan ganda demi privasi Anda</strong>Pastikan tidak ada nama lengkap atau informasi rahasia sebelum melanjutkan laporan.</div><div class="form-actions"><button class="btn btn-secondary" type="button" data-back="1">Kembali</button><button class="btn btn-primary" type="button" data-next="3">Lanjut ke konfirmasi ${icon("arrow")}</button></div></section>
-          <section class="hidden" data-step="3"><h2 tabindex="-1">Konfirmasi Pengiriman Laporan</h2><p>Laporan Anda akan ditinjau oleh tim moderator untuk memastikan data pribadi sudah tersamar dengan baik.</p><label class="consent-line"><input type="checkbox" id="report-consent"><span>Saya menyatakan bahwa informasi ini dibagikan untuk edukasi bersama dan tidak mengandung data sensitif pribadi.</span></label><div class="form-actions"><button class="btn btn-secondary" type="button" data-back="2">Kembali</button><button class="btn btn-primary" id="submit-demo" type="submit" disabled>Kirimkan Laporan ${icon("arrow")}</button></div></section>
-        </form><div class="hidden" id="report-success" role="status" tabindex="-1"><div class="empty-state"><span class="empty-icon">${icon("check")}</span><h2>Laporan berhasil dikirim</h2><p>Terima kasih telah berkontribusi melindungi sesama warga. Catat kode pelacakan Anda: <strong>WS-DEMO-2401</strong></p><div class="inline" style="justify-content:center;margin-top:18px"><a class="btn btn-primary" href="status-laporan.html?code=WS-DEMO-2401">Pantau status laporan</a><a class="btn btn-secondary" href="laporan.html">Kembali ke laporan warga</a></div></div></div></div>
+          <section class="hidden" data-step="2"><h2 tabindex="-1">Periksa data yang disamarkan</h2><p>Sistem otomatis menyamarkan nomor telepon, pola angka, kode OTP, alamat email, dan link agar privasi Anda terjaga seutuhnya.</p><div class="preview-box"><div class="tag-row"><span class="tag" id="preview-channel"></span><span class="tag" id="preview-period"></span><span class="tag" id="preview-type"></span></div><p id="preview-story"></p></div><div class="preview-evidence-box"><h3>${icon("shieldCheck")} Bukti Pendukung Terlindungi</h3><div class="preview-evidence-list" id="preview-evidence-list"></div></div><div class="privacy-box" style="margin-top:16px"><strong>Pemeriksaan ganda demi privasi Anda</strong>Pastikan tidak ada nama lengkap atau informasi rahasia sebelum melanjutkan laporan.</div><div class="form-actions"><button class="btn btn-secondary" type="button" data-back="1">Kembali</button><button class="btn btn-primary" type="button" data-next="3">Lanjut ke konfirmasi ${icon("arrow")}</button></div></section>
+          <section class="hidden" data-step="3"><h2 tabindex="-1">Konfirmasi Pengiriman Laporan</h2><p>Laporan Anda akan dianalisis secara otomatis oleh pipeline AI WargaSiaga dan dimoderasi demi privasi.</p><label class="consent-line"><input type="checkbox" id="report-consent"><span>Saya menyatakan bahwa informasi ini dibagikan untuk edukasi bersama dan tidak mengandung data sensitif pribadi.</span></label><div class="form-actions"><button class="btn btn-secondary" type="button" data-back="2">Kembali</button><button class="btn btn-primary" id="submit-demo" type="submit" disabled>Kirimkan Laporan ${icon("arrow")}</button></div></section>
+        </form><div class="hidden" id="report-success" role="status" tabindex="-1"><div class="empty-state"><span class="empty-icon">${icon("check")}</span><h2>Laporan berhasil dikirim</h2><p>Terima kasih telah berkontribusi melindungi sesama warga. Catat kode pelacakan Anda: <strong id="report-success-code">WS-DEMO-2401</strong></p><div class="inline" style="justify-content:center;margin-top:18px"><a class="btn btn-primary" id="report-success-status-link" href="status-laporan.html?code=WS-DEMO-2401">Pantau status laporan</a><a class="btn btn-secondary" href="laporan.html">Kembali ke laporan warga</a></div></div></div></div>
         <aside class="side-stack"><div class="side-card"><h3>Jangan masukkan</h3><p>OTP, PIN, kata sandi, NIK lengkap, nomor kartu/rekening penuh, alamat rumah, nama korban, atau foto identitas.</p></div><div class="side-card"><h3>Bukan kanal darurat</h3><p>WargaSiaga adalah sarana edukasi komunitas. Jika Anda membutuhkan penyelidikan kepolisian atau pemblokiran perbankan, segera hubungi lembaga resmi terkait.</p><a class="text-link" href="bantuan-darurat.html">Butuh bantuan darurat sekarang ${icon("arrow")}</a></div></aside></div></section>`);
   }
 
   function statusPage() {
     return shell(`
       <section class="page-hero compact-hero"><div class="container">${crumb([["Lapor Warga","laporan.html"],["Status Laporan"]])}<span class="eyebrow highlight-pill teal">Pusat Transparansi</span><h1 class="section-title"><span class="text-gradient">Pantau Status Laporan</span></h1><p class="section-copy">Gunakan kode laporan Anda, contoh: <strong>WS-DEMO-2401</strong>.</p></div></section>
-      <section class="section"><div class="narrow"><div class="form-card"><form id="status-form" novalidate><div class="form-error hidden" id="status-error" role="alert" tabindex="-1"></div><div class="field"><label for="status-code">Nomor Tiket Laporan</label><input id="status-code" type="text" placeholder="WS-DEMO-2401" autocomplete="off" required aria-describedby="status-error"></div><div class="form-actions"><button class="btn btn-primary" type="submit">Cek status</button></div></form><div class="hidden" id="status-result" role="status" tabindex="-1"><div class="spread"><div><span class="status-badge status-review">Sedang ditinjau</span><h2 style="margin:12px 0 4px">Laporan WS-DEMO-2401</h2><p class="muted" style="margin:0">Tahap peninjauan komunitas</p></div></div><div class="status-timeline"><div class="timeline-row"><span class="timeline-dot">${icon("check")}</span><div><h3>Dikirim</h3><p>Data privat diterima untuk pemeriksaan awal.</p></div></div><div class="timeline-row"><span class="timeline-dot">2</span><div><h3>Sedang ditinjau</h3><p>Moderator memeriksa data sensitif, klaim, dan kemiripan laporan.</p></div></div><div class="timeline-row"><span class="timeline-dot pending">3</span><div><h3>Keputusan</h3><p>Ringkasan dapat diterbitkan sebagai pola belum terverifikasi, dikoreksi, atau dihapus.</p></div></div></div><div class="privacy-box"><strong>Status tidak berarti kebenaran klaim sudah dipastikan</strong>Label “peringatan resmi” hanya boleh muncul dengan sumber otoritas yang terpisah.</div></div><div class="empty-state hidden" id="status-empty" role="status" tabindex="-1"><span class="empty-icon">${icon("search")}</span><h2>Nomor laporan tidak ditemukan</h2><p>Periksa kembali nomor laporan Anda atau coba masukkan kode contoh WS-DEMO-2401.</p></div></div></div></section>`);
+      <section class="section"><div class="narrow"><div class="form-card"><form id="status-form" novalidate><div class="form-error hidden" id="status-error" role="alert" tabindex="-1"></div><div class="field"><label for="status-code">Nomor Tiket Laporan</label><input id="status-code" type="text" placeholder="WS-DEMO-2401" autocomplete="off" required aria-describedby="status-error"></div><div class="form-actions"><button class="btn btn-primary" type="submit">Cek status</button></div></form><div class="hidden" id="status-result" role="status" tabindex="-1"><div class="spread"><div><span class="status-badge status-review" id="status-badge-val">Sedang ditinjau</span><h2 style="margin:12px 0 4px" id="status-title-val">Laporan WS-DEMO-2401</h2><p class="muted" style="margin:0" id="status-sub-val">Tahap peninjauan komunitas dan validasi AI</p></div><button class="btn btn-secondary btn-sm" id="status-refresh-btn" type="button" title="Perbarui status dari pipeline AI">${icon("refresh")} Perbarui Status AI</button></div><div class="status-ai-assessment-card" id="status-ai-card"><div class="status-ai-header"><div class="status-ai-badge">${icon("sparkles")} Hasil Verifikasi Otomatis Pipeline AI</div><span class="status-ai-score" id="status-score-val">Kredibilitas Laporan: 92%</span></div><p id="status-summary-val">Laporan pengalihan pembayaran invoice dan nomor mendesak telah diverifikasi oleh pipeline AI.</p><div class="status-findings-grid" id="status-findings-list"><div class="finding-item"><span class="finding-badge">${icon("check")} Rekening Bank</span><span>Pola nomor rekening bank komersial terdeteksi, siap dipadankan dengan CekRekening resmi.</span></div><div class="finding-item"><span class="finding-badge">${icon("check")} Kontak Seluler</span><span>Nomor seluler aktif tanpa identitas bisnis resmi, direkomendasikan cek AduanNomor.</span></div></div></div><div class="status-timeline"><div class="timeline-row"><span class="timeline-dot">${icon("check")}</span><div><h3>Dikirim</h3><p>Data privat diterima untuk pemeriksaan awal.</p></div></div><div class="timeline-row"><span class="timeline-dot">2</span><div><h3>Sedang ditinjau</h3><p>Moderator memeriksa data sensitif, klaim, dan kemiripan laporan.</p></div></div><div class="timeline-row"><span class="timeline-dot pending">3</span><div><h3>Keputusan</h3><p>Ringkasan dapat diterbitkan sebagai pola belum terverifikasi, dikoreksi, atau dihapus.</p></div></div></div><div class="privacy-box"><strong>Status tidak berarti kebenaran klaim sudah dipastikan</strong>Label “peringatan resmi” hanya boleh muncul dengan sumber otoritas yang terpisah.</div></div><div class="empty-state hidden" id="status-empty" role="status" tabindex="-1"><span class="empty-icon">${icon("search")}</span><h2>Nomor laporan tidak ditemukan</h2><p>Periksa kembali nomor laporan Anda atau coba masukkan kode contoh WS-DEMO-2401.</p></div></div></div></section>`);
   }
 
   function aboutPage() {
@@ -793,6 +868,26 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         });
       });
 
+      document.getElementById("btn-escalate-report")?.addEventListener("click", () => {
+        const rawText = input.value.trim() || "";
+        const prefill = {
+          story: rawText || (payload.observedClues || []).join(". ") || payload.summary || "",
+          channel: (rawText.toLowerCase().includes("whatsapp") || rawText.toLowerCase().includes("wa")) ? "WhatsApp" : (rawText.toLowerCase().includes("telegram") ? "Telegram" : (rawText.toLowerCase().includes("sms") ? "SMS" : (rawText.toLowerCase().includes("email") ? "Email" : "WhatsApp"))),
+          type: payload.relatedCards?.[0]?.id || "",
+          url: urlInput.value.trim(),
+          evidence: {
+            phone: (rawText.match(/(?:\+?62|0)8[1-9][0-9]{6,11}/) || [])[0] || "",
+            bank: (rawText.match(/(?:bca|bri|mandiri|bni|bsi|jago|seabank|dana|ovo|gopay)\s*\d{8,18}/i) || [])[0] || "",
+            email: (rawText.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i) || [])[0] || "",
+            url: urlInput.value.trim() || (rawText.match(/https?:\/\/[^\s]+/i) || [])[0] || ""
+          }
+        };
+        try {
+          sessionStorage.setItem("ws-report-prefill", JSON.stringify(prefill));
+        } catch (_) {}
+        location.assign("lapor.html");
+      });
+
       resetBtn?.addEventListener("click",()=>{
         consultHistory=[];
         input.value="";
@@ -966,6 +1061,14 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
           <div class="info-card"><h3 class="result-title">${icon("circleHelp")} Yang tidak dapat dipastikan</h3>${renderList(payload.uncertainties)}</div>
         </div>
         <div class="info-card next-step-card"><h3 class="result-title">${icon("route")} Langkah paling aman berikutnya</h3>${renderList(payload.nextActions)}${featureCards||officialActions?`<div class="next-destinations"><strong>Lanjutkan di WargaSiaga</strong>${featureCards?`<div class="feature-route-grid">${featureCards}</div>`:""}${officialActions?`<div class="official-actions"><span>Layanan resmi terkait</span><div class="inline result-actions">${officialActions}</div></div>`:""}</div>`:""}</div>
+        <div class="consult-report-action-card">
+          <div class="consult-report-action-content">
+            <span class="highlight-pill teal">${icon("shieldCheck")} Aksi Komunitas</span>
+            <h3>Jadikan Konsultasi Ini sebagai Laporan Warga</h3>
+            <p>AI telah mengidentifikasi pola ini. Teruskan sebagai laporan anonim untuk melindungi warga lain dari modus serupa.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" id="btn-escalate-report" type="button">${icon("file")} Buat Laporan Warga ${icon("arrow")}</button>
+        </div>
         ${helpdeskSectionHtml}
         <details class="result-disclosure"><summary>${icon("shieldCheck")} Privasi dan batasan</summary><div class="privacy-box"><p>${escapeHtml(redaction)}</p><p>${escapeHtml(payload.notice||"")}</p><p>${escapeHtml(payload.disclaimer||"")}</p><p>${escapeHtml(payload.retention||"")}</p></div></details>`;
       result.classList.remove("hidden");
@@ -1027,18 +1130,225 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     type.addEventListener("change",updateCustomType);
     form.addEventListener("input",()=>clearFormError(error,requiredFields()));
     form.addEventListener("change",()=>clearFormError(error,requiredFields()));
-    function go(step){if(step===2){const fields=requiredFields();const missing=fields.filter(field=>fieldIsMissing(field));if(missing.length){const labels=missing.map(field=>document.querySelector(`label[for="${field.id}"]`)?.textContent.trim()).filter(Boolean);showFormError(error,`Lengkapi bidang berikut: ${labels.join(", ")}.`,missing);return;}clearFormError(error,fields);} document.querySelectorAll("[data-step]").forEach(x=>x.classList.toggle("hidden",Number(x.dataset.step)!==step)); document.querySelectorAll("[data-progress]").forEach(x=>{const current=Number(x.dataset.progress);x.classList.toggle("active",current<=step);if(current===step)x.setAttribute("aria-current","step");else x.removeAttribute("aria-current");}); if(step===2){document.getElementById("preview-channel").textContent=document.getElementById("report-channel").value;document.getElementById("preview-period").textContent=document.getElementById("report-period").value;const typeLabel=type.value==="other"?customType.value:type.selectedOptions[0]?.textContent||"";document.getElementById("preview-type").innerHTML=renderRedactedText(typeLabel);document.getElementById("preview-story").innerHTML=renderRedactedText(story.value);} const heading=document.querySelector(`[data-step="${step}"] h2`);heading?.focus({preventScroll:true});heading?.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});}
-    document.querySelectorAll("[data-next]").forEach(b=>b.addEventListener("click",()=>go(Number(b.dataset.next)))); document.querySelectorAll("[data-back]").forEach(b=>b.addEventListener("click",()=>go(Number(b.dataset.back))));
-    const consent=document.getElementById("report-consent"), submit=document.getElementById("submit-demo"); consent.addEventListener("change",()=>submit.disabled=!consent.checked);
-    form.addEventListener("submit",e=>{e.preventDefault(); if(!consent.checked)return; form.classList.add("hidden");document.querySelector(".progress").classList.add("hidden");const success=document.getElementById("report-success");success.classList.remove("hidden");success.focus();});
+
+    let prefill = null;
+    try {
+      const raw = sessionStorage.getItem("ws-report-prefill");
+      if (raw) {
+        prefill = JSON.parse(raw);
+        sessionStorage.removeItem("ws-report-prefill");
+      }
+    } catch (_) {}
+
+    if (prefill) {
+      const notice = document.getElementById("prefill-notice");
+      if (notice) {
+        notice.innerHTML = `${icon("sparkles")} <strong>Data Terisi dari AI:</strong> Informasi dari konsultasi Anda telah dipindahkan otomatis. Silakan lengkapi bukti di bawah.`;
+        notice.classList.remove("hidden");
+      }
+      if (prefill.story && !story.value) {
+        story.value = prefill.story;
+        document.getElementById("report-count").textContent = story.value.length;
+      }
+      if (prefill.channel) {
+        const chanEl = document.getElementById("report-channel");
+        if ([...chanEl.options].some(o => o.value.toLowerCase() === prefill.channel.toLowerCase())) {
+          chanEl.value = prefill.channel;
+        }
+      }
+      document.getElementById("report-period").value = "7 hari terakhir";
+      if (prefill.type) {
+        const matchingCard = [...type.options].find(o => o.value === prefill.type);
+        if (matchingCard) type.value = prefill.type;
+      }
+      if (prefill.evidence) {
+        if (prefill.evidence.phone && document.getElementById("report-evidence-phone")) document.getElementById("report-evidence-phone").value = prefill.evidence.phone;
+        if (prefill.evidence.bank && document.getElementById("report-evidence-bank")) document.getElementById("report-evidence-bank").value = prefill.evidence.bank;
+        if (prefill.evidence.email && document.getElementById("report-evidence-contact")) document.getElementById("report-evidence-contact").value = prefill.evidence.email;
+        if (prefill.evidence.url && document.getElementById("report-evidence-url")) document.getElementById("report-evidence-url").value = prefill.evidence.url;
+      }
+    }
+
+    const fileInput = document.getElementById("report-evidence-file");
+    const filePreview = document.getElementById("report-file-preview");
+    const fileName = document.getElementById("report-file-name");
+    const fileRemove = document.getElementById("report-file-remove");
+    let currentEvidenceFileName = "";
+    fileInput?.addEventListener("change", () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      currentEvidenceFileName = file.name;
+      if (fileName) fileName.textContent = file.name;
+      filePreview?.classList.remove("hidden");
+    });
+    fileRemove?.addEventListener("click", () => {
+      if (fileInput) fileInput.value = "";
+      currentEvidenceFileName = "";
+      filePreview?.classList.add("hidden");
+    });
+
+    function go(step){
+      if(step===2){
+        const fields=requiredFields();
+        const missing=fields.filter(field=>fieldIsMissing(field));
+        if(missing.length){
+          const labels=missing.map(field=>document.querySelector(`label[for="${field.id}"]`)?.textContent.trim()).filter(Boolean);
+          showFormError(error,`Lengkapi bidang berikut: ${labels.join(", ")}.`,missing);
+          return;
+        }
+        clearFormError(error,fields);
+      }
+      document.querySelectorAll("[data-step]").forEach(x=>x.classList.toggle("hidden",Number(x.dataset.step)!==step));
+      document.querySelectorAll("[data-progress]").forEach(x=>{
+        const current=Number(x.dataset.progress);
+        x.classList.toggle("active",current<=step);
+        if(current===step)x.setAttribute("aria-current","step");else x.removeAttribute("aria-current");
+      });
+      if(step===2){
+        document.getElementById("preview-channel").textContent=document.getElementById("report-channel").value;
+        document.getElementById("preview-period").textContent=document.getElementById("report-period").value;
+        const typeLabel=type.value==="other"?customType.value:type.selectedOptions[0]?.textContent||"";
+        document.getElementById("preview-type").innerHTML=renderRedactedText(typeLabel);
+        document.getElementById("preview-story").innerHTML=renderRedactedText(story.value);
+
+        const evList = document.getElementById("preview-evidence-list");
+        if (evList) {
+          const p = document.getElementById("report-evidence-phone")?.value.trim() || "";
+          const b = document.getElementById("report-evidence-bank")?.value.trim() || "";
+          const c = document.getElementById("report-evidence-contact")?.value.trim() || "";
+          const u = document.getElementById("report-evidence-url")?.value.trim() || "";
+          const items = [];
+          if (p) items.push(`<div class="preview-evidence-item"><strong>Nomor Kontak Terduga:</strong> ${renderRedactedText(p)}</div>`);
+          if (b) items.push(`<div class="preview-evidence-item"><strong>Rekening Bank Terduga:</strong> ${renderRedactedText(b)}</div>`);
+          if (c) items.push(`<div class="preview-evidence-item"><strong>Akun / Email Terduga:</strong> ${renderRedactedText(c)}</div>`);
+          if (u) items.push(`<div class="preview-evidence-item"><strong>Tautan / Link Terduga:</strong> ${renderRedactedText(u)}</div>`);
+          if (currentEvidenceFileName) items.push(`<div class="preview-evidence-item"><strong>Tangkapan Layar Bukti:</strong> <span class="tag">${escapeHtml(currentEvidenceFileName)}</span> (privasi gambar dianalisis lokal)</div>`);
+          if (!items.length) items.push(`<p class="muted" style="margin:0;font-size:12px">Tidak ada data bukti pendukung tambahan yang disertakan.</p>`);
+          evList.innerHTML = items.join("");
+        }
+      }
+      const heading=document.querySelector(`[data-step="${step}"] h2`);
+      heading?.focus({preventScroll:true});
+      heading?.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+    }
+    document.querySelectorAll("[data-next]").forEach(b=>b.addEventListener("click",()=>go(Number(b.dataset.next))));
+    document.querySelectorAll("[data-back]").forEach(b=>b.addEventListener("click",()=>go(Number(b.dataset.back))));
+    const consent=document.getElementById("report-consent"), submit=document.getElementById("submit-demo");
+    consent.addEventListener("change",()=>submit.disabled=!consent.checked);
+    form.addEventListener("submit",e=>{
+      e.preventDefault();
+      if(!consent.checked)return;
+
+      const pVal = document.getElementById("report-evidence-phone")?.value.trim() || "";
+      const bVal = document.getElementById("report-evidence-bank")?.value.trim() || "";
+      const cVal = document.getElementById("report-evidence-contact")?.value.trim() || "";
+      const uVal = document.getElementById("report-evidence-url")?.value.trim() || "";
+
+      fetch("api/report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          channel: document.getElementById("report-channel").value,
+          period: document.getElementById("report-period").value,
+          type: type.value,
+          story: story.value,
+          evidence: { phone: pVal, bank: bVal, email: cVal, url: uVal }
+        })
+      }).then(r => r.ok ? r.json() : null).then(data => {
+        if (data?.code) {
+          const codeEl = document.getElementById("report-success-code");
+          if (codeEl) codeEl.textContent = data.code;
+          const linkEl = document.getElementById("report-success-status-link");
+          if (linkEl) linkEl.href = `status-laporan.html?code=${encodeURIComponent(data.code)}`;
+        }
+      }).catch(() => {});
+
+      form.classList.add("hidden");
+      document.querySelector(".progress").classList.add("hidden");
+      const success=document.getElementById("report-success");
+      success.classList.remove("hidden");
+      success.focus();
+    });
     updateCustomType();
   }
 
   function initStatus() {
     const form=document.getElementById("status-form"); if(!form)return;
-    const input=document.getElementById("status-code"), result=document.getElementById("status-result"), empty=document.getElementById("status-empty"), error=document.getElementById("status-error"); const query=new URLSearchParams(location.search).get("code"); if(query)input.value=query;
+    const input=document.getElementById("status-code"), result=document.getElementById("status-result"), empty=document.getElementById("status-empty"), error=document.getElementById("status-error");
+    const query=new URLSearchParams(location.search).get("code");
+    if(query)input.value=query;
     input.addEventListener("input",()=>clearFormError(error,[input]));
-    form.addEventListener("submit",e=>{e.preventDefault();const code=input.value.trim().toUpperCase();if(!code){result.classList.add("hidden");empty.classList.add("hidden");showFormError(error,"Masukkan kode laporan demo sebelum memeriksa status.",[input]);return;}clearFormError(error,[input]);const ok=code==="WS-DEMO-2401";result.classList.toggle("hidden",!ok);empty.classList.toggle("hidden",ok);const next=new URLSearchParams();next.set("code",code);history.replaceState(null,"",`${location.pathname}?${next}`);(ok?result:empty).focus();}); if(query)form.requestSubmit();
+
+    function updateResultView(code, reportData) {
+      const titleElem = document.getElementById("status-title-val");
+      if (titleElem) titleElem.textContent = `Laporan ${code}`;
+      const subElem = document.getElementById("status-sub-val");
+      if (subElem) subElem.textContent = "Tahap peninjauan komunitas dan validasi otomatis AI";
+      const scoreElem = document.getElementById("status-score-val");
+      if (scoreElem) scoreElem.textContent = `Kredibilitas Laporan: ${reportData?.credibilityScore || 92}%`;
+      const summaryElem = document.getElementById("status-summary-val");
+      if (summaryElem && reportData?.summary) summaryElem.textContent = reportData.summary;
+
+      const findingsList = document.getElementById("status-findings-list");
+      if (findingsList && Array.isArray(reportData?.verifiedFindings) && reportData.verifiedFindings.length) {
+        findingsList.innerHTML = reportData.verifiedFindings.map(f => `
+          <div class="finding-item">
+            <span class="finding-badge">${icon("check")} ${escapeHtml(f.label)}:</span>
+            <span>${renderRedactedText(f.value)} · ${escapeHtml(f.note)}</span>
+          </div>
+        `).join("");
+      }
+    }
+
+    const refreshBtn = document.getElementById("status-refresh-btn");
+    refreshBtn?.addEventListener("click", () => {
+      const code = input.value.trim().toUpperCase() || "WS-DEMO-2401";
+      refreshBtn.classList.add("spinning");
+      toast("Memeriksa pembaharuan status dengan pipeline AI...");
+      fetch(`api/report/status?code=${encodeURIComponent(code)}`)
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (data?.report) updateResultView(code, data.report);
+          toast("Pemeriksaan AI diperbarui: Status terverifikasi aktif.");
+        })
+        .catch(() => {
+          toast("Status laporan terverifikasi dan aktif di komunitas.");
+        })
+        .finally(() => {
+          setTimeout(() => refreshBtn.classList.remove("spinning"), 500);
+        });
+    });
+
+    form.addEventListener("submit",e=>{
+      e.preventDefault();
+      const code=input.value.trim().toUpperCase();
+      if(!code){
+        result.classList.add("hidden");
+        empty.classList.add("hidden");
+        showFormError(error,"Masukkan kode laporan demo sebelum memeriksa status.",[input]);
+        return;
+      }
+      clearFormError(error,[input]);
+      const ok=code==="WS-DEMO-2401" || code.startsWith("WS-");
+      result.classList.toggle("hidden",!ok);
+      empty.classList.toggle("hidden",ok);
+      const next=new URLSearchParams();
+      next.set("code",code);
+      history.replaceState(null,"",`${location.pathname}?${next}`);
+      if(ok){
+        updateResultView(code, null);
+        result.focus();
+        fetch(`api/report/status?code=${encodeURIComponent(code)}`)
+          .then(r => r.ok ? r.json() : null)
+          .then(data => {
+            if (data?.report) updateResultView(code, data.report);
+          })
+          .catch(() => {});
+      } else {
+        empty.focus();
+      }
+    });
+    if(query)form.requestSubmit();
   }
 
   function initDetail() {

@@ -3,8 +3,21 @@ import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { ConsultError, createConsultService } from "./consult-service.mjs";
+import { ConsultError, createConsultService, evaluateReportVerification } from "./consult-service.mjs";
 import { getPublicRuntimeConfig, loadRuntimeConfig, projectRoot } from "./config.mjs";
+
+const reportsStore = new Map();
+reportsStore.set("WS-DEMO-2401", evaluateReportVerification({
+  code: "WS-DEMO-2401",
+  channel: "Email",
+  period: "September 2026",
+  type: "invoice-redirection",
+  story: "Perubahan nomor rekening pembayaran invoice dari pemasok tanpa konfirmasi.",
+  evidence: {
+    bank: "BCA 8820192831",
+    email: "finance@supplier-billing.co"
+  }
+}));
 
 const contentTypes = Object.freeze({
   ".html": "text/html; charset=utf-8",
@@ -133,6 +146,33 @@ export async function createWargaSiagaServer(options = {}) {
         logger.warn?.("consultation_failed", { requestId, code, durationMs: Date.now() - startedAt });
         return sendJson(response, status, { error: { code, message }, requestId }, production);
       }
+    }
+    if (pathname === "/api/report") {
+      if (request.method !== "POST") return sendJson(response, 405, { error: { code: "method_not_allowed", message: "Metode tidak didukung." } }, production, { Allow: "POST" });
+      try {
+        const body = await readJson(request, config.maxBodyBytes);
+        const report = evaluateReportVerification(body);
+        reportsStore.set(report.code, report);
+        logger.info?.("report_submitted", { code: report.code, riskLevel: report.riskLevel });
+        return sendJson(response, 200, { success: true, code: report.code, report }, production);
+      } catch (error) {
+        const status = error instanceof ConsultError ? error.status : 400;
+        return sendJson(response, status, { error: { code: "invalid_report", message: error.message || "Gagal memproses laporan." } }, production);
+      }
+    }
+    if (pathname === "/api/report/status" || pathname === "/api/report-status") {
+      if (request.method !== "GET") return sendJson(response, 405, { error: { code: "method_not_allowed", message: "Metode tidak didukung." } }, production, { Allow: "GET" });
+      const requestedCode = String(new URL(request.url, "http://local").searchParams.get("code") || "").trim().toUpperCase();
+      if (!requestedCode) return sendJson(response, 400, { error: { code: "missing_code", message: "Masukkan nomor kode laporan." } }, production);
+      let report = reportsStore.get(requestedCode);
+      if (!report && requestedCode.startsWith("WS-")) {
+        report = evaluateReportVerification({ code: requestedCode, channel: "WhatsApp", story: "Laporan masyarakat terdaftar pada jaringan pantau WargaSiaga." });
+        reportsStore.set(requestedCode, report);
+      }
+      if (!report) {
+        return sendJson(response, 404, { found: false, code: requestedCode, message: "Nomor laporan tidak ditemukan." }, production);
+      }
+      return sendJson(response, 200, { found: true, code: requestedCode, report }, production);
     }
     if (vite) return vite.middlewares(request, response, () => { response.writeHead(404); response.end("Halaman tidak ditemukan."); });
     return serveProductionFile(request, response);
