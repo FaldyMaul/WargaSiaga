@@ -47,11 +47,22 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Local literacy reference visual
+## Local literacy reference visuals
 
-`assets/images/wargasiaga-literasi-data-pribadi.webp` is an optimized excerpt
-from page 20 of the user-provided PDF *Pandu Literasi Digital: Bongkar Dunia
-Tipu-Tipu Digital* by Azaria Zada Noordika (December 2025). It is used in this
-local prototype as a contextual educational visual. Publication and
-redistribution rights for the extracted source artwork have not been
-independently verified and must be confirmed before a public release.
+The following optimized excerpts come from the user-provided PDF *Pandu
+Literasi Digital: Bongkar Dunia Tipu-Tipu Digital* by Azaria Zada Noordika
+(December 2025):
+
+- `assets/images/literacy-marketplace-stay-in-app.webp` — page 12, cropped to
+  exclude chat screenshots, account identifiers, phone numbers, and logos.
+- `assets/images/literacy-lookalike-domain-table.webp` — page 16, cropped to the
+  domain-pattern table and excluding the email screenshot and logo.
+- `assets/images/wargasiaga-literasi-data-pribadi.webp` — page 20, cropped to
+  the key illustration.
+
+They are used only as contextual educational visuals in this local prototype.
+Important instructions are provided separately as accessible HTML and aligned
+with official sources. Publication and redistribution rights for the source
+material have not been independently verified and must be confirmed before a
+public release. If permission is unavailable, replace the excerpts with
+original illustrations while retaining the verified HTML guidance.

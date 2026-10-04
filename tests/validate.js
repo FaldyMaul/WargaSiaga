@@ -57,6 +57,7 @@ const appSource = fs.readFileSync(path.join(root, "assets/js/app.js"), "utf8");
 const lucideIconSource = fs.readFileSync(path.join(root, "assets/js/lucide-icons.js"), "utf8");
 const lucideBuildSource = fs.readFileSync(path.join(root, "scripts/build-lucide-icons.mjs"), "utf8");
 const mainSource = fs.readFileSync(path.join(root, "assets/js/main.js"), "utf8");
+const caseCaptureSource = fs.readFileSync(path.join(root, "assets/js/case-captures.mjs"), "utf8");
 const styleSource = fs.readFileSync(path.join(root, "assets/css/styles.css"), "utf8");
 const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
 const workspacePackageJson = JSON.parse(fs.readFileSync(path.resolve(root, "..", "package.json"), "utf8"));
@@ -64,11 +65,48 @@ const serverSource = fs.readFileSync(path.join(root, "server/index.mjs"), "utf8"
 const consultServiceSource = fs.readFileSync(path.join(root, "server/consult-service.mjs"), "utf8");
 check(!/AI_API_KEY|api[_-]?key\s*[:=]\s*["'][^"']+/i.test(appSource), "Browser JavaScript must not contain an API key.");
 check(/import safetyOrbitUrl from "\.\.\/images\/wargasiaga-safety-orbit\.svg\?url"/.test(appSource), "The hero SVG must be part of the Vite asset graph.");
-for (const asset of ["wargasiaga-home-check.webp", "wargasiaga-ai-inputs.webp", "wargasiaga-community.webp", "wargasiaga-literasi-data-pribadi.webp"]) {
+for (const asset of ["wargasiaga-home-check.webp", "wargasiaga-ai-inputs.webp", "wargasiaga-community.webp", "wargasiaga-literasi-data-pribadi.webp", "literacy-marketplace-stay-in-app.webp", "literacy-lookalike-domain-table.webp"]) {
   check(fs.existsSync(path.join(root, "assets/images", asset)), `Generated web illustration is missing: ${asset}.`);
   check(appSource.includes(`../images/${asset}?url`), `Generated web illustration is not imported: ${asset}.`);
   check(fs.statSync(path.join(root, "assets/images", asset)).size < 200_000, `Generated web illustration is not optimized below 200 KB: ${asset}.`);
 }
+const generatedGuideImages = cards.map((card) => `guide-${card.id}.webp`);
+const generatedAgeImages = ["age-kids-indonesia.webp", "age-teens-indonesia.webp", "age-adults-indonesia.webp", "age-elderly-indonesia.webp"];
+for (const asset of ["wargasiaga-modus-library-v2.webp", ...generatedAgeImages, ...generatedGuideImages]) {
+  const assetPath = path.join(root, "assets/images", asset);
+  check(fs.existsSync(assetPath), `Personalized guide visual is missing: ${asset}.`);
+  if (fs.existsSync(assetPath)) check(fs.statSync(assetPath).size < 200_000, `Personalized guide visual is not optimized below 200 KB: ${asset}.`);
+}
+for (const card of cards) {
+  const captureAsset = `capture-${card.id}.svg`;
+  const capturePath = path.join(root, "assets/images", captureAsset);
+  check(fs.existsSync(capturePath), `Readable case reconstruction is missing: ${captureAsset}.`);
+  check(caseCaptureSource.includes(`"${card.id}"`), `${card.id}: capture explanation metadata is missing.`);
+  if (fs.existsSync(capturePath)) {
+    const captureSvg = fs.readFileSync(capturePath, "utf8");
+    check(/REKONSTRUKSI EDUKASI/.test(captureSvg), `${captureAsset}: reconstruction label is missing.`);
+    check((captureSvg.match(/>1<|>2<|>3</g) || []).length >= 3, `${captureAsset}: three numbered warning markers are missing.`);
+    const embeddedUrls = [...captureSvg.matchAll(/https?:\/\/[^"'<\s]+/g)].map((match) => match[0]);
+    check(embeddedUrls.every((url) => url === "http://www.w3.org/2000/svg" || url.endsWith(".example")), `${captureAsset}: real clickable URL must not appear inside the reconstruction.`);
+  }
+  const realCaptureAsset = `capture-real-${card.id}-v1.webp`;
+  const realCapturePath = path.join(root, "assets/images", realCaptureAsset);
+  check(fs.existsSync(realCapturePath), `Realistic case reconstruction is missing: ${realCaptureAsset}.`);
+  if (fs.existsSync(realCapturePath)) {
+    check(fs.statSync(realCapturePath).size < 200_000, `Realistic case reconstruction is not optimized below 200 KB: ${realCaptureAsset}.`);
+  }
+}
+check(/import\.meta\.glob\("\.\.\/images\/guide-\*\.webp"/.test(appSource), "Guide images must use the Vite asset graph.");
+check(/import\.meta\.glob\("\.\.\/images\/capture-\*\.svg"/.test(appSource), "Case reconstructions must use the Vite asset graph.");
+check(/import\.meta\.glob\("\.\.\/images\/capture-real-\*-v1\.webp"/.test(appSource), "Realistic case reconstructions must use the Vite asset graph.");
+check(/class="case-learning"/.test(appSource) && /class="capture-signals"/.test(appSource), "Readable case reconstruction and aligned explanations are not connected to guide details.");
+check(/const AGE_IMAGES =/.test(appSource) && /class="age-portrait"/.test(appSource), "Age personalization portraits are not connected to the catalogue.");
+check(/const GUIDE_VISUAL_META =/.test(appSource) && /class="context-visual"/.test(appSource), "Guide visuals and accessible descriptions are not connected to detail pages.");
+check(/class="safe-flow-grid"/.test(appSource), "The three-step visual safety flow is missing from guide details.");
+check(/const LITERACY_GUIDANCE =/.test(appSource) && /class="content-disclosure literacy-reference"/.test(appSource), "QA-approved PDF literacy guidance is not connected to guide details.");
+check(["marketplace-diversion", "invoice-redirection", "bank-otp", "apk-phishing", "illegal-online-loan", "game-reward-account"].every((id) => appSource.includes(`"${id}"`)), "A QA-approved literacy mapping is missing.");
+check(/Teks penting dijelaskan kembali/.test(appSource) && /hak publikasi perlu dikonfirmasi/.test(appSource), "PDF excerpts need an accessible explanation and a visible rights notice.");
+check(/aspect-ratio:3\/2/.test(styleSource) && /aspect-ratio:16\/9/.test(styleSource), "Image ratio contracts are missing from the layout CSS.");
 check(appSource.includes("Bantu orang terdekat") && appSource.includes("bantu-orang-lain.html"), "The help-a-loved-one journey is missing.");
 check(/Cuplikan visual dari/.test(appSource) && /Local literacy reference visual/.test(fs.readFileSync(path.join(root, "THIRD_PARTY_NOTICES.md"), "utf8")), "The PDF-derived visual needs visible attribution and a third-party notice.");
 check(fs.readdirSync(path.join(root, "assets/images")).filter((file) => /image-prompt\.txt$/.test(file)).length >= 5, "The image regeneration prompt pack is incomplete.");
@@ -83,11 +121,14 @@ check(packageJson.scripts?.["dev:watch"] === "node --watch server/index.mjs", "T
 check(workspacePackageJson.scripts?.dev === "npm --prefix wargasiaga-dev run dev", "Workspace-level npm run dev must forward to the application.");
 check(packageJson.scripts?.build === "vite build", "npm run build must create the production frontend.");
 check(packageJson.scripts?.["icons:build"] === "node scripts/build-lucide-icons.mjs", "The local Lucide rebuild command is missing.");
+check(packageJson.scripts?.["captures:build"] === "node scripts/generate-case-captures.mjs", "The deterministic case-capture rebuild command is missing.");
+check(packageJson.scripts?.["literacy:build"] === "python scripts/extract-literacy-pdf-assets.py", "The deterministic PDF excerpt rebuild command is missing.");
 check(packageJson.scripts?.["test:api"] === "node tests/api-integration.js", "The API integration test command is missing.");
 check(fs.existsSync(path.join(root, "vite.config.mjs")), "Vite multi-page configuration is missing.");
 check(/createConsultService/.test(serverSource) && /\/api\/consult/.test(serverSource), "The server-side consultation endpoint is missing.");
 check(/EADDRINUSE/.test(serverSource) && /Port \$\{requestedPort\} sedang dipakai/.test(serverSource), "Development startup needs a clear port-conflict fallback.");
 check(/hmrPort/.test(serverSource) && /clientPort: hmrPort/.test(serverSource), "Vite HMR must use an instance-specific port.");
+check(/"\.webp": "image\/webp"/.test(serverSource), "Production server must send generated WebP assets with the correct MIME type.");
 check(/detectUrgentExposure/.test(consultServiceSource) && /if \(detectUrgentExposure/.test(consultServiceSource), "Server-side urgent bypass is missing.");
 check(/buildFeatureRecommendations/.test(consultServiceSource) && /featureRecommendations:/.test(consultServiceSource), "Server-controlled feature routing is missing.");
 check(/function analyzeUrl/.test(consultServiceSource) && /fetched:\s*false/.test(consultServiceSource), "Non-fetching URL inspection is missing.");
@@ -114,6 +155,8 @@ check(appSource.includes('value="other">Lainnya — tulis sendiri'), "The citize
 check(appSource.includes("Lanjutkan Laporan"), "The report continuation button label is missing.");
 check(appSource.includes('["reports", "laporan.html", "Lapor Warga"]'), "The primary navigation must use Lapor Warga.");
 check(/const AGE_GROUPS =/.test(appSource) && /name="age"/.test(appSource), "The scam catalogue needs an age-first filter.");
+check(/const AGE_GUIDANCE =/.test(appSource) && /data-guide-link/.test(appSource) && /catalogueHref/.test(appSource), "Selected age context must continue into guide details and back navigation.");
+check(/function renderRedactedText/.test(appSource) && /preview-type"\)\.innerHTML=renderRedactedText/.test(appSource), "Custom report categories must be redacted before preview.");
 
 const staleSources = ["business-email-compromise-scams/invoice-redirection", "money-recovery-scams/recovery-room-scams"];
 for (const staleSource of staleSources) check(!dataSource.includes(staleSource), `Stale source route remains: ${staleSource}`);

@@ -5,6 +5,8 @@
   "description": "Multi-page WargaSiaga application with a guarded server-side AI consultation",
   "scripts": {
     "icons:build": "node scripts/build-lucide-icons.mjs",
+    "captures:build": "node scripts/generate-case-captures.mjs",
+    "literacy:build": "python scripts/extract-literacy-pdf-assets.py",
     "dev": "node server/index.mjs",
     "dev:watch": "node --watch server/index.mjs",
     "build": "vite build",

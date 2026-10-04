@@ -1,0 +1,30 @@
+WARGASIAGA MASTER WEB IMAGE STYLE
+
+Intended product: a calm, trustworthy Indonesian public-safety web application that helps people recognize online scam patterns without shame or fear.
+
+Global composition:
+- Generate a clean production-ready web asset at the ratio named in the scene prompt.
+- Keep the primary subject inside the central 78–82 percent safe area for responsive center cropping.
+- Preserve generous breathing room and one clear focal point.
+- Do not place important details near edges.
+
+Visual system:
+- Use restrained TailAdmin purple #7A5AF8 as a recognizable accent, never as a full dominant background.
+- Support with deep navy #182230, teal #147D70, pale sky #EAF4FB, warm amber #D98B24, white, cool gray, and warm off-white.
+- Lighting is soft, bright, and reassuring. Avoid fear-based drama.
+- Materials and spaces should feel contemporary, practical, and recognizably Indonesian without clichés.
+
+For human scenes:
+- Hyperrealistic natural editorial photography of Indonesian people.
+- Real skin texture, natural hair and fabric, believable hands, everyday environment, candid body language.
+- Calm, thoughtful, empowered expressions; never depict the person as foolish or helpless.
+- No celebrity resemblance and no identifiable private information.
+
+For conceptual scenes:
+- Premium corporate editorial 3D visualization with matte claymorphic geometry, soft ceramic or frosted-glass detail, gentle ambient shadows, and precise silhouettes.
+
+Product constraints:
+- No text is required inside the image. All meaningful copy and labels will be rendered as HTML/SVG.
+- No real brands, platform logos, government insignia, watermarks, QR codes, or readable private data.
+- No depiction that certifies a message, sender, account, or website as safe.
+

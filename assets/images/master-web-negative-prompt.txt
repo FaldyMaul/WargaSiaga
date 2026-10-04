@@ -1,0 +1,6 @@
+WARGASIAGA UNIVERSAL NEGATIVE CONSTRAINTS
+
+Avoid text, letters, words, numbers, pseudo-writing, unreadable UI copy, watermark, signature, logo, brand mark, government emblem, police insignia, bank branding, marketplace branding, social-media branding, QR code, barcode, readable phone number, account number, identity number, address, email, password, OTP, PIN, or personal document.
+
+Avoid fearmongering, crying victim, humiliation, victim-blaming, threatening attacker, weapon, handcuffs, prison bars, hacker hoodie cliché, dark-web aesthetic, black background, neon cyber glow, red alarm overload, horror lighting, visual chaos, stock-photo handshake, staged corporate grin, plastic skin, excessive beauty retouching, distorted hands, extra fingers, malformed devices, warped geometry, noisy background, clutter, oversaturated purple, low resolution, compression artifacts, and unsafe edge crop.
+

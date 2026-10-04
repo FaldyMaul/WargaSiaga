@@ -4,6 +4,10 @@ Mobile-first, multi-page Indonesian anti-scam guide with a guarded server-side A
 
 The home page is the AI-first entry point. A user can type one short question immediately, continue on the consultation page without putting the text in the URL, and receive server-controlled links to the most relevant WargaSiaga guide, emergency path, modus library, or community patterns.
 
+For agent continuation, start with [`AGENT_HANDOFF.md`](AGENT_HANDOFF.md). It
+links the product references, current implementation state, active realistic
+case-capture task, QA history, and project file map.
+
 ## Run locally
 
 Requirements: Node.js 20.19 or newer and npm.
@@ -46,6 +50,7 @@ Rebuild the curated icon module from the provided local Lucide repository:
 
 ```powershell
 npm run icons:build
+npm run literacy:build
 ```
 
 The browser smoke test starts an isolated integrated development server and headless Chrome. It checks the AI result UI, deterministic urgent path, local screenshot OCR, URL presentation, every other interactive journey, reduced-motion handling, the purple theme, and 50 page/viewport combinations.
@@ -55,6 +60,7 @@ The browser smoke test starts an isolated integrated development server and head
 - `npm run dev` — start the integrated Node API and Vite development server.
 - `npm run dev:watch` — optional server-file watch mode; use ordinary `npm run dev` for the most stable Windows startup.
 - `npm run icons:build` — rebuild the audited SVG subset from `../lucide-main/lucide-main/icons` without a CDN.
+- `npm run literacy:build` — reproduce the two QA-approved PDF crops from the workspace source file; requires PyMuPDF and Pillow and is not needed for normal app startup.
 - `npm run build` — bundle all ten HTML entry points for production.
 - `npm run preview` — build and serve the generated production app with its API.
 - `npm test` — validate page contracts, links, content, safety rules, and frontend configuration.
@@ -100,15 +106,17 @@ The application uses plain HTML, CSS, browser JavaScript, a Node HTTP server, an
 
 The visual language adapts TailAdmin's clear cards, badges, spacing, responsive navigation, forms, and neutral surfaces into a public-service experience. TailAdmin's exact theme-purple token `#7a5af8` remains the identity and primary-action color, while deep navy, teal, sky blue, warm amber, and cool gray give content areas distinct roles without flooding whole pages with purple. Red and green remain reserved for urgent and success semantics. It does not copy the dashboard layout verbatim.
 
-Four optimized WebP illustrations support the home decision panel, AI input explanation, community-pattern page, and digital-literacy reminder. The last visual is an attributed excerpt from the user-provided literacy PDF; its publication rights must be confirmed before release. Detailed regeneration briefs and future illustration briefs live beside the files in `assets/images/`; start with `IMAGE-PROMPT-INDEX.txt`.
+The visual system now includes optimized WebP artwork for the home, AI consultation, community-pattern, digital-literacy, and guide-catalogue heroes; four Indonesian age-personalization portraits; one contextual illustration for every guide; and 13 readable 4:5 case reconstructions. The reconstructed chat, SMS, email, social, and call captures use exact SVG text, masked identities, safe `.example` domains, three numbered warning markers, a zoom dialog, transcript, disclaimer, and visible research link. Guide images use a stable 3:2 content ratio, catalogue cards crop them to 16:9, and age portraits use 1:1. Three QA-approved excerpts from the user-provided literacy PDF are mapped to relevant guides inside a closed-by-default disclosure; all safety instructions remain accessible HTML, and publication rights must be confirmed before release. Exact dimensions, regeneration prompts, negative prompts, source locations, and the PDF audit are documented in `assets/images/` and `../wargasiaga-dev-report/21-pdf-literacy-content-qa.md`.
 
 The information architecture is AI-first: the home page has one dominant question box, an equally visible emergency route, and four secondary destinations, including a dedicated path for helping someone else. The question is handed to the consultation page through one-time `sessionStorage`, removed immediately after reading, and never exposed in query parameters or browser history. Optional URL/image inputs, long guide explanations, source metadata, privacy detail, and report-status explanations use native progressive disclosure. Important warnings and next actions always remain visible without opening a disclosure.
+
+The scam catalogue uses age only as a non-persistent content filter. Each choice has a respectful Indonesian portrait to make the segmentation scannable without relying on text alone. A selected age is carried into guide links and back navigation so users do not lose context; detail pages repeat the selected portrait and show a short age-appropriate support note. Every detail page includes a contextual visual and a semantic three-step “Jeda, Periksa, Amankan” flow; factual labels remain HTML rather than generated pixels. Custom citizen-report categories pass through the same preview redaction as the report story, preventing obvious phone numbers, email addresses, URLs, and long numeric identifiers from appearing unmasked.
 
 Lucide icons are used as functional wayfinding for AI, URL inspection, OCR/QR, privacy, navigation, and result categories. Decorative instances are hidden from assistive technology; text remains the accessible label. License attribution is in `THIRD_PARTY_NOTICES.md`.
 
 The browser interaction audit covers the shared menu and contrast controls, every consultation quick prompt, catalogue search/filter/reset/chips, every urgent incident selector, print behavior, report forward/back/consent/completion states, valid and invalid status lookup, sharing/fallback, invalid detail routes, AI-first primary actions, default-collapsed optional inputs, and progressive-disclosure contracts.
 
-The UI/UX Pro Max refinement adds announced form error summaries, sequential heading hierarchy, sticky-navigation focus clearance, reduced-motion verification, stable non-jitter interaction feedback, a lightweight custom SVG at `assets/images/wargasiaga-safety-orbit.svg`, and four WebP illustrations. Responsive regression covers all ten routes at small-phone, phone-landscape, tablet, laptop, and desktop widths.
+The UI/UX refinement adds announced form error summaries, sequential heading hierarchy, sticky-navigation focus clearance, reduced-motion verification, stable non-jitter interaction feedback, a lightweight custom SVG at `assets/images/wargasiaga-safety-orbit.svg`, and a complete responsive WebP illustration set. Responsive regression covers all ten routes at small-phone, phone-landscape, tablet, laptop, and desktop widths.
 
 ## Environment variables
 

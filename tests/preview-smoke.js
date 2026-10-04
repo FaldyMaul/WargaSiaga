@@ -70,10 +70,13 @@ async function run() {
   if (javascript.includes('src="assets/images/wargasiaga-safety-orbit.svg"')) throw new Error("The production bundle still contains an unresolved source SVG path.");
   const visualAssets = [...new Set([...javascript.matchAll(/wargasiaga-[^"'`]+\.webp/g)].map((match) => match[0]))];
   if (visualAssets.length < 3) throw new Error("The three generated WebP illustrations were not included in the production asset graph.");
-  for (const asset of visualAssets) {
+  const literacyAssets = [...new Set([...javascript.matchAll(/literacy-[^"'`]+\.webp/g)].map((match) => match[0]))];
+  if (literacyAssets.length < 2) throw new Error("The two QA-approved literacy excerpts were not included in the production asset graph.");
+  for (const asset of [...visualAssets, ...literacyAssets]) {
     const response = await fetch(new URL(asset, javascriptAssetUrls[0]));
     const body = await response.arrayBuffer();
     if (!response.ok || body.byteLength === 0) throw new Error(`Generated illustration is unavailable: ${asset}`);
+    if (response.headers.get("content-type") !== "image/webp") throw new Error(`WebP asset has the wrong MIME type: ${asset}`);
   }
   const ocrAssets = ["ocr/worker.min.js", "ocr/lang/ind.traineddata.gz", "ocr/core/tesseract-core-lstm.wasm.js", "ocr/core/tesseract-core-simd-lstm.wasm.js", "ocr/core/tesseract-core-relaxedsimd-lstm.wasm.js"];
   for (const asset of ocrAssets) {
@@ -82,7 +85,7 @@ async function run() {
     if (!response.ok || body.byteLength === 0) throw new Error(`Local OCR asset is unavailable: ${asset}`);
   }
 
-  console.log(`Production server audit passed: API health, security headers, ${routes.length} routes, bundled assets, safety illustration, and ${ocrAssets.length} local OCR assets are reachable.`);
+  console.log(`Production server audit passed: API health, security headers, ${routes.length} routes, bundled assets, ${literacyAssets.length} literacy excerpts, safety illustration, and ${ocrAssets.length} local OCR assets are reachable.`);
 }
 
 run()

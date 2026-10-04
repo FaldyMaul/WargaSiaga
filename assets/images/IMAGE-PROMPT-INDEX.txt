@@ -1,30 +1,77 @@
 WARGASIAGA IMAGE ASSET INDEX
 
-Generated and integrated:
-1. wargasiaga-home-check.webp
-   Prompt: 01-home-check-image-prompt.txt
-   Placement: home hero scenario card
+LAYOUT CONTRACT
+- 00-visual-ratio-layout-spec.md
+- master-web-image-style-guide.txt
+- master-web-negative-prompt.txt
 
-2. wargasiaga-ai-inputs.webp
-   Prompt: 02-ai-inputs-image-prompt.txt
-   Placement: AI consultation hero
+GENERATED AND INTEGRATED
+1. wargasiaga-home-check.webp — 3:2 — home decision panel
+   Regeneration brief: 01-home-check-image-prompt.txt
+2. wargasiaga-ai-inputs.webp — 16:9 — AI consultation hero
+   Regeneration brief: 02-ai-inputs-image-prompt.txt
+3. wargasiaga-community.webp — 3:2 — citizen reports hero
+   Regeneration brief: 03-community-image-prompt.txt
+4. wargasiaga-literasi-data-pribadi.webp — source-derived — literacy reminder
+5. wargasiaga-modus-library-v2.webp — 3:2 — guide catalogue hero
+   Earlier exploration brief: 05-modus-library-image-prompt.txt
 
-3. wargasiaga-community.webp
-   Prompt: 03-community-image-prompt.txt
-   Placement: community-pattern reports hero
+AGE PERSONALIZATION — 1:1
+- age-kids-indonesia.webp
+- age-teens-indonesia.webp
+- age-adults-indonesia.webp
+- age-elderly-indonesia.webp
+  Exact prompts and crop rules: age-segmentation-image-prompts.txt
 
-Prompt-ready future assets:
-4. wargasiaga-emergency-steps.webp
-   Prompt: 04-emergency-steps-image-prompt.txt
+GUIDE VISUALS — 3:2
+- guide-bank-otp.webp
+- guide-job-deposit.webp
+- guide-marketplace-diversion.webp
+- guide-investment-return.webp
+- guide-apk-phishing.webp
+- guide-family-emergency.webp
+- guide-prize-refund.webp
+- guide-invoice-redirection.webp
+- guide-recovery-scam.webp
+- guide-game-reward-account.webp
+- guide-deepfake-impersonation.webp
+- guide-illegal-online-loan.webp
+- guide-romance-scam.webp
+  Exact prompts, alt intent, and filenames: guide-visual-image-prompts.txt
 
-5. wargasiaga-modus-library.webp
-   Prompt: 05-modus-library-image-prompt.txt
+READABLE CASE RECONSTRUCTIONS — 4:5 SVG
+- capture-bank-otp.svg
+- capture-job-deposit.svg
+- capture-marketplace-diversion.svg
+- capture-investment-return.svg
+- capture-apk-phishing.svg
+- capture-family-emergency.svg
+- capture-prize-refund.svg
+- capture-invoice-redirection.svg
+- capture-recovery-scam.svg
+- capture-game-reward-account.svg
+- capture-deepfake-impersonation.svg
+- capture-illegal-online-loan.svg
+- capture-romance-scam.svg
+  Layout and privacy contract: 01-case-capture-layout-spec.md
+  Exact copy, explanation, alt text, and research links: assets/js/case-captures.mjs
+  Rebuild command: npm run captures:build
 
-Shared visual rules:
-- Purple #7A5AF8 remains the brand accent, never the entire background.
-- Supporting colors: teal #2A9D8F, sky blue #DDECF7, amber #E9A23B, slate, and warm off-white.
-- No text inside illustrations; all product copy remains real HTML.
-- No logos, government insignia, private information, or watermarks.
-- Use calm and practical safety imagery; avoid fear, shame, and victim-blaming.
-- Export production images as WebP, ideally 70–180 KB at a maximum width of 1280 px.
-- Keep source generations separately if future editing is expected.
+SOURCE POLICY
+- Editable PNG generations are retained in assets/images/sources/.
+- Production WebP files are the only versions imported by the application.
+- Text, numbered steps, warnings, and factual labels stay in semantic HTML/SVG,
+  not baked into generative images.
+
+SHARED VISUAL RULES
+- Purple #7A5AF8 is the brand accent, not the entire background.
+- Supporting colors: teal, sky blue, amber, slate, and warm off-white.
+- Indonesian people are represented naturally, respectfully, and without shame.
+- No logos, government insignia, readable private data, or watermarks.
+- Keep key subjects inside the safe center crop and faces away from text overlays.
+- Use calm, practical safety imagery; avoid fear and victim-blaming.
+- Production WebP should remain below 200 KB at the specified display dimensions.
+
+FUTURE / OPTIONAL
+- wargasiaga-emergency-steps.webp
+  Regeneration brief: 04-emergency-steps-image-prompt.txt

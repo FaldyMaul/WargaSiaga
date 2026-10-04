@@ -1,0 +1,38 @@
+Combine every scene below with master-web-image-style-guide.txt and master-web-negative-prompt.txt.
+
+TARGET: age-kids-indonesia.webp
+Use case: photorealistic-natural
+Asset type: square age-segment portrait thumbnail
+Primary request: a confident Indonesian child around 10–11 years old learning to check a suspicious message safely with a trusted parent nearby but softly out of focus.
+Scene/backdrop: bright Indonesian family study corner with neutral books and a small plant.
+Composition/framing: square 1:1, child head and shoulders centered, eyes directed toward a generic phone held below chest level, face and hands inside central 70 percent.
+Lighting/mood: soft daylight, curious, safe, supported.
+Constraints: generic device with blank screen; age-appropriate clothing; no school logo; no text; no distress.
+
+TARGET: age-teens-indonesia.webp
+Use case: photorealistic-natural
+Asset type: square age-segment portrait thumbnail
+Primary request: an Indonesian teenager around 16 years old pausing thoughtfully before responding to a generic message on a phone.
+Scene/backdrop: bright study desk with notebooks and soft teal-purple accents.
+Composition/framing: square 1:1, head and shoulders centered, phone below face, natural expression, central 70 percent safe crop.
+Lighting/mood: modern daylight, alert but calm, independent and capable.
+Constraints: no school badge, no text, no recognizable app, no dramatic fear.
+
+TARGET: age-adults-indonesia.webp
+Use case: photorealistic-natural
+Asset type: square age-segment portrait thumbnail
+Primary request: an Indonesian adult in their early 30s calmly cross-checking a generic phone message while using a laptop.
+Scene/backdrop: practical home work corner with warm neutral materials and a subtle teal accent.
+Composition/framing: square 1:1, head and shoulders centered, natural hand position, face inside central 65 percent.
+Lighting/mood: soft morning light, focused, competent, reassuring.
+Constraints: no employer logo, no readable screens, no text, no staged corporate pose.
+
+TARGET: age-elderly-indonesia.webp
+Use case: photorealistic-natural
+Asset type: square age-segment portrait thumbnail
+Primary request: an Indonesian older adult around 65–70 years old confidently checking a phone together with a trusted family member whose presence is supportive but secondary.
+Scene/backdrop: comfortable bright living room with subtle Indonesian woven textile, no cultural costume cliché.
+Composition/framing: square 1:1, older adult head and shoulders centered, face and phone safely within central 70 percent.
+Lighting/mood: gentle daylight, dignified, calm, collaborative.
+Constraints: no frailty stereotype, no distress, no text, no medical context.
+

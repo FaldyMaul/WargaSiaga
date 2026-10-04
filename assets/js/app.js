@@ -3,7 +3,24 @@ import homeCheckUrl from "../images/wargasiaga-home-check.webp?url";
 import aiInputsUrl from "../images/wargasiaga-ai-inputs.webp?url";
 import communityUrl from "../images/wargasiaga-community.webp?url";
 import literacyKeysUrl from "../images/wargasiaga-literasi-data-pribadi.webp?url";
+import literacyMarketplaceUrl from "../images/literacy-marketplace-stay-in-app.webp?url";
+import literacyDomainUrl from "../images/literacy-lookalike-domain-table.webp?url";
+import modusLibraryUrl from "../images/wargasiaga-modus-library-v2.webp?url";
+import ageKidsUrl from "../images/age-kids-indonesia.webp?url";
+import ageTeensUrl from "../images/age-teens-indonesia.webp?url";
+import ageAdultsUrl from "../images/age-adults-indonesia.webp?url";
+import ageElderlyUrl from "../images/age-elderly-indonesia.webp?url";
+import { CASE_CAPTURES } from "./case-captures.mjs";
 import { LUCIDE_ICONS } from "./lucide-icons.js";
+
+const guideImageModules=import.meta.glob("../images/guide-*.webp",{eager:true,query:"?url",import:"default"});
+const GUIDE_IMAGE_URLS=Object.fromEntries(Object.entries(guideImageModules).map(([path,url])=>[path.match(/guide-(.+)\.webp$/)?.[1],url]).filter(([id])=>id));
+const captureImageModules=import.meta.glob("../images/capture-*.svg",{eager:true,query:"?url",import:"default"});
+const captureRealImageModules=import.meta.glob("../images/capture-real-*-v1.webp",{eager:true,query:"?url",import:"default"});
+const CAPTURE_SVG_URLS=Object.fromEntries(Object.entries(captureImageModules).map(([path,url])=>[path.match(/capture-(.+)\.svg$/)?.[1],url]).filter(([id])=>id));
+const CAPTURE_REAL_URLS=Object.fromEntries(Object.entries(captureRealImageModules).map(([path,url])=>[path.match(/capture-real-(.+)-v1\.webp$/)?.[1],url]).filter(([id])=>id));
+const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...CAPTURE_REAL_URLS}).map(id=>[id,CAPTURE_REAL_URLS[id]||CAPTURE_SVG_URLS[id]]));
+
 
 (function () {
   "use strict";
@@ -21,6 +38,55 @@ import { LUCIDE_ICONS } from "./lucide-icons.js";
     teens:"Jika ada tekanan, ancaman, atau permintaan data, libatkan orang dewasa tepercaya sebelum melanjutkan.",
     adults:"Periksa melalui kanal resmi yang Anda buka sendiri dan libatkan orang tepercaya bila keputusan terasa mendesak.",
     elderly:"Bila perlu, periksa bersama orang yang dipercaya tanpa memberikan kendali akun, PIN, OTP, atau perangkat."
+  };
+  const AGE_IMAGES = { kids:ageKidsUrl, teens:ageTeensUrl, adults:ageAdultsUrl, elderly:ageElderlyUrl };
+  const ACCOUNT_SECRET_LITERACY = {
+    imageUrl:literacyKeysUrl,
+    page:20,
+    title:"Kenali data yang harus tetap rahasia",
+    alt:"Ilustrasi kunci fisik dan kunci digital sebagai pengingat bahwa akses akun harus dijaga.",
+    summary:"PIN, kata sandi, OTP, CVV, dan CVC adalah kunci akses akun. Petugas yang menghubungi Anda tidak memerlukan rahasia tersebut.",
+    actions:["Tutup percakapan bila diminta menyebutkan kode rahasia.","Buka aplikasi atau situs resmi secara mandiri.","Jika sudah terbagi, amankan akun dari perangkat tepercaya dan hubungi penyedia layanan."],
+    source:{label:"Bank Indonesia — Panduan Dasar Pelindungan Konsumen",url:"https://www.bi.go.id/id/Pelindungan-Konsumen/Panduan-Dasar/Default.aspx"}
+  };
+  const LITERACY_GUIDANCE = {
+    "marketplace-diversion":{
+      imageUrl:literacyMarketplaceUrl,
+      page:12,
+      title:"Tetap periksa dari aplikasi marketplace",
+      alt:"Cuplikan materi yang mengingatkan pengguna agar tidak memindahkan transaksi keluar marketplace atau membuka tautan dari chat.",
+      summary:"Jangan mengikuti alur pembayaran, pengiriman, atau pengembalian dana dari tautan chat. Buka aplikasi marketplace sendiri lalu cari pesanan yang dimaksud.",
+      actions:["Periksa status pesanan dari menu di aplikasi resmi.","Tetap gunakan pembayaran dan percakapan di dalam platform.","Hubungi pusat bantuan dari aplikasi bila ada informasi yang berbeda."],
+      source:{label:"Scamwatch — Buying and selling scams",url:"https://www.scamwatch.gov.au/types-of-scams/buying-and-selling-scams"}
+    },
+    "invoice-redirection":{
+      imageUrl:literacyDomainUrl,
+      page:16,
+      title:"Periksa seluruh ejaan domain pengirim",
+      alt:"Tabel contoh domain tiruan yang mengganti huruf, angka, tanda hubung, akhiran domain, atau menghapus satu karakter.",
+      summary:"Domain yang tampak hampir sama dapat memakai penggantian huruf, angka, tanda hubung, atau akhiran berbeda. Kemiripan adalah tanda untuk memeriksa—bukan bukti tunggal.",
+      actions:["Baca alamat setelah tanda @ sampai karakter terakhir.","Jangan membalas email itu untuk mengonfirmasi perubahan rekening.","Hubungi pemasok melalui nomor lama atau kanal terpisah yang sudah dikenal."],
+      source:{label:"Pusiknas Bareskrim Polri — Business Email Compromise",url:"https://pusiknas.polri.go.id/detail_artikel/waspada_penipuan_email_bisnis%2C_jangan_lengah_hingga_salah_transfer_uang"}
+    },
+    "bank-otp":ACCOUNT_SECRET_LITERACY,
+    "apk-phishing":ACCOUNT_SECRET_LITERACY,
+    "illegal-online-loan":ACCOUNT_SECRET_LITERACY,
+    "game-reward-account":ACCOUNT_SECRET_LITERACY
+  };
+  const GUIDE_VISUAL_META = {
+    "bank-otp":{alt:"Warga memeriksa panggilan tak dikenal melalui perangkat dan kanal terpisah.",steps:["Jangan berikan OTP, PIN, atau kata sandi.","Tutup panggilan lalu hubungi bank dari aplikasi atau nomor resmi.","Jika data sudah terbagi, amankan akun dan hubungi bank segera."]},
+    "job-deposit":{alt:"Pencari kerja membandingkan pesan rekrutmen dengan informasi perusahaan sebelum membayar.",steps:["Jangan bayar deposit, top up, atau biaya aktivasi.","Cari perusahaan dan lowongan melalui kanal yang Anda buka sendiri.","Jika uang terkirim, hubungi penyedia pembayaran dan simpan bukti."]},
+    "marketplace-diversion":{alt:"Penjual online menjaga transaksi tetap di marketplace dan memeriksa link dari pembeli.",steps:["Jangan pindah pembayaran atau membuka link dari chat pembeli.","Periksa pesanan hanya dari aplikasi marketplace resmi.","Jika akun atau uang terpapar, amankan akun dan hubungi platform."]},
+    "investment-return":{alt:"Dua warga memeriksa tawaran investasi menggunakan sumber yang terpisah.",steps:["Jangan transfer karena janji keuntungan atau tekanan waktu.","Periksa legalitas dan identitas melalui kanal resmi yang dicari sendiri.","Jika rugi, hentikan pembayaran dan gunakan jalur pelaporan resmi."]},
+    "apk-phishing":{alt:"File, link, dan kode QR tertahan di luar lapisan perlindungan ponsel.",steps:["Jangan pasang APK atau buka link dari pesan tak terduga.","Buka layanan dari aplikasi atau alamat resmi yang Anda ketik sendiri.","Jika terpasang, putuskan koneksi dan amankan akun dari perangkat lain."]},
+    "family-emergency":{alt:"Keluarga memverifikasi panggilan mendesak melalui kontak kedua yang sudah dikenal.",steps:["Jangan transfer saat penelepon meminta keputusan seketika.","Tutup panggilan dan hubungi keluarga melalui nomor yang sudah tersimpan.","Jika uang terkirim, hubungi bank atau dompet digital segera."]},
+    "prize-refund":{alt:"Hadiah dan panah pengembalian dana diperiksa di balik perisai transparan.",steps:["Jangan bayar biaya untuk menerima hadiah atau refund.","Periksa promo dan pengembalian hanya dari aplikasi atau situs resmi.","Jika kartu atau dana terpapar, blokir akses dan hubungi penyedia."]},
+    "invoice-redirection":{alt:"Pemilik usaha membandingkan instruksi pembayaran dengan kontak pemasok resmi.",steps:["Tunda pembayaran bila detail rekening berubah mendadak.","Konfirmasi kepada pemasok lewat kontak lama, bukan balasan email itu.","Jika terbayar, hubungi bank dan pihak pemasok secepatnya."]},
+    "recovery-scam":{alt:"Warga dan keluarga meninjau pesan pemulihan dana bersama bukti lama.",steps:["Jangan bayar pihak yang menjanjikan dana pasti kembali.","Verifikasi langsung kepada lembaga melalui kanal resminya.","Simpan pesan baru dan tambahkan ke laporan kerugian sebelumnya."]},
+    "game-reward-account":{alt:"Anak menunjukkan tawaran hadiah game kepada orang tua sebelum menekan apa pun.",steps:["Jangan buka link atau bagikan kode akun demi hadiah.","Tunjukkan pesan kepada orang dewasa tepercaya dan cek dari game resmi.","Jika akun terambil, ganti kata sandi dan keluarkan sesi lain."]},
+    "deepfake-impersonation":{alt:"Visual wajah dan suara tiruan dibandingkan dengan kontak tepercaya dan perisai.",steps:["Jangan bertindak hanya karena suara atau wajah tampak dikenal.","Hubungi orang tersebut kembali lewat nomor lama atau kanal lain.","Jika uang terkirim, hubungi penyedia dan simpan bukti panggilan."]},
+    "illegal-online-loan":{alt:"Warga memeriksa tawaran pinjaman di ponsel melalui informasi resmi di laptop.",steps:["Jangan memasang aplikasi atau membayar biaya pencairan dari chat.","Periksa legalitas penyedia melalui kanal resmi OJK.","Jika data terambil, cabut izin aplikasi dan amankan akun."]},
+    "romance-scam":{alt:"Dua teman memeriksa pesan hubungan online sebelum uang atau foto dikirim.",steps:["Jangan kirim uang, kripto, atau foto pribadi tambahan.","Ceritakan kepada orang tepercaya dan periksa identitas secara terpisah.","Jika rugi atau diancam, amankan akun, simpan bukti, dan laporkan."]}
   };
   const page = document.body.dataset.page || "home";
   const root = document.getElementById("app");
@@ -89,8 +155,9 @@ import { LUCIDE_ICONS } from "./lucide-icons.js";
   function crumb(items) { return `<nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Beranda</a><span>/</span>${items.map((x, i) => i === items.length - 1 ? `<span aria-current="page">${x[0]}</span>` : `<a href="${x[1]}">${x[0]}</a><span>/</span>`).join("")}</nav>`; }
 
   function modusCard(card) {
+    const imageUrl=GUIDE_IMAGE_URLS[card.id];
     return `<article class="modus-card" data-accent="${card.accent}" data-card-id="${card.id}" data-search="${[card.title,card.summary,...card.channels,...card.contexts,...card.tactics].join(" ").toLowerCase()}">
-      <div class="card-accent"></div><div class="modus-card-body"><div class="card-top"><span class="card-icon">${icon(card.icon)}</span><span class="risk-badge">Perlu diwaspadai</span></div>
+      <div class="card-accent"></div>${imageUrl?`<a class="modus-card-media" data-guide-link href="modus-detail.html?id=${card.id}" tabindex="-1" aria-hidden="true"><img src="${imageUrl}" width="1280" height="853" alt="" loading="lazy"><span class="risk-badge">Perlu diwaspadai</span></a>`:""}<div class="modus-card-body"><div class="card-top"><span class="card-icon">${icon(card.icon)}</span>${imageUrl?"":'<span class="risk-badge">Perlu diwaspadai</span>'}</div>
       <h3><a data-guide-link href="modus-detail.html?id=${card.id}">${card.title}</a></h3><p>${card.summary}</p><div class="card-audience">${icon("users")}<span>${card.ageGroups.map(value=>AGE_GROUPS.find(group=>group.value===value)?.label).filter(Boolean).join(" · ")}</span></div><div class="tag-row">${card.channels.slice(0,2).map(x=>`<span class="tag">${x}</span>`).join("")}</div>
       <div class="card-footer"><a class="text-link" data-guide-link href="modus-detail.html?id=${card.id}">Buka panduan${icon("arrow")}</a></div></div></article>`;
   }
@@ -129,8 +196,8 @@ import { LUCIDE_ICONS } from "./lucide-icons.js";
     const channels = [...new Set(DATA.cards.flatMap(c=>c.channels))].sort();
     const contexts = [...new Set(DATA.cards.flatMap(c=>c.contexts))].sort();
     return shell(`
-      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Kenali Modus"]])}<span class="eyebrow">Katalog panduan</span><h1 class="section-title">Cari modus yang mirip</h1><p class="section-copy">Pilih kelompok usia, lalu cari berdasarkan pesan atau situasi.</p></div><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Sudah terlanjur?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></section>
-      <section class="section-sm"><div class="container"><fieldset class="age-selector" id="age-selector" aria-describedby="age-selector-help"><legend><span class="eyebrow">Langkah 1</span><strong>Panduan ini untuk siapa?</strong></legend><p id="age-selector-help">Pilih usia orang yang menghadapi situasi ini. Pilihan hanya memfilter panduan dan tidak disimpan.</p><div class="age-options">${AGE_GROUPS.map((group,index)=>`<label><input type="radio" name="age" value="${group.value}"${index===0?" checked":""}><span><strong>${group.label}</strong>${group.description?`<small>${group.description}</small>`:""}</span></label>`).join("")}</div></fieldset></div></section>
+      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Kenali Modus"]])}<span class="eyebrow">Katalog panduan</span><h1 class="section-title">Cari modus yang mirip</h1><p class="section-copy">Pilih kelompok usia, lalu cari berdasarkan pesan atau situasi.</p></div><div class="page-hero-visual ratio-3-2 catalog-hero-visual"><img src="${modusLibraryUrl}" width="1536" height="1024" alt="" aria-hidden="true"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Sudah terlanjur?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
+      <section class="section-sm"><div class="container"><fieldset class="age-selector" id="age-selector" aria-describedby="age-selector-help"><legend><span class="eyebrow">Langkah 1</span><strong>Panduan ini untuk siapa?</strong></legend><p id="age-selector-help">Pilih usia orang yang menghadapi situasi ini. Pilihan hanya memfilter panduan dan tidak disimpan.</p><div class="age-options">${AGE_GROUPS.map((group,index)=>`<label><input type="radio" name="age" value="${group.value}"${index===0?" checked":""}><span>${group.value==="all"?`<span class="age-portrait age-all">${icon("users")}</span>`:`<img class="age-portrait" src="${AGE_IMAGES[group.value]}" width="640" height="640" alt="" loading="lazy">`}<span class="age-option-copy"><strong>${group.label}</strong>${group.description?`<small>${group.description}</small>`:""}</span></span></label>`).join("")}</div></fieldset></div></section>
       <section class="section-sm catalog-section"><div class="container filter-shell">
         <aside class="filter-panel" id="filter-panel" aria-label="Filter modus"><div class="spread"><strong>Filter panduan</strong><button class="btn btn-ghost" id="reset-filter" type="button">Hapus filter</button></div>
           <div class="filter-group"><span class="filter-title">Cara dihubungi</span>${channels.map(v=>`<label class="check"><input type="checkbox" name="channel" value="${v}"><span>${v}</span></label>`).join("")}</div>
@@ -154,12 +221,20 @@ import { LUCIDE_ICONS } from "./lucide-icons.js";
     }
     const selectedAge=AGE_GROUPS.find(group=>group.value!=="all"&&group.value===params.get("age")&&card.ageGroups.includes(group.value));
     const catalogueHref=selectedAge?`modus.html?age=${encodeURIComponent(selectedAge.value)}`:"modus.html";
+    const guideImageUrl=GUIDE_IMAGE_URLS[card.id];
+    const visual=GUIDE_VISUAL_META[card.id];
+    const literacy=LITERACY_GUIDANCE[card.id];
+    const capture=CASE_CAPTURES[card.id];
+    const captureImageUrl=CAPTURE_IMAGE_URLS[card.id];
     document.title = `${card.title} | WargaSiaga`;
     const list = (items, cls="") => `<ul class="check-list ${cls}">${items.map(i=>`<li>${i}</li>`).join("")}</ul>`;
     return shell(`
       <section class="page-hero detail-hero"><div class="container">${crumb([["Kenali Modus",catalogueHref],[card.title]])}</div></section>
-      <section class="section-sm"><div class="container detail-layout"><article class="article-card"><header class="article-head"><div class="inline"><span class="risk-badge">Perlu diwaspadai</span>${card.channels.slice(0,2).map(x=>`<span class="tag">${x}</span>`).join("")}</div><h1>${card.title}</h1><p class="section-copy">${card.summary}</p>${selectedAge?`<div class="audience-note">${icon("users")}<div><strong>Panduan untuk ${selectedAge.label}</strong><span>${AGE_GUIDANCE[selectedAge.value]}</span></div></div>`:""}<div class="hero-actions"><a class="btn btn-primary" href="konsultasi.html">${icon("bot")} Periksa kasus saya</a><a class="btn btn-urgent" href="bantuan-darurat.html">${icon("alert")} Saya sudah bertindak</a></div></header>
+      <section class="section-sm"><div class="container detail-layout"><article class="article-card"><header class="article-head"><div class="inline"><span class="risk-badge">Perlu diwaspadai</span>${card.channels.slice(0,2).map(x=>`<span class="tag">${x}</span>`).join("")}</div><h1>${card.title}</h1><p class="section-copy">${card.summary}</p>${selectedAge?`<div class="audience-note"><img class="audience-avatar" src="${AGE_IMAGES[selectedAge.value]}" width="640" height="640" alt=""><div><strong>Panduan untuk ${selectedAge.label}</strong><span>${AGE_GUIDANCE[selectedAge.value]}</span></div></div>`:""}<div class="hero-actions"><a class="btn btn-primary" href="konsultasi.html">${icon("bot")} Periksa kasus saya</a><a class="btn btn-urgent" href="bantuan-darurat.html">${icon("alert")} Saya sudah bertindak</a></div></header>
+        ${capture&&captureImageUrl?`<section class="case-learning" aria-labelledby="case-learning-title"><div class="case-capture-column"><span class="capture-label">Contoh pesan</span><button class="capture-open" id="capture-open" type="button" aria-haspopup="dialog" aria-controls="capture-dialog"><img src="${captureImageUrl}" width="800" height="1000" alt="${capture.alt}" fetchpriority="high"><span class="capture-zoom">${icon("search")} Perbesar contoh</span></button><p class="capture-disclaimer">Contoh fiktif berdasarkan pola yang dilaporkan. Bukan chat asli dan bukan bukti bahwa pengirim tertentu adalah penipu.</p></div><div class="case-analysis"><span class="eyebrow">Contoh yang sering muncul</span><h2 id="case-learning-title">Baca pesannya, cari tiga tanda</h2><ol class="capture-signals">${capture.signals.map((signal,index)=>`<li><span>${index+1}</span><p>${signal}</p></li>`).join("")}</ol><a class="source-link capture-source" href="${capture.source.url}" target="_blank" rel="noopener noreferrer">${icon("external")}<span>Sumber pola: ${capture.source.label}</span></a>${guideImageUrl&&visual?`<figure class="context-visual"><img src="${guideImageUrl}" width="1280" height="853" alt="${visual.alt}" loading="lazy"><figcaption>Gambaran situasi</figcaption></figure>`:""}</div></section><dialog class="capture-dialog" id="capture-dialog" aria-labelledby="capture-dialog-title"><div class="capture-dialog-head"><div><span class="eyebrow">Rekonstruksi edukasi</span><h2 id="capture-dialog-title">Contoh pesan yang perlu diperiksa</h2></div><button class="icon-button" id="capture-close" type="button" aria-label="Tutup contoh pesan">${icon("close")}</button></div><div class="capture-dialog-body"><img src="${captureImageUrl}" width="800" height="1000" alt="${capture.alt}"><div class="capture-transcript"><h3>Transkrip</h3><ol>${capture.messages.map((message,index)=>`<li><strong>${index+1}</strong><span>${message}</span></li>`).join("")}</ol><p>${capture.alt}</p></div></div></dialog>`:""}
         <div class="article-content"><section class="article-section priority-section"><span class="eyebrow">Lihat dahulu</span><h2>Tanda yang patut diwaspadai</h2>${list(card.warningSigns,"warning-list")}</section>
+        ${visual?`<section class="article-section safe-flow" aria-labelledby="safe-flow-title"><span class="eyebrow">Alur aman</span><h2 id="safe-flow-title">Jeda, periksa, lalu amankan</h2><ol class="safe-flow-grid"><li><span class="safe-flow-icon">${icon("clock")}</span><span><strong>1. Jeda</strong><small>${visual.steps[0]}</small></span></li><li><span class="safe-flow-icon">${icon("search")}</span><span><strong>2. Periksa</strong><small>${visual.steps[1]}</small></span></li><li><span class="safe-flow-icon">${icon("shieldCheck")}</span><span><strong>3. Amankan</strong><small>${visual.steps[2]}</small></span></li></ol></section>`:""}
+        ${literacy?`<details class="content-disclosure literacy-reference"><summary><span>${icon("book")} Materi literasi terkait</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content literacy-reference-grid"><figure class="literacy-reference-figure"><img src="${literacy.imageUrl}" alt="${literacy.alt}" loading="lazy"><figcaption>Cuplikan materi PDF, halaman ${literacy.page}. Teks penting dijelaskan kembali di samping gambar.</figcaption></figure><div class="literacy-reference-copy"><span class="reference-kicker">Inti yang perlu diingat</span><h3>${literacy.title}</h3><p>${literacy.summary}</p>${list(literacy.actions)}<a class="source-link" href="${literacy.source.url}" target="_blank" rel="noopener noreferrer">${icon("external")}<span>Periksa rujukan: ${literacy.source.label}</span></a><p class="asset-credit">Cuplikan dari <cite>Pandu Literasi Digital: Bongkar Dunia Tipu-Tipu Digital</cite>, Azaria Zada Noordika (Desember 2025). Digunakan pada prototipe lokal; hak publikasi perlu dikonfirmasi.</p></div></div></details>`:""}
         <details class="content-disclosure"><summary><span>${icon("chat")} Contoh pola dan permintaan</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content"><div class="example-box"><p>${card.fictionalExample}</p><div class="example-label">Contoh fiktif</div></div><h3>Apa yang diminta</h3><p>${card.requestedAction}</p></div></details>
         <details class="content-disclosure"><summary><span>${icon("shieldCheck")} Cara memeriksa dengan aman</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content">${list(card.independentChecks)}</div></details>
         <section class="article-section urgent-section"><h2>${icon("alert")} Jika sudah terlanjur</h2>${list(card.alreadyActedSteps,"urgent-list")}<a class="btn btn-urgent" href="bantuan-darurat.html">Buka langkah darurat ${icon("arrow")}</a></section>
@@ -706,7 +781,16 @@ import { LUCIDE_ICONS } from "./lucide-icons.js";
     form.addEventListener("submit",e=>{e.preventDefault();const code=input.value.trim().toUpperCase();if(!code){result.classList.add("hidden");empty.classList.add("hidden");showFormError(error,"Masukkan kode laporan demo sebelum memeriksa status.",[input]);return;}clearFormError(error,[input]);const ok=code==="WS-DEMO-2401";result.classList.toggle("hidden",!ok);empty.classList.toggle("hidden",ok);const next=new URLSearchParams();next.set("code",code);history.replaceState(null,"",`${location.pathname}?${next}`);(ok?result:empty).focus();}); if(query)form.requestSubmit();
   }
 
-  function initDetail() { const field=document.getElementById("share-url"); const button=document.getElementById("share-guide"); if(field)field.value=location.href; button?.addEventListener("click",async()=>{const disclosure=button.closest("details");if(disclosure)disclosure.open=true;try{await navigator.clipboard.writeText(location.href);button.innerHTML=`${icon("check")} Tautan disalin`;toast("Tautan panduan disalin");setTimeout(()=>button.innerHTML=`${icon("copy")} Salin tautan`,1800);}catch(_){field?.focus();field?.select();toast("Tautan dipilih. Tekan Ctrl+C untuk menyalin.");}}); }
+  function initDetail() {
+    const field=document.getElementById("share-url"), button=document.getElementById("share-guide");
+    if(field)field.value=location.href;
+    button?.addEventListener("click",async()=>{const disclosure=button.closest("details");if(disclosure)disclosure.open=true;try{await navigator.clipboard.writeText(location.href);button.innerHTML=`${icon("check")} Tautan disalin`;toast("Tautan panduan disalin");setTimeout(()=>button.innerHTML=`${icon("copy")} Salin tautan`,1800);}catch(_){field?.focus();field?.select();toast("Tautan dipilih. Tekan Ctrl+C untuk menyalin.");}});
+    const dialog=document.getElementById("capture-dialog"), open=document.getElementById("capture-open"), close=document.getElementById("capture-close");
+    open?.addEventListener("click",()=>dialog?.showModal());
+    close?.addEventListener("click",()=>dialog?.close());
+    dialog?.addEventListener("click",event=>{const bounds=dialog.getBoundingClientRect();if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)dialog.close();});
+    dialog?.addEventListener("close",()=>open?.focus());
+  }
 
   window.WS_UTILS = Object.freeze({ redactSensitive, detectUrgentExposure, escapeHtml });
 

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-labelledby="title description">
+  <title id="title">PESAN PEMULIHAN</title>
+  <desc id="description">Rekonstruksi pesan jasa pemulihan dana yang menjamin uang kembali dan meminta biaya verifikasi.</desc>
+  <defs>
+    <linearGradient id="backdrop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4f1ff"/><stop offset=".58" stop-color="#eef7f6"/><stop offset="1" stop-color="#fff7e7"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#243442" flood-opacity=".16"/></filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#backdrop)"/>
+  <rect x="52" y="32" width="696" height="936" rx="48" fill="#ffffff" stroke="#ccd7dd" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="310" y="49" width="180" height="24" rx="12" fill="#172839"/>
+  <text x="94" y="102" fill="#44525d" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="700">16.40</text>
+  <g fill="none" stroke="#44525d" stroke-width="5" stroke-linecap="round"><path d="M650 94h8M665 89v10M683 88h20v12h-20z"/></g>
+  <rect x="78" y="126" width="644" height="106" rx="24" fill="#f8fafc" stroke="#e0e6ea"/>
+  <circle cx="129" cy="179" r="30" fill="#7a5af8"/>
+  <path d="M116 180l9 9 19-22" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="178" y="170" fill="#172839" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23" font-weight="800">Tim pengembalian dana?</text>
+  <text x="178" y="202" fill="#6c7a85" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="650">PESAN PEMULIHAN</text>
+  <g>
+      <circle cx="118" cy="299" r="25" fill="#147d70"/>
+      <text x="118" y="308" text-anchor="middle" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24" font-weight="800">1</text>
+      <rect x="158" y="264" width="516" height="177" rx="22" fill="#f4f7f9" stroke="#d8e1e6" stroke-width="2"/>
+      <text x="184" y="316" fill="#243442" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="36" font-weight="560"><tspan x="184" dy="0">Kami tim pemulihan dana.</tspan><tspan x="184" dy="45">Kerugian Anda sudah</tspan><tspan x="184" dy="45">terdata.</tspan></text>
+      <text x="638" y="423" text-anchor="end" fill="#7a8893" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17">16.40</text>
+    </g>
+<g>
+      <circle cx="118" cy="501" r="25" fill="#b86805"/>
+      <text x="118" y="510" text-anchor="middle" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24" font-weight="800">2</text>
+      <rect x="158" y="466" width="516" height="177" rx="22" fill="#fff4df" stroke="#e4a044" stroke-width="2"/>
+      <text x="184" y="518" fill="#243442" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="36" font-weight="560"><tspan x="184" dy="0">Dana dijamin kembali 100%</tspan><tspan x="184" dy="45">melalui program</tspan><tspan x="184" dy="45">pemerintah.</tspan></text>
+      <text x="638" y="625" text-anchor="end" fill="#7a8893" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17">16.40</text>
+    </g>
+<g>
+      <circle cx="118" cy="703" r="25" fill="#bd391f"/>
+      <text x="118" y="712" text-anchor="middle" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24" font-weight="800">3</text>
+      <rect x="158" y="668" width="516" height="177" rx="22" fill="#fff0ec" stroke="#df7d68" stroke-width="2"/>
+      <text x="184" y="720" fill="#243442" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="36" font-weight="560"><tspan x="184" dy="0">Bayar biaya verifikasi</tspan><tspan x="184" dy="45">Rp375.000 agar pencairan</tspan><tspan x="184" dy="45">diproses.</tspan></text>
+      <text x="638" y="827" text-anchor="end" fill="#7a8893" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17">16.40</text>
+    </g>
+  <rect x="82" y="942" width="318" height="34" rx="17" fill="#f4f1ff"/>
+  <text x="241" y="965" text-anchor="middle" fill="#5925dc" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16" font-weight="800" letter-spacing="1.1">REKONSTRUKSI EDUKASI</text>
+</svg>

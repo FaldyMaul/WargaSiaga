@@ -1,0 +1,67 @@
+Combine every scene below with master-web-image-style-guide.txt and master-web-negative-prompt.txt. All targets use a 1536 × 1024 landscape 3:2 source composition and must remain readable after a central responsive crop.
+
+TARGET: guide-bank-otp.webp
+Use case: photorealistic-natural
+Primary request: an Indonesian adult receiving an unexpected phone call, pausing before sharing anything, while opening the official banking app independently on a second trusted device.
+Visual cue: a subtle teal shield object and separated devices communicate independent verification without text.
+
+TARGET: guide-job-deposit.webp
+Use case: photorealistic-natural
+Primary request: a young Indonesian job seeker at a bright desk comparing a generic recruitment message on a phone with a company information page on a laptop, with a small unopened wallet placed aside.
+Visual cue: the person pauses and verifies before paying; no visible company or screen text.
+
+TARGET: guide-marketplace-diversion.webp
+Use case: photorealistic-natural
+Primary request: an Indonesian online seller packing a neutral parcel while declining to follow a suspicious off-platform link shown only as abstract shapes on a phone.
+Visual cue: marketplace parcel remains on one side and an external link symbol remains clearly separate.
+
+TARGET: guide-investment-return.webp
+Use case: photorealistic-natural
+Primary request: an Indonesian adult calmly reviewing an unsolicited investment offer with a trusted family member, while a tablet shows only an abstract unlabeled rising chart.
+Visual cue: magnifying glass and shield indicate verification; avoid wealth fantasy.
+
+TARGET: guide-apk-phishing.webp
+Use case: stylized-concept
+Primary request: a generic smartphone with an unknown file package stopped before entering the device by a layered teal shield, with a separate QR tile and link chain held outside the safety boundary.
+Style: premium 3D editorial diagram, crisp object separation, no human required.
+
+TARGET: guide-family-emergency.webp
+Use case: photorealistic-natural
+Primary request: an Indonesian parent receiving an urgent call while another family member uses a separate saved contact to verify the story.
+Visual cue: two clearly separate call paths and a calm family verification moment.
+
+TARGET: guide-prize-refund.webp
+Use case: stylized-concept
+Primary request: a generic gift box and refund arrow held behind a transparent verification shield, with a payment card safely separated outside the request path.
+Style: premium 3D editorial visual, amber gift accent, teal shield, restrained purple connectors.
+
+TARGET: guide-invoice-redirection.webp
+Use case: photorealistic-natural
+Primary request: an Indonesian small-business owner comparing a generic invoice on a laptop with a known supplier contact on a phone before approving payment.
+Visual cue: two account-path cards remain visually separated and one is being independently checked.
+
+TARGET: guide-recovery-scam.webp
+Use case: photorealistic-natural
+Primary request: an older Indonesian adult and trusted family member reviewing a follow-up message that promises recovered money, with previous evidence organized safely on the table.
+Visual cue: no cash celebration; the scene emphasizes pausing, documenting, and verifying.
+
+TARGET: guide-game-reward-account.webp
+Use case: photorealistic-natural
+Primary request: an Indonesian child around 11 years old showing a suspicious game reward message to a parent before clicking anything.
+Scene/backdrop: bright shared family room with generic game controller shapes and blank screen.
+Visual cue: collaborative safety and account protection; child is supported, not blamed.
+
+TARGET: guide-deepfake-impersonation.webp
+Use case: stylized-concept
+Primary request: a split verification metaphor with a generic face silhouette and voice waveform on one side, a trusted phone contact and shield on the other, connected through a magnifying lens that reveals subtle duplication artifacts.
+Style: clean 3D editorial educational visualization; no real face and no text.
+
+TARGET: guide-illegal-online-loan.webp
+Use case: photorealistic-natural
+Primary request: an Indonesian adult examining a generic quick-loan offer on a phone while deliberately checking official information on a laptop before installing or paying.
+Visual cue: an unopened app package and wallet remain outside the decision area; no poverty stereotype.
+
+TARGET: guide-romance-scam.webp
+Use case: photorealistic-natural
+Primary request: an Indonesian adult in a calm home setting reviewing an online relationship message with a trusted friend before sending money or personal images.
+Visual cue: generic video-call silhouette on the device, wallet and personal photo album kept safely closed and separate.
