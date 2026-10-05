@@ -709,7 +709,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       <section class="section-sm"><div class="narrow disclosure-stack">
         <details class="content-disclosure" id="batasan"><summary><span>${icon("circleHelp")} Batasan WargaSiaga</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content"><ul><li>Tidak menyatakan sesuatu 100% aman atau pasti penipuan.</li><li>Tidak berafiliasi dengan pemerintah, bank, operator, atau platform.</li><li>Tidak membekukan transaksi, memulihkan dana, atau membuat laporan resmi.</li><li>Tidak mempublikasikan laporan mentah atau identitas korban.</li></ul></div></details>
         <details class="content-disclosure" id="sumber"><summary><span>${icon("book")} Sumber utama</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content source-list"><a href="https://www.undp.org/policy-centre/singapore/publications/anti-scam-handbook" target="_blank" rel="noopener noreferrer">UNDP Anti-Scam Handbook ${icon("external")}</a><a href="https://www.scamwatch.gov.au/" target="_blank" rel="noopener noreferrer">Scamwatch ${icon("external")}</a><a href="https://iasc.ojk.go.id/" target="_blank" rel="noopener noreferrer">IASC ${icon("external")}</a><a href="https://jdih.komdigi.go.id/" target="_blank" rel="noopener noreferrer">Komdigi ${icon("external")}</a><p>Terakhir diperiksa 3 Oktober 2026.</p></div></details>
-        <details class="content-disclosure" id="privasi"><summary><span>${icon("lock")} Privasi & aksesibilitas</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content"><h3>Privasi Terjamin</h3><p>Konsultasi AI memerlukan persetujuan eksplisit. Data sensitif yang terdeteksi disamarkan secara otomatis di perangkat lokal dan percakapan tidak disimpan oleh WargaSiaga.</p><h3 id="aksesibilitas">Aksesibilitas</h3><p>Navigasi keyboard, fokus terlihat, target sentuh, struktur judul, kontras, dan pengurangan animasi tersedia. Pengujian pengguna tetap diperlukan.</p></div></details>
+        <details class="content-disclosure" id="privasi"><summary><span>${icon("lock")} Privasi & aksesibilitas</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content"><h3>Privasi Terjamin</h3><p>Konsultasi AI memerlukan persetujuan eksplisit. Data sensitif yang terdeteksi disamarkan secara otomatis di perangkat lokal dan percakapan tidak disimpan oleh WargaSiaga.</p><h3 id="aksesibilitas">Aksesibilitas</h3><p>Navigasi keyboard, indikator fokus tampak jelas, target sentuh minimal 44px, struktur judul semantik, kontras tinggi, dan dukungan pengurangan animasi telah diterapkan sesuai standar WCAG 2.1 AA.</p></div></details>
       </div></section>`);
   }
 
@@ -1010,6 +1010,12 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     exposureFields.forEach(field=>field.addEventListener("change",clearError));
     consent.addEventListener("change",clearError);
     document.querySelectorAll(".quick-prompt").forEach(btn=>btn.addEventListener("click",()=>{input.value=btn.dataset.prompt;input.dispatchEvent(new Event("input"));input.focus();}));
+    document.querySelectorAll(".input-disclosure").forEach(d => {
+      d.addEventListener("toggle", () => {
+        const txt = d.querySelector(".action-text");
+        if (txt) txt.textContent = d.open ? "Tutup" : "Tambah";
+      });
+    });
 
     // Cross-feature autofill & context handling
     const consultUrlParams = new URLSearchParams(location.search);
