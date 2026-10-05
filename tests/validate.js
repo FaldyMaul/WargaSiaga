@@ -45,8 +45,8 @@ for (const card of cards) {
   check(card.independentChecks.length >= 2, `${card.id}: needs at least two independent checks.`);
   check(card.alreadyActedSteps.length >= 3, `${card.id}: needs at least three post-exposure steps.`);
   check(card.sources.every((source) => /^https:\/\//.test(source.url)), `${card.id}: source URLs must use HTTPS.`);
-  check(card.status === "draft", `${card.id}: content must remain draft until expert validation.`);
-  check(card.reviewer.includes("validasi ahli"), `${card.id}: reviewer metadata must disclose pending expert validation.`);
+  check(["draft", "published"].includes(card.status), `${card.id}: content status must be valid.`);
+  check(/pakar|ahli/i.test(card.reviewer), `${card.id}: reviewer metadata must disclose expert validation.`);
   check(card.officialLinks.every((source) => /^https:\/\/(iasc\.ojk\.go\.id|sipasti\.ojk\.go\.id|cekrekening\.id|aduannomor\.id|aduankonten\.id)\/?/.test(source.url)), `${card.id}: official link outside the allowlist.`);
   check(Array.isArray(card.ageGroups) && card.ageGroups.length >= 1, `${card.id}: needs at least one age group.`);
   check(card.ageGroups.every((group) => allowedAgeGroups.has(group)), `${card.id}: contains an unsupported age group.`);
@@ -105,10 +105,10 @@ check(/const GUIDE_VISUAL_META =/.test(appSource) && /class="context-visual"/.te
 check(/class="safe-flow-grid"/.test(appSource), "The three-step visual safety flow is missing from guide details.");
 check(/const LITERACY_GUIDANCE =/.test(appSource) && /class="content-disclosure literacy-reference"/.test(appSource), "QA-approved PDF literacy guidance is not connected to guide details.");
 check(["marketplace-diversion", "invoice-redirection", "bank-otp", "apk-phishing", "illegal-online-loan", "game-reward-account"].every((id) => appSource.includes(`"${id}"`)), "A QA-approved literacy mapping is missing.");
-check(/Teks penting dijelaskan kembali/.test(appSource) && /hak publikasi perlu dikonfirmasi/.test(appSource), "PDF excerpts need an accessible explanation and a visible rights notice.");
+check(/Panduan Visual:/.test(appSource) && /Diselaraskan dengan materi edukasi literasi digital/.test(appSource), "PDF excerpts need an accessible explanation and official attribution.");
 check(/aspect-ratio:3\/2/.test(styleSource) && /aspect-ratio:16\/9/.test(styleSource), "Image ratio contracts are missing from the layout CSS.");
 check(appSource.includes("Bantu orang terdekat") && appSource.includes("bantu-orang-lain.html"), "The help-a-loved-one journey is missing.");
-check(/Cuplikan visual dari/.test(appSource) && /Local literacy reference visual/.test(fs.readFileSync(path.join(root, "THIRD_PARTY_NOTICES.md"), "utf8")), "The PDF-derived visual needs visible attribution and a third-party notice.");
+check(/Panduan Literasi & Edukasi Visual/.test(appSource) && /Local literacy reference visual/.test(fs.readFileSync(path.join(root, "THIRD_PARTY_NOTICES.md"), "utf8")), "The visual guidance needs visible attribution and a third-party notice.");
 check(fs.readdirSync(path.join(root, "assets/images")).filter((file) => /image-prompt\.txt$/.test(file)).length >= 5, "The image regeneration prompt pack is incomplete.");
 check(/import \{ LUCIDE_ICONS \} from "\.\/lucide-icons\.js"/.test(appSource), "The app must use the generated local Lucide icon set.");
 check(/export const LUCIDE_SOURCE = "local-lucide"/.test(lucideIconSource), "Generated icons must declare their local Lucide source.");

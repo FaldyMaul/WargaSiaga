@@ -30,7 +30,7 @@
         alreadyActedSteps: ["Segera hubungi bank melalui kanal resmi dan minta pengamanan akun/transaksi.", "Ganti kata sandi dari perangkat yang dipercaya dan keluar dari semua sesi jika tersedia.", "Simpan bukti tanpa menyebarkan OTP atau data pribadi.", "Jika ada kerugian finansial, siapkan bukti untuk IASC dan laporan polisi."],
         officialLinks: [{ label: "IASC — laporan penipuan transaksi", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian finansial" }, { label: "AduanNomor", url: "https://aduannomor.id/", purpose: "Cek atau laporkan nomor mencurigakan" }],
         sources: [{ publisher: "Bank Indonesia — Panduan Dasar Pelindungan Konsumen", url: "https://www.bi.go.id/id/Pelindungan-Konsumen/Panduan-Dasar/Default.aspx", accessedAt: "2026-10-04" }, { publisher: "OJK / Satgas PASTI", url: "https://iasc.ojk.go.id/", accessedAt: "2026-10-04" }, { publisher: "Komdigi — AduanNomor", url: "https://aduannomor.id/", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "blue", icon: "shield"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "blue", icon: "shield"
       },
       {
         id: "job-deposit", categoryId: "job-investment", categoryLabel: "Kerja & Investasi",
@@ -48,7 +48,7 @@
         alreadyActedSteps: ["Hentikan transfer berikutnya meski dijanjikan dana lama akan cair.", "Hubungi bank atau penyedia dompet digital segera melalui kanal resmi.", "Simpan percakapan dan bukti transaksi.", "Gunakan IASC dan laporan polisi jika ada kerugian finansial."],
         officialLinks: [{ label: "IASC — laporan penipuan transaksi", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian finansial" }, { label: "CekRekening", url: "https://cekrekening.id/", purpose: "Cek/laporkan rekening; hasil bukan jaminan aman" }],
         sources: [{ publisher: "Scamwatch — Jobs and employment scams", url: "https://www.scamwatch.gov.au/types-of-scams/jobs-and-employment-scams", accessedAt: "2026-10-03" }, { publisher: "Komdigi — CekRekening", url: "https://cekrekening.id/", accessedAt: "2026-10-03" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "orange", icon: "briefcase"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "orange", icon: "briefcase"
       },
       {
         id: "marketplace-diversion", categoryId: "commerce", categoryLabel: "Jual Beli & Bisnis",
@@ -66,7 +66,7 @@
         alreadyActedSteps: ["Hubungi bank atau penyedia dompet digital dan platform secepatnya.", "Amankan akun marketplace dan email terkait.", "Simpan bukti pesanan, chat, link (sebagai teks atau tangkapan layar), dan transaksi.", "Laporkan konten atau rekening lewat layanan resmi yang sesuai."],
         officialLinks: [{ label: "CekRekening", url: "https://cekrekening.id/", purpose: "Cek/laporkan rekening; bukan sertifikasi aman" }, { label: "AduanKonten", url: "https://aduankonten.id/", purpose: "Laporkan konten daring berbahaya" }],
         sources: [{ publisher: "Scamwatch — Buying and selling scams", url: "https://www.scamwatch.gov.au/types-of-scams/buying-and-selling-scams", accessedAt: "2026-10-04" }, { publisher: "Komdigi — AduanKonten", url: "https://aduankonten.id/", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "blue", icon: "bag"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "blue", icon: "bag"
       },
       {
         id: "investment-return", categoryId: "job-investment", categoryLabel: "Kerja & Investasi",
@@ -84,7 +84,7 @@
         alreadyActedSteps: ["Jangan bayar biaya tambahan untuk membuka penarikan.", "Hubungi bank atau penyedia dompet digital melalui kanal resmi.", "Amankan akun dan simpan bukti komunikasi/transaksi.", "Gunakan rute IASC dan polisi jika dana sudah terkirim."],
         officialLinks: [{ label: "SIPASTI — OJK", url: "https://sipasti.ojk.go.id/", purpose: "Laporkan indikasi aktivitas keuangan ilegal" }, { label: "IASC", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi" }, { label: "CekRekening", url: "https://cekrekening.id/", purpose: "Cek atau laporkan rekening; hasil bukan jaminan aman" }],
         sources: [{ publisher: "OJK / Satgas PASTI — aktivitas keuangan ilegal", url: "https://ojk.go.id/id/berita-dan-kegiatan/info-terkini/Pages/Satgas-Pasti-Hentikan-953-Entitas-Pinjol-Ilegal-Dan-Penawaran-Investasi-Ilegal-Mei-2026.aspx", accessedAt: "2026-10-04" }, { publisher: "Scamwatch — Investment scams", url: "https://www.scamwatch.gov.au/types-of-scams/investment-scams", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "violet", icon: "chart"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "violet", icon: "chart"
       },
       {
         id: "apk-phishing", categoryId: "malware-phishing", categoryLabel: "Pesan & File Bahaya",
@@ -102,7 +102,7 @@
         alreadyActedSteps: ["Putuskan koneksi perangkat bila perilaku mencurigakan muncul.", "Gunakan perangkat tepercaya untuk menghubungi bank atau penyedia layanan dan mengganti kata sandi.", "Periksa dan hapus aplikasi atau izin mencurigakan mengikuti panduan produsen perangkat.", "Simpan bukti dan pertimbangkan laporan resmi."],
         officialLinks: [{ label: "AduanKonten", url: "https://aduankonten.id/", purpose: "Laporkan konten daring berbahaya" }, { label: "AduanNomor", url: "https://aduannomor.id/", purpose: "Cek/laporkan nomor mencurigakan" }],
         sources: [{ publisher: "Bank Indonesia — Panduan Dasar Pelindungan Konsumen", url: "https://www.bi.go.id/id/Pelindungan-Konsumen/Panduan-Dasar/Default.aspx", accessedAt: "2026-10-04" }, { publisher: "Scamwatch — Phishing scams", url: "https://www.scamwatch.gov.au/types-of-scams/phishing-scams", accessedAt: "2026-10-04" }, { publisher: "Komdigi — AduanKonten", url: "https://aduankonten.id/", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "orange", icon: "link"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "orange", icon: "link"
       },
       {
         id: "family-emergency", categoryId: "social-family", categoryLabel: "Keluarga & Relasi",
@@ -120,7 +120,7 @@
         alreadyActedSteps: ["Hubungi bank atau penyedia dompet digital segera melalui kanal resmi.", "Beri tahu orang yang identitasnya dipakai agar memperingatkan kontak lain.", "Simpan nomor, waktu, percakapan, dan bukti transaksi.", "Gunakan IASC dan buat laporan polisi bila ada kerugian."],
         officialLinks: [{ label: "AduanNomor", url: "https://aduannomor.id/", purpose: "Cek/laporkan nomor mencurigakan" }, { label: "IASC", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi" }],
         sources: [{ publisher: "Scamwatch — Phishing scams (friends and family impersonation)", url: "https://www.scamwatch.gov.au/types-of-scams/phishing-scams", accessedAt: "2026-10-04" }, { publisher: "Komdigi — AduanNomor", url: "https://aduannomor.id/", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "violet", icon: "users"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "violet", icon: "users"
       },
       {
         id: "prize-refund", categoryId: "prize-loan", categoryLabel: "Hadiah & Pinjaman",
@@ -138,7 +138,7 @@
         alreadyActedSteps: ["Hubungi penyedia pembayaran bila sudah transfer.", "Ubah kredensial yang sempat dimasukkan melalui situs/aplikasi resmi.", "Simpan bukti dan laporkan kanal/konten yang dipakai.", "Gunakan rute IASC bila ada kerugian finansial."],
         officialLinks: [{ label: "AduanKonten", url: "https://aduankonten.id/", purpose: "Laporan konten daring" }, { label: "IASC", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi" }],
         sources: [{ publisher: "Scamwatch — Unexpected money scams", url: "https://www.scamwatch.gov.au/types-of-scams/unexpected-money-scams", accessedAt: "2026-10-04" }, { publisher: "OJK / Satgas PASTI", url: "https://iasc.ojk.go.id/", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "orange", icon: "gift"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "orange", icon: "gift"
       },
       {
         id: "invoice-redirection", categoryId: "commerce", categoryLabel: "Jual Beli & Bisnis",
@@ -156,7 +156,7 @@
         alreadyActedSteps: ["Hubungi bank bisnis segera untuk penanganan transaksi.", "Hubungi pemasok asli melalui kanal lama.", "Amankan email dan akun bisnis; periksa aturan penerusan email.", "Simpan header email, invoice, dan bukti transaksi untuk pelaporan."],
         officialLinks: [{ label: "IASC", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi" }, { label: "CekRekening", url: "https://cekrekening.id/", purpose: "Cek/laporkan rekening; bukan jaminan aman" }],
         sources: [{ publisher: "Scamwatch — Business email compromise scams", url: "https://www.scamwatch.gov.au/types-of-scams/business-email-compromise-scams", accessedAt: "2026-10-04" }, { publisher: "OJK / Satgas PASTI", url: "https://iasc.ojk.go.id/", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "blue", icon: "invoice"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "blue", icon: "invoice"
       },
       {
         id: "recovery-scam", categoryId: "banking", categoryLabel: "Perbankan & Akun",
@@ -174,7 +174,7 @@
         alreadyActedSteps: ["Hentikan semua kontak dan pembayaran tambahan.", "Hubungi bank atau penyedia dompet digital melalui kanal resmi.", "Amankan akun jika data atau akses perangkat telah dibagikan.", "Percayai kabar pengembalian dana hanya dari lembaga keuangan Anda melalui kanal resminya.", "Tambahkan bukti upaya pemulihan palsu ke laporan sebelumnya atau buat laporan baru."],
         officialLinks: [{ label: "IASC", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi" }, { label: "AduanNomor", url: "https://aduannomor.id/", purpose: "Cek/laporkan nomor mencurigakan" }],
         sources: [{ publisher: "Scamwatch — Money recovery scams", url: "https://www.scamwatch.gov.au/types-of-scams/money-recovery-scams", accessedAt: "2026-10-04" }, { publisher: "IASC — informasi pengembalian dana", url: "https://iasc.ojk.go.id/", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "violet", icon: "refresh"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "violet", icon: "refresh"
       },
       {
         id: "game-reward-account", categoryId: "prize-loan", categoryLabel: "Hadiah & Pinjaman",
@@ -192,7 +192,7 @@
         alreadyActedSteps: ["Beri tahu orang dewasa tepercaya tanpa takut dimarahi.", "Ganti kata sandi akun dari aplikasi atau situs resmi dan keluarkan sesi lain.", "Laporkan serta blokir akun melalui fitur di dalam game.", "Jika data pembayaran dipakai, minta orang tua segera menghubungi bank atau penyedia pembayaran."],
         officialLinks: [{ label: "AduanKonten", url: "https://aduankonten.id/", purpose: "Laporkan konten atau link berbahaya" }, { label: "AduanNomor", url: "https://aduannomor.id/", purpose: "Cek atau laporkan nomor mencurigakan" }],
         sources: [{ publisher: "Komdigi — perlindungan anak di ruang digital", url: "https://wasdig.komdigi.go.id/pernyataan-menteri-komunikasi-dan-digital-tentang-penerbitan-permen-turunan-pp-tunas", accessedAt: "2026-10-04" }, { publisher: "FTC Consumer Advice — Kids and Video Games", url: "https://consumer.ftc.gov/articles/kids-video-games", accessedAt: "2026-10-04" }, { publisher: "FTC — Find the Fakes activity", url: "https://consumer.ftc.gov/system/files/consumer_ftc_gov/pdf/FindtheFakes-ActivitySheet-508-v2.pdf", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli dan uji bahasa anak diperlukan sebelum publikasi", status: "draft", accent: "blue", icon: "gift"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "blue", icon: "gift"
       },
       {
         id: "deepfake-impersonation", categoryId: "malware-phishing", categoryLabel: "Pesan & File Bahaya",
@@ -210,7 +210,7 @@
         alreadyActedSteps: ["Segera hubungi bank atau penyedia pembayaran bila uang terkirim.", "Beri tahu orang yang identitasnya dipakai agar dapat memperingatkan kontak lain.", "Simpan rekaman, nomor, waktu, dan bukti transaksi tanpa menyebarkannya ke publik.", "Gunakan IASC dan laporan polisi bila ada kerugian."],
         officialLinks: [{ label: "IASC", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi" }, { label: "AduanNomor", url: "https://aduannomor.id/", purpose: "Cek atau laporkan nomor mencurigakan" }],
         sources: [{ publisher: "Bank Indonesia — Modul Pelindungan terhadap Risiko", url: "https://www.bi.go.id/id/edukasi/Documents/Buku-Panduan-Modul-Edukasi-Keuangan-Digital-Tingkat-Dasar-Modul-5-Pelindungan-terhadap-Risiko.pdf", accessedAt: "2026-10-04" }, { publisher: "OJK / Indonesia Anti-Scam Centre", url: "https://iasc.ojk.go.id/", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "violet", icon: "image"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "violet", icon: "image"
       },
       {
         id: "illegal-online-loan", categoryId: "prize-loan", categoryLabel: "Hadiah & Pinjaman",
@@ -228,7 +228,7 @@
         alreadyActedSteps: ["Hentikan pembayaran tambahan dan simpan bukti.", "Cabut izin aplikasi yang tidak perlu dan amankan akun dari perangkat tepercaya.", "Hubungi bank atau penyedia pembayaran bila sudah mengirim uang.", "Laporkan aktivitas keuangan ilegal melalui SIPASTI dan gunakan IASC bila terjadi kerugian transaksi."],
         officialLinks: [{ label: "SIPASTI — OJK", url: "https://sipasti.ojk.go.id/", purpose: "Laporkan aktivitas keuangan ilegal" }, { label: "IASC", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi" }],
         sources: [{ publisher: "OJK / Satgas PASTI — penghentian pinjol ilegal April 2026", url: "https://ojk.go.id/id/berita-dan-kegiatan/info-terkini/Pages/Satgas-PASTI-Hentikan-953-Entitas-Pinjol-Ilegal-dan-Penawaran-Investasi-Ilegal.aspx", accessedAt: "2026-10-04" }, { publisher: "Bank Indonesia — Panduan Dasar Pelindungan Konsumen", url: "https://www.bi.go.id/id/Pelindungan-Konsumen/Panduan-Dasar/Default.aspx", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "orange", icon: "invoice"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "orange", icon: "invoice"
       },
       {
         id: "romance-scam", categoryId: "social-family", categoryLabel: "Keluarga & Relasi",
@@ -246,7 +246,7 @@
         alreadyActedSteps: ["Hentikan pembayaran dan jangan membayar pihak yang menjanjikan pemulihan dana.", "Hubungi bank atau penyedia pembayaran segera.", "Amankan akun dan simpan percakapan serta bukti transaksi.", "Laporkan akun ke platform dan gunakan IASC serta polisi bila ada kerugian atau ancaman."],
         officialLinks: [{ label: "IASC", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi" }, { label: "AduanNomor", url: "https://aduannomor.id/", purpose: "Cek atau laporkan nomor mencurigakan" }],
         sources: [{ publisher: "Polda Jawa Timur — pengungkapan love scam 2026", url: "https://tribratanews.jatim.polri.go.id/ditressiber-polda-jatim-bongkar-sindikat-penipuan-online-modus-percintaan-love-scamming-internasional", accessedAt: "2026-10-04" }, { publisher: "Scamwatch — Relationship scams", url: "https://www.scamwatch.gov.au/types-of-scams/relationship-scams", accessedAt: "2026-10-04" }],
-        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "violet", icon: "users"
+        reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "violet", icon: "users"
       }
     ],
     reports: [

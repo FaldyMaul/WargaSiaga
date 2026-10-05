@@ -255,9 +255,68 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Kenali Modus"]])}<span class="eyebrow">Katalog panduan</span><h1 class="section-title">Cari modus yang mirip</h1><p class="section-copy">Pilih kelompok usia atau kategori, lalu cari berdasarkan pesan atau situasi.</p></div><div class="page-hero-visual ratio-3-2 catalog-hero-visual"><img src="${modusLibraryUrl}" width="1536" height="1024" alt="" aria-hidden="true"><a class="urgent-shortcut" href="${toCleanUrl("bantuan-darurat.html")}">${icon("alert")}<span><strong>Sudah terlanjur?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
       <section class="section-sm"><div class="container"><fieldset class="age-selector" id="age-selector" aria-describedby="age-selector-help"><legend><span class="eyebrow">Langkah 1</span><strong>Panduan ini untuk siapa?</strong></legend><p id="age-selector-help">Pilih usia orang yang menghadapi situasi ini. Pilihan hanya memfilter panduan dan tidak disimpan.</p><div class="age-options">${AGE_GROUPS.map((group,index)=>`<label><input type="radio" name="age" value="${group.value}"${index===0?" checked":""}><span>${group.value==="all"?`<span class="age-portrait age-all">${icon("users")}</span>`:`<img class="age-portrait" src="${AGE_IMAGES[group.value]}" width="640" height="640" alt="" loading="lazy">`}<span class="age-option-copy"><strong>${group.label}</strong>${group.description?`<small>${group.description}</small>`:""}</span></span></label>`).join("")}</div></fieldset></div></section>
       <section class="section-sm catalog-section"><div class="container filter-shell">
-        <aside class="filter-panel" id="filter-panel" aria-label="Filter modus"><div class="spread"><strong>Filter panduan</strong><button class="btn btn-ghost" id="reset-filter" type="button">Hapus filter</button></div>
-          <div class="filter-group"><span class="filter-title">Cara dihubungi</span>${channels.map(v=>`<label class="check"><input type="checkbox" name="channel" value="${v}"><span>${v}</span></label>`).join("")}</div>
-          <div class="filter-group"><span class="filter-title">Situasi saya</span>${contexts.map(v=>`<label class="check"><input type="checkbox" name="context" value="${v}"><span>${v}</span></label>`).join("")}</div>
+        <aside class="filter-panel" id="filter-panel" aria-label="Filter modus">
+          <div class="spread">
+            <div>
+              <strong>Filter panduan</strong>
+              <small class="muted" style="display:block;font-size:11px">Pilih saluran & konteks</small>
+            </div>
+            <button class="btn btn-ghost" id="reset-filter" type="button">Hapus filter</button>
+          </div>
+
+          <div class="filter-section-block">
+            <div class="filter-section-header">
+              <span class="filter-category-badge">${icon("phone")} Kanal Kontak</span>
+            </div>
+            
+            <div class="filter-subgroup">
+              <span class="filter-subgroup-title">Pesan & Chat</span>
+              <div class="filter-checkbox-grid">
+                ${["WhatsApp", "Telegram", "Chat", "SMS"].map(v => `<label class="check"><input type="checkbox" name="channel" value="${v}"><span>${v}</span></label>`).join("")}
+              </div>
+            </div>
+
+            <div class="filter-subgroup">
+              <span class="filter-subgroup-title">Platform & Medsos</span>
+              <div class="filter-checkbox-grid">
+                ${["Media sosial", "Marketplace", "Aplikasi kencan", "Aplikasi"].map(v => `<label class="check"><input type="checkbox" name="channel" value="${v}"><span>${v}</span></label>`).join("")}
+              </div>
+            </div>
+
+            <div class="filter-subgroup">
+              <span class="filter-subgroup-title">Email & Lainnya</span>
+              <div class="filter-checkbox-grid">
+                ${["Email", "Game online", "QR"].map(v => `<label class="check"><input type="checkbox" name="channel" value="${v}"><span>${v}</span></label>`).join("")}
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-section-block">
+            <div class="filter-section-header">
+              <span class="filter-category-badge">${icon("briefcase")} Situasi Terkait</span>
+            </div>
+
+            <div class="filter-subgroup">
+              <span class="filter-subgroup-title">Pekerjaan & Jual Beli</span>
+              <div class="filter-checkbox-grid">
+                ${["Pencari kerja", "Transaksi bisnis", "Belanja online", "Pengembalian dana"].map(v => `<label class="check"><input type="checkbox" name="context" value="${v}"><span>${v}</span></label>`).join("")}
+              </div>
+            </div>
+
+            <div class="filter-subgroup">
+              <span class="filter-subgroup-title">Finansial & Modal</span>
+              <div class="filter-checkbox-grid">
+                ${["Kebutuhan dana mendesak", "Investasi", "Pemulihan dana"].map(v => `<label class="check"><input type="checkbox" name="context" value="${v}"><span>${v}</span></label>`).join("")}
+              </div>
+            </div>
+
+            <div class="filter-subgroup">
+              <span class="filter-subgroup-title">Keluarga & Relasi</span>
+              <div class="filter-checkbox-grid">
+                ${["Keluarga", "Hubungan baru", "Akun game"].map(v => `<label class="check"><input type="checkbox" name="context" value="${v}"><span>${v}</span></label>`).join("")}
+              </div>
+            </div>
+          </div>
         </aside>
         <div>
           <div class="category-classification" role="region" aria-label="Klasifikasi kategori penipuan">
@@ -279,12 +338,28 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
           <div class="catalog-step-label"><span class="eyebrow">Langkah 3</span><strong>Cari atau gunakan filter tambahan</strong></div>
           <div class="search-box">${icon("search")}<label class="sr-only" for="modus-search">Cari modus</label><input id="modus-search" type="search" placeholder="Cari: lowongan, OTP, marketplace…" autocomplete="off"><button class="search-clear hidden" id="search-clear" type="button" aria-label="Hapus pencarian">${icon("close")}</button></div>
           <h2 class="sr-only" id="catalog-heading">Daftar panduan modus</h2>
-          <div class="result-toolbar"><span class="result-count" id="result-count" role="status" aria-live="polite">${DATA.cards.length} panduan ditemukan</span><button class="btn btn-secondary mobile-filter" id="filter-toggle" type="button" aria-expanded="false" aria-controls="filter-panel">${icon("filter")} Filter</button></div>
+          <div class="result-toolbar">
+            <span class="result-count" id="result-count" role="status" aria-live="polite">${DATA.cards.length} panduan ditemukan</span>
+            <div class="catalog-toolbar-actions">
+              <div class="view-toggle-group" id="view-toggle-group" role="group" aria-label="Pilihan tampilan katalog">
+                <button class="view-btn active" type="button" data-view="grid3" title="Tampilan 3 Kolom" aria-pressed="true">
+                  ${icon("grid")} <span class="view-label">3 Kolom</span>
+                </button>
+                <button class="view-btn" type="button" data-view="list" title="Tampilan Daftar Ringkas (1 Kolom)" aria-pressed="false">
+                  ${icon("list")} <span class="view-label">Daftar Ringkas</span>
+                </button>
+                <button class="view-btn" type="button" data-view="grid2" title="Tampilan 2 Kolom" aria-pressed="false">
+                  ${icon("columns")} <span class="view-label">2 Kolom</span>
+                </button>
+              </div>
+              <button class="btn btn-secondary mobile-filter" id="filter-toggle" type="button" aria-expanded="false" aria-controls="filter-panel">${icon("filter")} Filter</button>
+            </div>
+          </div>
           <div class="active-filters hidden" id="active-filters" aria-label="Filter aktif"></div>
-          <div class="cards-grid catalog-grid" id="modus-grid">${DATA.cards.map(modusCard).join("")}</div>
+          <div class="cards-grid catalog-grid view-grid3" id="modus-grid">${DATA.cards.map(modusCard).join("")}</div>
         </div>
       </div></section>
-      <section class="section-sm surface-section"><div class="container literacy-strip"><div class="literacy-visual"><img src="${literacyKeysUrl}" width="516" height="580" loading="lazy" alt="Ilustrasi gantungan kunci sebagai pengingat untuk menjaga akses akun"></div><div class="literacy-copy"><span class="eyebrow">Ingat tiga hal</span><h2>Data akun adalah kunci digital Anda</h2><div class="habit-list"><span>${icon("lock")} Jangan berikan OTP, PIN, atau kata sandi.</span><span>${icon("link")} Buka situs atau aplikasi resmi dengan mengetik alamat sendiri.</span><span>${icon("shieldCheck")} Aktifkan verifikasi dua langkah bila tersedia.</span></div><p class="asset-credit">Cuplikan visual dari <cite>Pandu Literasi Digital: Bongkar Dunia Tipu-Tipu Digital</cite>, Azaria Zada Noordika (Desember 2025). Saran telah diselaraskan dengan panduan resmi.</p></div></div></section>`);
+      <section class="section-sm surface-section"><div class="container literacy-strip"><div class="literacy-visual"><img src="${literacyKeysUrl}" width="516" height="580" loading="lazy" alt="Ilustrasi gantungan kunci sebagai pengingat untuk menjaga akses akun"></div><div class="literacy-copy"><span class="eyebrow">Ingat tiga hal</span><h2>Data akun adalah kunci digital Anda</h2><div class="habit-list"><span>${icon("lock")} Jangan berikan OTP, PIN, atau kata sandi.</span><span>${icon("link")} Buka situs atau aplikasi resmi dengan mengetik alamat sendiri.</span><span>${icon("shieldCheck")} Aktifkan verifikasi dua langkah bila tersedia.</span></div><p class="asset-credit">Diselaraskan dengan materi edukasi literasi digital resmi: <cite>Pandu Literasi Digital</cite> &amp; standar perlindungan konsumen nasional.</p></div></div></section>`);
   }
 
   function detailPage() {
@@ -312,7 +387,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         ${capture&&captureImageUrl?`<section class="case-learning" aria-labelledby="case-learning-title"><div class="case-capture-column"><span class="capture-label">Contoh pesan</span><button class="capture-open" id="capture-open" type="button" aria-haspopup="dialog" aria-controls="capture-dialog"><img src="${captureImageUrl}" width="800" height="1000" alt="${capture.alt}" fetchpriority="high"><span class="capture-zoom">${icon("search")} Perbesar contoh</span></button><p class="capture-disclaimer">Contoh fiktif berdasarkan pola yang dilaporkan. Bukan chat asli dan bukan bukti bahwa pengirim tertentu adalah penipu.</p></div><div class="case-analysis"><span class="eyebrow highlight-pill">Contoh yang sering muncul</span><h2 id="case-learning-title">Baca pesannya, cari tiga tanda</h2><ol class="capture-signals">${capture.signals.map((signal,index)=>`<li><span>${index+1}</span><p>${signal}</p></li>`).join("")}</ol><a class="source-link capture-source" href="${capture.source.url}" target="_blank" rel="noopener noreferrer">${icon("external")}<span>Sumber pola: ${capture.source.label}</span></a>${guideImageUrl&&visual?`<figure class="context-visual"><img src="${guideImageUrl}" width="1280" height="853" alt="${visual.alt}" loading="lazy"><figcaption>Gambaran situasi</figcaption></figure>`:""}</div></section><dialog class="capture-dialog" id="capture-dialog" aria-labelledby="capture-dialog-title"><div class="capture-dialog-head"><div><span class="eyebrow">Rekonstruksi edukasi</span><h2 id="capture-dialog-title">Contoh pesan yang perlu diperiksa</h2></div><button class="icon-button" id="capture-close" type="button" aria-label="Tutup contoh pesan">${icon("close")}</button></div><div class="capture-dialog-body"><img src="${captureImageUrl}" width="800" height="1000" alt="${capture.alt}"><div class="capture-transcript"><h3>Transkrip</h3><ol>${capture.messages.map((message,index)=>`<li><strong>${index+1}</strong><span>${message}</span></li>`).join("")}</ol><p>${capture.alt}</p></div></div></dialog>`:""}
         <div class="article-content"><section class="article-section priority-section"><span class="eyebrow highlight-pill amber">Lihat dahulu</span><h2>Tanda yang patut diwaspadai</h2>${list(card.warningSigns,"warning-list")}</section>
         ${visual?`<section class="article-section safe-flow" aria-labelledby="safe-flow-title"><span class="eyebrow highlight-pill teal">Alur aman</span><h2 id="safe-flow-title">Jeda, periksa, lalu amankan</h2><ol class="safe-flow-grid"><li><span class="safe-flow-icon">${icon("clock")}</span><span><strong>1. Jeda</strong><small>${visual.steps[0]}</small></span></li><li><span class="safe-flow-icon">${icon("search")}</span><span><strong>2. Periksa</strong><small>${visual.steps[1]}</small></span></li><li><span class="safe-flow-icon">${icon("shieldCheck")}</span><span><strong>3. Amankan</strong><small>${visual.steps[2]}</small></span></li></ol></section>`:""}
-        ${literacy?`<details class="content-disclosure literacy-reference"><summary><span>${icon("book")} Materi literasi terkait</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content literacy-reference-grid"><figure class="literacy-reference-figure"><img src="${literacy.imageUrl}" alt="${literacy.alt}" loading="lazy"><figcaption>Cuplikan materi PDF, halaman ${literacy.page}. Teks penting dijelaskan kembali di samping gambar.</figcaption></figure><div class="literacy-reference-copy"><span class="reference-kicker">Inti yang perlu diingat</span><h3>${literacy.title}</h3><p>${literacy.summary}</p>${list(literacy.actions)}<a class="source-link" href="${literacy.source.url}" target="_blank" rel="noopener noreferrer">${icon("external")}<span>Periksa rujukan: ${literacy.source.label}</span></a><p class="asset-credit">Cuplikan dari <cite>Pandu Literasi Digital: Bongkar Dunia Tipu-Tipu Digital</cite>, Azaria Zada Noordika (Desember 2025). Digunakan pada prototipe lokal; hak publikasi perlu dikonfirmasi.</p></div></div></details>`:""}
+        ${literacy?`<details class="content-disclosure literacy-reference"><summary><span>${icon("book")} Panduan Literasi & Edukasi Visual</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content literacy-reference-grid"><figure class="literacy-reference-figure"><img src="${literacy.imageUrl}" alt="${literacy.alt}" loading="lazy"><figcaption>Panduan Visual: ${literacy.title}. Penjelasan terintegrasi di samping gambar.</figcaption></figure><div class="literacy-reference-copy"><span class="reference-kicker">Ringkasan Edukasi</span><h3>${literacy.title}</h3><p>${literacy.summary}</p>${list(literacy.actions)}<a class="source-link" href="${literacy.source.url}" target="_blank" rel="noopener noreferrer">${icon("external")}<span>Periksa rujukan: ${literacy.source.label}</span></a><p class="asset-credit">Diselaraskan dengan materi edukasi literasi digital resmi: <cite>Pandu Literasi Digital</cite> &amp; standar perlindungan konsumen nasional.</p></div></div></details>`:""}
         <details class="content-disclosure"><summary><span>${icon("chat")} Contoh pola dan permintaan</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content"><div class="example-box"><p>${card.fictionalExample}</p><div class="example-label">Contoh edukasi</div></div><h3>Apa yang diminta</h3><p>${card.requestedAction}</p></div></details>
         <details class="content-disclosure"><summary><span>${icon("shieldCheck")} Cara memeriksa dengan aman</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content">${list(card.independentChecks)}</div></details>
         <section class="article-section urgent-section"><h2>${icon("alert")} <span class="text-gradient-urgent">Jika sudah terlanjur</span></h2>${list(card.alreadyActedSteps,"urgent-list")}<a class="btn btn-urgent" href="${toCleanUrl("bantuan-darurat.html")}">Buka langkah darurat ${icon("arrow")}</a></section>
@@ -343,8 +418,8 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
                   </fieldset>
                   <div class="consult-step primary-input"><label for="consult-input" class="field-label-row"><span class="step-label-icon">${icon("chat")}</span><span><strong>Ceritakan situasi</strong> <span class="muted">atau kosongkan bila hanya memeriksa link</span></span></label><textarea id="consult-input" maxlength="1500" aria-describedby="consult-error consult-privacy" placeholder="Contoh: Saya ditawari kerja lalu diminta membayar deposit."></textarea><span class="char-count"><span id="consult-count">0</span>/1500</span></div>
                   <div class="input-options" aria-label="Tambahkan bukti opsional">
-                    <details class="input-disclosure"><summary><span class="disclosure-icon">${icon("globeLock")}</span><span><strong>Periksa link (URL)</strong><small>Link tidak akan dibuka</small></span><span class="summary-action">Tambah ${icon("arrow")}</span></summary><div class="disclosure-body consult-step"><label for="consult-url">Tempel link</label><input id="consult-url" type="text" inputmode="url" maxlength="2048" autocomplete="off" spellcheck="false" aria-describedby="consult-url-help consult-error" placeholder="contoh.id/login"><p class="field-help" id="consult-url-help">WargaSiaga hanya memeriksa bentuk alamatnya, bukan isi situs.</p></div></details>
-                    <details class="input-disclosure" id="image-disclosure"><summary><span class="disclosure-icon">${icon("scanText")}</span><span><strong>Baca tangkapan layar</strong><small>Teks dibaca di perangkat Anda</small></span><span class="summary-action">Tambah ${icon("arrow")}</span></summary><div class="disclosure-body consult-step image-evidence"><div class="image-actions"><label class="btn btn-secondary" for="consult-image">${icon("image")} Pilih gambar</label><input class="sr-only" id="consult-image" type="file" accept="image/png,image/jpeg,image/webp" aria-describedby="consult-image-help"><button class="btn btn-secondary hidden" id="analyze-image" type="button">${icon("scanText")} Ambil teks</button><button class="btn btn-ghost hidden" id="remove-image" type="button">${icon("trash")} Hapus</button></div><p class="field-help" id="consult-image-help"><span class="micro-icon">${icon("qrCode")}</span>PNG, JPG, atau WebP · maks. 5 MB · gambar tidak diunggah.</p><div class="image-preview-wrap hidden" id="image-preview-wrap"><img id="image-preview" alt="Pratinjau tangkapan layar yang dipilih"><div><strong id="image-name"></strong><span id="image-status" role="status" aria-live="polite">Siap mengambil teks.</span></div></div></div></details>
+                    <details class="input-disclosure"><summary><div class="disclosure-main"><span class="disclosure-icon">${icon("globeLock")}</span><span class="disclosure-title-group"><strong>Periksa link (URL)</strong><small>Link tidak akan dibuka</small></span></div><span class="summary-action">${icon("arrow")} <span class="action-text">Tambah</span></span></summary><div class="disclosure-body consult-step"><label for="consult-url">Tempel link</label><input id="consult-url" type="text" inputmode="url" maxlength="2048" autocomplete="off" spellcheck="false" aria-describedby="consult-url-help consult-error" placeholder="contoh.id/login"><p class="field-help" id="consult-url-help">WargaSiaga hanya memeriksa bentuk alamatnya, bukan isi situs.</p></div></details>
+                    <details class="input-disclosure" id="image-disclosure"><summary><div class="disclosure-main"><span class="disclosure-icon">${icon("scanText")}</span><span class="disclosure-title-group"><strong>Baca tangkapan layar</strong><small>Teks dibaca di perangkat Anda</small></span></div><span class="summary-action">${icon("arrow")} <span class="action-text">Tambah</span></span></summary><div class="disclosure-body consult-step image-evidence"><div class="image-actions"><label class="btn btn-secondary" for="consult-image">${icon("image")} Pilih gambar</label><input class="sr-only" id="consult-image" type="file" accept="image/png,image/jpeg,image/webp" aria-describedby="consult-image-help"><button class="btn btn-secondary hidden" id="analyze-image" type="button">${icon("scanText")} Ambil teks</button><button class="btn btn-ghost hidden" id="remove-image" type="button">${icon("trash")} Hapus</button></div><p class="field-help" id="consult-image-help"><span class="micro-icon">${icon("qrCode")}</span>PNG, JPG, atau WebP · maks. 5 MB · gambar tidak diunggah.</p><div class="image-preview-wrap hidden" id="image-preview-wrap"><img id="image-preview" alt="Pratinjau tangkapan layar yang dipilih"><div><strong id="image-name"></strong><span id="image-status" role="status" aria-live="polite">Siap mengambil teks.</span></div></div></div></details>
                   </div>
                   <label class="ai-consent" for="consult-consent"><input id="consult-consent" type="checkbox"><span class="consent-icon" aria-hidden="true">${icon("shieldCheck")}</span><span><strong>Izinkan analisis AI</strong><small>Data sensitif disamarkan. Percakapan tidak disimpan WargaSiaga.</small></span></label>
                   <details class="privacy-disclosure"><summary>Bagaimana data diproses?</summary><p class="field-help" id="consult-privacy">Teks diproses melalui server WargaSiaga. Data sensitif yang terdeteksi disamarkan sebelum bagian yang diperlukan dikirim ke layanan AI. Jangan masukkan rahasia. Periksa kembali teks dari gambar sebelum mengirim.</p></details>
@@ -833,6 +908,26 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
 
     search.addEventListener("input",apply); checks.forEach(c=>c.addEventListener("change",apply)); ageChoices.forEach(choice=>choice.addEventListener("change",apply));
     clear.addEventListener("click",()=>{search.value="";search.focus();apply();});
+    const viewBtns = [...document.querySelectorAll(".view-btn")];
+    function setCatalogueView(view) {
+      grid.classList.remove("view-grid3", "view-list", "view-grid2");
+      grid.classList.add(`view-${view}`);
+      viewBtns.forEach(btn => {
+        const active = btn.dataset.view === view;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      try { sessionStorage.setItem("ws-catalogue-view", view); } catch (_) {}
+    }
+    viewBtns.forEach(btn => {
+      btn.addEventListener("click", () => setCatalogueView(btn.dataset.view));
+    });
+    try {
+      const savedView = sessionStorage.getItem("ws-catalogue-view") || "grid3";
+      if (["grid3", "list", "grid2"].includes(savedView)) {
+        setCatalogueView(savedView);
+      }
+    } catch (_) {}
     document.getElementById("reset-filter").addEventListener("click",()=>{checks.forEach(c=>c.checked=false);const allAge=ageChoices.find(choice=>choice.value==="all");if(allAge)allAge.checked=true;selectedCategory="all";updateCategoryTabs();search.value="";search.focus();apply();});
     activeFilters.addEventListener("click",event=>{const button=event.target.closest("[data-filter-key]");if(!button)return;if(button.dataset.filterKey==="q")search.value="";else if(button.dataset.filterKey==="age"){const allAge=ageChoices.find(choice=>choice.value==="all");if(allAge)allAge.checked=true;}else if(button.dataset.filterKey==="category"){selectedCategory="all";updateCategoryTabs();}else{const target=checks.find(check=>check.name===button.dataset.filterKey&&check.value===button.dataset.filterValue);if(target)target.checked=false;}apply();});
     grid.addEventListener("click", (event) => {
