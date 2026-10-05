@@ -1,4 +1,4 @@
-﻿const { spawn } = require("child_process");
+const { spawn } = require("child_process");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
@@ -351,6 +351,14 @@ async function run() {
   await capture("home-desktop-cdp.png");
   await navigate(`${baseUrl}/konsultasi.html`);
   await capture("consult-redesign-desktop-cdp.png");
+  await evaluate(`(async()=>{
+    document.querySelector('.quick-prompt')?.click();
+    document.querySelector('input[name="exposure"][value="none"]').checked=true;
+    document.querySelector('#consult-consent').checked=true;
+    document.querySelector('#consult-form').requestSubmit();
+    await new Promise(resolve=>setTimeout(resolve, 350));
+  })()`);
+  await capture("consult-desktop-submitted-cdp.png");
   await navigate(`${baseUrl}/modus-detail.html?id=job-deposit`);
   await capture("modus-detail-redesign-desktop-cdp.png");
   await navigate(`${baseUrl}/tentang.html`);

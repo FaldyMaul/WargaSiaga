@@ -610,6 +610,185 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
 .consent-line { display:flex; align-items:flex-start; gap:10px; padding:14px; border:1px solid var(--line); border-radius:12px; background:#fff; font-size:13px; }
 .consent-line input { width:18px; height:18px; margin-top:2px; accent-color:var(--brand); }
 
+/* Consult Workbench 2-Column Responsive Layout */
+.consult-workbench {
+  width: min(calc(100% - 32px), var(--container));
+  margin-inline: auto;
+}
+
+.consult-grid {
+  display: grid;
+  grid-template-columns: minmax(360px, 450px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.consult-input-col {
+  position: sticky;
+  top: 88px;
+  max-height: calc(100vh - 104px);
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 90, 248, 0.25) transparent;
+}
+
+.consult-input-col::-webkit-scrollbar {
+  width: 6px;
+}
+.consult-input-col::-webkit-scrollbar-track {
+  background: transparent;
+}
+.consult-input-col::-webkit-scrollbar-thumb {
+  background: rgba(122, 90, 248, 0.25);
+  border-radius: 999px;
+}
+
+.consult-result-col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.consult-ready-card {
+  padding: 30px 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg, 16px);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfbfe 100%);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.ready-card-header h2 {
+  font-size: 24px;
+  margin: 10px 0 8px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.ready-card-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.ready-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ready-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ready-feature-item:hover {
+  border-color: rgba(122, 90, 248, 0.35);
+  box-shadow: 0 4px 12px rgba(122, 90, 248, 0.06);
+}
+
+.ready-feature-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background: var(--brand-pale, #f4f3ff);
+  color: var(--brand);
+}
+
+.ready-feature-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.ready-feature-item strong {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.ready-feature-item p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.ready-quick-tips {
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: #fff9f0;
+  border: 1px solid #fedf89;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ready-tip-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 750;
+  color: #b54708;
+}
+
+.ready-tip-title svg {
+  width: 16px;
+  height: 16px;
+  color: #f79009;
+}
+
+.ready-quick-tips p {
+  margin: 0;
+  font-size: 13px;
+  color: #7a3e0b;
+  line-height: 1.5;
+}
+
+.ready-tip-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 991px) {
+  .consult-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .consult-input-col {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .ready-features-grid {
+    grid-template-columns: 1fr;
+  }
+  .consult-ready-card {
+    padding: 20px 16px;
+  }
+}
+
 .chat-shell { overflow:hidden; border:1px solid var(--line); border-radius:var(--radius-lg); background:#fff; box-shadow:var(--shadow-md); }
 .chat-head { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:18px 22px; border-bottom:1px solid var(--line); background:#fbfcfc; }
 .assistant-id { display:flex; align-items:center; gap:11px; }

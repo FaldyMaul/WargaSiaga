@@ -279,25 +279,81 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
   function consultPage() {
     return shell(`
       <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Periksa dengan AI"]])}<span class="eyebrow highlight-pill">${icon("sparkles")} Asisten Keamanan Warga</span><h1 class="section-title">Apa yang ingin <span class="text-gradient">Anda periksa?</span></h1><p class="section-copy">Ceritakan situasi yang mencurigakan. Anda juga dapat menambahkan link atau tangkapan layar untuk dianalisis.</p></div><div class="page-hero-visual"><img src="${aiInputsUrl}" width="1280" height="720" alt="" aria-hidden="true"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Sudah terlanjur?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
-      <section class="section-sm consult-workspace"><div class="narrow"><div class="chat-shell" id="consult-shell">
-        <div class="chat-head"><div class="assistant-id"><span class="assistant-avatar">${icon("bot")}<span class="assistant-spark" aria-hidden="true">${icon("sparkles")}</span></span><div><strong>Asisten Keamanan Warga</strong><span id="consult-service-state">Sistem analisis siap membantu</span></div></div><span class="status-badge status-review" id="consult-mode-badge">Siaga Aktif</span></div>
-        <div class="chat-body" id="chat-body"><div class="message assistant"><strong>Pilih contoh kasus atau tuliskan dengan kalimat Anda sendiri.</strong><span>Privasi terjaga: Jangan pernah sertakan OTP, PIN, atau kata sandi.</span></div><div class="quick-prompts"><button class="quick-prompt" type="button" data-prompt="Saya ditawari kerja, tetapi diminta transfer deposit sebelum mulai.">Kerja & Deposit</button><button class="quick-prompt" type="button" data-prompt="Ada yang mengaku dari bank dan meminta kode OTP.">Bank & OTP</button><button class="quick-prompt" type="button" data-prompt="Pembeli meminta saya klik tautan kurir di luar marketplace.">Tautan Pembeli</button></div></div>
-        <form class="chat-compose" id="consult-form" novalidate>
-          <div class="form-error hidden" id="consult-error" role="alert" tabindex="-1"></div>
-          <fieldset class="exposure-check" aria-describedby="consult-error">
-            <legend><span class="step-label-icon">${icon("shieldCheck")}</span>Apakah Anda sudah mengirim uang, data, atau akses akun?</legend>
-            <div class="exposure-options"><label><input type="radio" name="exposure" value="none" required><span>Belum / tidak</span></label><label><input type="radio" name="exposure" value="money"><span>Ya, uang terkirim</span></label><label><input type="radio" name="exposure" value="access"><span>Ya, akses atau OTP dibagikan</span></label></div>
-          </fieldset>
-          <div class="consult-step primary-input"><label for="consult-input" class="field-label-row"><span class="step-label-icon">${icon("chat")}</span><span><strong>Ceritakan situasi</strong> <span class="muted">atau kosongkan bila hanya memeriksa link</span></span></label><textarea id="consult-input" maxlength="1500" aria-describedby="consult-error consult-privacy" placeholder="Contoh: Saya ditawari kerja lalu diminta membayar deposit."></textarea><span class="char-count"><span id="consult-count">0</span>/1500</span></div>
-          <div class="input-options" aria-label="Tambahkan bukti opsional">
-            <details class="input-disclosure"><summary><span class="disclosure-icon">${icon("globeLock")}</span><span><strong>Periksa link (URL)</strong><small>Link tidak akan dibuka</small></span><span class="summary-action">Tambah ${icon("arrow")}</span></summary><div class="disclosure-body consult-step"><label for="consult-url">Tempel link</label><input id="consult-url" type="text" inputmode="url" maxlength="2048" autocomplete="off" spellcheck="false" aria-describedby="consult-url-help consult-error" placeholder="contoh.id/login"><p class="field-help" id="consult-url-help">WargaSiaga hanya memeriksa bentuk alamatnya, bukan isi situs.</p></div></details>
-            <details class="input-disclosure" id="image-disclosure"><summary><span class="disclosure-icon">${icon("scanText")}</span><span><strong>Baca tangkapan layar</strong><small>Teks dibaca di perangkat Anda</small></span><span class="summary-action">Tambah ${icon("arrow")}</span></summary><div class="disclosure-body consult-step image-evidence"><div class="image-actions"><label class="btn btn-secondary" for="consult-image">${icon("image")} Pilih gambar</label><input class="sr-only" id="consult-image" type="file" accept="image/png,image/jpeg,image/webp" aria-describedby="consult-image-help"><button class="btn btn-secondary hidden" id="analyze-image" type="button">${icon("scanText")} Ambil teks</button><button class="btn btn-ghost hidden" id="remove-image" type="button">${icon("trash")} Hapus</button></div><p class="field-help" id="consult-image-help"><span class="micro-icon">${icon("qrCode")}</span>PNG, JPG, atau WebP · maks. 5 MB · gambar tidak diunggah.</p><div class="image-preview-wrap hidden" id="image-preview-wrap"><img id="image-preview" alt="Pratinjau tangkapan layar yang dipilih"><div><strong id="image-name"></strong><span id="image-status" role="status" aria-live="polite">Siap mengambil teks.</span></div></div></div></details>
+      <section class="section-sm consult-workspace">
+        <div class="container consult-workbench">
+          <div class="consult-grid">
+            <div class="consult-input-col">
+              <div class="chat-shell" id="consult-shell">
+                <div class="chat-head"><div class="assistant-id"><span class="assistant-avatar">${icon("bot")}<span class="assistant-spark" aria-hidden="true">${icon("sparkles")}</span></span><div><strong>Asisten Keamanan Warga</strong><span id="consult-service-state">Sistem analisis siap membantu</span></div></div><span class="status-badge status-review" id="consult-mode-badge">Siaga Aktif</span></div>
+                <div class="chat-body" id="chat-body"><div class="message assistant"><strong>Pilih contoh kasus atau tuliskan dengan kalimat Anda sendiri.</strong><span>Privasi terjaga: Jangan pernah sertakan OTP, PIN, atau kata sandi.</span></div><div class="quick-prompts"><button class="quick-prompt" type="button" data-prompt="Saya ditawari kerja, tetapi diminta transfer deposit sebelum mulai.">Kerja & Deposit</button><button class="quick-prompt" type="button" data-prompt="Ada yang mengaku dari bank dan meminta kode OTP.">Bank & OTP</button><button class="quick-prompt" type="button" data-prompt="Pembeli meminta saya klik tautan kurir di luar marketplace.">Tautan Pembeli</button></div></div>
+                <form class="chat-compose" id="consult-form" novalidate>
+                  <div class="form-error hidden" id="consult-error" role="alert" tabindex="-1"></div>
+                  <fieldset class="exposure-check" aria-describedby="consult-error">
+                    <legend><span class="step-label-icon">${icon("shieldCheck")}</span>Apakah Anda sudah mengirim uang, data, atau akses akun?</legend>
+                    <div class="exposure-options"><label><input type="radio" name="exposure" value="none" required><span>Belum / tidak</span></label><label><input type="radio" name="exposure" value="money"><span>Ya, uang terkirim</span></label><label><input type="radio" name="exposure" value="access"><span>Ya, akses atau OTP dibagikan</span></label></div>
+                  </fieldset>
+                  <div class="consult-step primary-input"><label for="consult-input" class="field-label-row"><span class="step-label-icon">${icon("chat")}</span><span><strong>Ceritakan situasi</strong> <span class="muted">atau kosongkan bila hanya memeriksa link</span></span></label><textarea id="consult-input" maxlength="1500" aria-describedby="consult-error consult-privacy" placeholder="Contoh: Saya ditawari kerja lalu diminta membayar deposit."></textarea><span class="char-count"><span id="consult-count">0</span>/1500</span></div>
+                  <div class="input-options" aria-label="Tambahkan bukti opsional">
+                    <details class="input-disclosure"><summary><span class="disclosure-icon">${icon("globeLock")}</span><span><strong>Periksa link (URL)</strong><small>Link tidak akan dibuka</small></span><span class="summary-action">Tambah ${icon("arrow")}</span></summary><div class="disclosure-body consult-step"><label for="consult-url">Tempel link</label><input id="consult-url" type="text" inputmode="url" maxlength="2048" autocomplete="off" spellcheck="false" aria-describedby="consult-url-help consult-error" placeholder="contoh.id/login"><p class="field-help" id="consult-url-help">WargaSiaga hanya memeriksa bentuk alamatnya, bukan isi situs.</p></div></details>
+                    <details class="input-disclosure" id="image-disclosure"><summary><span class="disclosure-icon">${icon("scanText")}</span><span><strong>Baca tangkapan layar</strong><small>Teks dibaca di perangkat Anda</small></span><span class="summary-action">Tambah ${icon("arrow")}</span></summary><div class="disclosure-body consult-step image-evidence"><div class="image-actions"><label class="btn btn-secondary" for="consult-image">${icon("image")} Pilih gambar</label><input class="sr-only" id="consult-image" type="file" accept="image/png,image/jpeg,image/webp" aria-describedby="consult-image-help"><button class="btn btn-secondary hidden" id="analyze-image" type="button">${icon("scanText")} Ambil teks</button><button class="btn btn-ghost hidden" id="remove-image" type="button">${icon("trash")} Hapus</button></div><p class="field-help" id="consult-image-help"><span class="micro-icon">${icon("qrCode")}</span>PNG, JPG, atau WebP · maks. 5 MB · gambar tidak diunggah.</p><div class="image-preview-wrap hidden" id="image-preview-wrap"><img id="image-preview" alt="Pratinjau tangkapan layar yang dipilih"><div><strong id="image-name"></strong><span id="image-status" role="status" aria-live="polite">Siap mengambil teks.</span></div></div></div></details>
+                  </div>
+                  <label class="ai-consent" for="consult-consent"><input id="consult-consent" type="checkbox"><span class="consent-icon" aria-hidden="true">${icon("shieldCheck")}</span><span><strong>Izinkan analisis AI</strong><small>Data sensitif disamarkan. Percakapan tidak disimpan WargaSiaga.</small></span></label>
+                  <details class="privacy-disclosure"><summary>Bagaimana data diproses?</summary><p class="field-help" id="consult-privacy">Teks diproses melalui server WargaSiaga. Data sensitif yang terdeteksi disamarkan sebelum bagian yang diperlukan dikirim ke layanan AI. Jangan masukkan rahasia. Periksa kembali teks dari gambar sebelum mengirim.</p></details>
+                  <div class="chat-tools"><span class="small muted">Hasil berupa panduan awal, bukan keputusan final.</span><button class="btn btn-primary btn-prominent" id="consult-submit" type="submit">${icon("scanSearch")} Periksa sekarang</button></div>
+                </form>
+              </div>
+            </div>
+            <div class="consult-result-col">
+              <div class="consult-ready-card" id="consult-ready-state">
+                <div class="ready-card-header">
+                  <span class="eyebrow highlight-pill teal">${icon("sparkles")} Pusat Analisis Keamanan</span>
+                  <h2>Hasil Analisis & Konsultasi Interaktif</h2>
+                  <p>Tuliskan percakapan atau tempel link di panel kiri, lalu klik <strong>Periksa sekarang</strong>. AI akan mengurai indikasi risiko secara real time tanpa menyimpan data pribadi Anda.</p>
+                </div>
+                <div class="ready-features-grid">
+                  <div class="ready-feature-item">
+                    <div class="ready-feature-icon">${icon("scanSearch")}</div>
+                    <div>
+                      <strong>Pendeteksian Tanda Manipulasi</strong>
+                      <p>Mengenali pola desakan waktu, iming iming hadiah, rekayasa transfer, atau lowongan deposit fiktif.</p>
+                    </div>
+                  </div>
+                  <div class="ready-feature-item">
+                    <div class="ready-feature-icon">${icon("globeLock")}</div>
+                    <div>
+                      <strong>Inspeksi Struktur Tautan Aman</strong>
+                      <p>Memeriksa keanehan domain tiruan, tautan pendek mencurigakan, atau alamat yang meniru merek resmi.</p>
+                    </div>
+                  </div>
+                  <div class="ready-feature-item">
+                    <div class="ready-feature-icon">${icon("bot")}</div>
+                    <div>
+                      <strong>Helpdesk Konsultasi Multi Chat</strong>
+                      <p>Setelah hasil awal keluar, Anda dapat bertanya lebih lanjut untuk mendapatkan panduan mitigasi langkah demi langkah.</p>
+                    </div>
+                  </div>
+                  <div class="ready-feature-item">
+                    <div class="ready-feature-icon">${icon("shieldCheck")}</div>
+                    <div>
+                      <strong>Penyamaran Data Otomatis</strong>
+                      <p>Pola nomor telepon, rekening, NIK, dan email disamarkan sebelum diproses agar kerahasiaan Anda terjaga.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="ready-quick-tips">
+                  <div class="ready-tip-title">${icon("alert")} Catatan Penting Sebelum Memeriksa:</div>
+                  <p>Bila Anda sudah terlanjur mentransfer uang atau membagikan kode OTP, segera buka <strong>Bantuan Sekarang</strong> untuk menghubungi call center darurat bank tanpa harus menunggu hasil analisis.</p>
+                  <div class="ready-tip-actions">
+                    <a class="btn btn-secondary btn-sm" href="bantuan-darurat.html">${icon("phone")} Buka Bantuan Darurat</a>
+                    <a class="btn btn-ghost btn-sm" href="modus.html">${icon("book")} Katalog Modus</a>
+                  </div>
+                </div>
+              </div>
+              <div id="consult-result" class="assessment hidden" role="status" aria-live="polite" tabindex="-1"></div>
+            </div>
           </div>
-          <label class="ai-consent" for="consult-consent"><input id="consult-consent" type="checkbox"><span class="consent-icon" aria-hidden="true">${icon("shieldCheck")}</span><span><strong>Izinkan analisis AI</strong><small>Data sensitif disamarkan. Percakapan tidak disimpan WargaSiaga.</small></span></label>
-          <details class="privacy-disclosure"><summary>Bagaimana data diproses?</summary><p class="field-help" id="consult-privacy">Teks diproses melalui server WargaSiaga. Data sensitif yang terdeteksi disamarkan sebelum bagian yang diperlukan dikirim ke layanan AI. Jangan masukkan rahasia. Periksa kembali teks dari gambar sebelum mengirim.</p></details>
-          <div class="chat-tools"><span class="small muted">Hasil berupa panduan awal, bukan keputusan final.</span><button class="btn btn-primary btn-prominent" id="consult-submit" type="submit">${icon("scanSearch")} Periksa sekarang</button></div>
-        </form>
-      </div><div id="consult-result" class="assessment hidden" style="margin-top:22px" role="status" aria-live="polite" tabindex="-1"></div></div></section>`);
+        </div>
+      </section>`);
   }
 
   function urgentPage() {
@@ -950,6 +1006,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         count.textContent="0";
         result.classList.add("hidden");
         result.innerHTML="";
+        document.getElementById("consult-ready-state")?.classList.remove("hidden");
         input.focus();
         input.scrollIntoView({behavior:"smooth",block:"center"});
       });
@@ -1138,6 +1195,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         </div>` : ""}
         ${helpdeskSectionHtml}
         <details class="result-disclosure"><summary>${icon("shieldCheck")} Privasi dan batasan</summary><div class="privacy-box"><p>${escapeHtml(redaction)}</p><p>${escapeHtml(payload.notice||"")}</p><p>${escapeHtml(payload.disclaimer||"")}</p><p>${escapeHtml(payload.retention||"")}</p></div></details>`;
+      document.getElementById("consult-ready-state")?.classList.add("hidden");
       result.classList.remove("hidden");
       attachHelpdeskEvents();
       result.focus({preventScroll:true});
@@ -1162,6 +1220,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       if(urgent){renderAssessment(localResult(raw,exposure,true,submittedUrl), raw);return;}
       submit.disabled=true;
       form.setAttribute("aria-busy","true");
+      document.getElementById("consult-ready-state")?.classList.add("hidden");
       result.innerHTML=`<div class="ai-loading"><span class="loading-spinner" aria-hidden="true"></span><div><strong>Memeriksa tanda dengan aman…</strong><span>Data sensitif yang terdeteksi akan disamarkan sebelum dikirim ke layanan AI.</span></div></div>`;
       result.classList.remove("hidden");
       const controller=new AbortController(), timeout=setTimeout(()=>controller.abort(),18000);
