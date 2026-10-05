@@ -4,13 +4,15 @@ import os from "node:os";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
+import { createWargaSiagaServer } from "../server/index.mjs";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const chromePath = process.env.CHROME_PATH || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const profileDir = path.join(os.tmpdir(), `wargasiaga-crossmenu-qa-${process.pid}`);
-const appPort = 62929;
-const baseUrl = `http://127.0.0.1:${appPort}`;
+let serverInstance = null;
+let baseUrl = "";
 
 const chrome = spawn(chromePath, [
   "--headless=new",
@@ -42,6 +44,10 @@ async function getDebuggerUrl() {
 }
 
 async function run() {
+  serverInstance = await createWargaSiagaServer({ mode: "development" });
+  const addr = await serverInstance.listen(0, "127.0.0.1");
+  baseUrl = `http://127.0.0.1:${addr.port}`;
+
   const ws = new WebSocket(await getDebuggerUrl());
   await new Promise((resolve, reject) => { ws.addEventListener("open", resolve); ws.addEventListener("error", reject); });
   let id = 0;
@@ -219,6 +225,9 @@ run().catch(err => {
   console.error("Cross-menu audit error:", err);
   process.exitCode = 1;
 }).finally(async () => {
+  if (serverInstance) {
+    try { await serverInstance.close(); } catch (_) {}
+  }
   chrome.kill();
   await wait(200);
   try { fs.rmSync(profileDir, { recursive: true, force: true }); } catch (_) {}

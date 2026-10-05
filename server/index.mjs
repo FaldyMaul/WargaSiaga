@@ -82,6 +82,34 @@ function serveProductionFile(request, response) {
   let requestPath;
   try { requestPath = decodeURIComponent(new URL(request.url, "http://local").pathname); }
   catch (_) { response.writeHead(400); response.end("Permintaan tidak valid."); return; }
+
+  if (requestPath.endsWith(".html")) {
+    let cleanPath = requestPath
+      .replace(/\/index\.html$/, "/")
+      .replace(/index\.html$/, "")
+      .replace(/\.html$/, "");
+    if (!cleanPath.startsWith("/")) cleanPath = "/" + cleanPath;
+    if (!cleanPath) cleanPath = "/";
+    const search = request.url.includes("?") ? request.url.slice(request.url.indexOf("?")) : "";
+    response.writeHead(301, {
+      "Location": cleanPath + search,
+      "Cache-Control": "public, max-age=31536000"
+    });
+    response.end();
+    return;
+  }
+
+  if (requestPath.length > 1 && requestPath.endsWith("/")) {
+    const cleanPath = requestPath.replace(/\/+$/, "");
+    const search = request.url.includes("?") ? request.url.slice(request.url.indexOf("?")) : "";
+    response.writeHead(301, {
+      "Location": cleanPath + search,
+      "Cache-Control": "public, max-age=31536000"
+    });
+    response.end();
+    return;
+  }
+
   const relative = requestPath === "/" ? "index.html" : requestPath.replace(/^\/+/, "");
   let filePath = path.resolve(distRoot, relative);
   if ((!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) && fs.existsSync(`${filePath}.html`)) {
@@ -125,7 +153,43 @@ export async function createWargaSiagaServer(options = {}) {
   }
 
   const server = http.createServer(async (request, response) => {
-    const pathname = new URL(request.url, "http://local").pathname;
+    let parsedUrl;
+    try {
+      parsedUrl = new URL(request.url, "http://local");
+    } catch (_) {
+      response.writeHead(400);
+      response.end("Permintaan tidak valid.");
+      return;
+    }
+    const pathname = decodeURIComponent(parsedUrl.pathname);
+
+    if (!pathname.startsWith("/api/")) {
+      if (pathname.endsWith(".html")) {
+        let cleanPath = pathname
+          .replace(/\/index\.html$/, "/")
+          .replace(/index\.html$/, "")
+          .replace(/\.html$/, "");
+        if (!cleanPath.startsWith("/")) cleanPath = "/" + cleanPath;
+        if (!cleanPath) cleanPath = "/";
+        const target = cleanPath + parsedUrl.search;
+        response.writeHead(301, {
+          "Location": target,
+          "Cache-Control": "public, max-age=31536000"
+        });
+        response.end();
+        return;
+      }
+      if (pathname.length > 1 && pathname.endsWith("/")) {
+        const cleanPath = pathname.replace(/\/+$/, "");
+        const target = cleanPath + parsedUrl.search;
+        response.writeHead(301, {
+          "Location": target,
+          "Cache-Control": "public, max-age=31536000"
+        });
+        response.end();
+        return;
+      }
+    }
     if (pathname === "/api/health") {
       if (request.method !== "GET") return sendJson(response, 405, { error: { code: "method_not_allowed", message: "Metode tidak didukung." } }, production, { Allow: "GET" });
       return sendJson(response, 200, getPublicRuntimeConfig(config), production);
