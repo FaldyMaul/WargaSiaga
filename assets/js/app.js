@@ -40,7 +40,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     elderly:"Bila perlu, periksa bersama orang yang dipercaya tanpa memberikan kendali akun, PIN, OTP, atau perangkat."
   };
   const AGE_IMAGES = { kids:ageKidsUrl, teens:ageTeensUrl, adults:ageAdultsUrl, elderly:ageElderlyUrl };
-  const MODUS_CATEGORIES = [
+  const MODUS_CATEGORIES = window.WS_DATA?.categories || [
     { id:"all", label:"Semua Kategori", icon:"search", count:13 },
     { id:"banking", label:"Perbankan & Akun", icon:"shieldCheck", desc:"OTP, rekening, dan pemulihan dana", cardIds:["bank-otp", "recovery-scam"] },
     { id:"job-investment", label:"Kerja & Investasi", icon:"briefcase", desc:"Deposit lowongan dan janji untung", cardIds:["job-deposit", "investment-return"] },
@@ -113,6 +113,13 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     ["about", "tentang.html", "Tentang"]
   ];
 
+  function toCleanUrl(href) {
+    if (!href || typeof href !== "string") return href;
+    if (href.startsWith("http://") || href.startsWith("https://") || href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("#")) return href;
+    if (href === "index.html" || href === "/index.html") return "/";
+    return href.replace(/^\/?index\.html(?=[?#]|$)/, "/").replace(/\.html(?=[?#]|$)/, "");
+  }
+
   function sectionFor(active) {
     if (["detail"].includes(active)) return "modus";
     if (["report-form", "report-status"].includes(active)) return "reports";
@@ -121,55 +128,94 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
 
   function header() {
     const current = sectionFor(page);
+    let consultHref = "konsultasi.html";
+    let reportHref = "laporan.html";
+    let urgentHref = "bantuan-darurat.html";
+
+    if (page === "detail") {
+      try {
+        const p = new URLSearchParams(location.search);
+        const reqId = p.get("id");
+        if (reqId) {
+          consultHref = `konsultasi.html?modus=${encodeURIComponent(reqId)}`;
+          reportHref = `lapor.html?modus=${encodeURIComponent(reqId)}`;
+          urgentHref = `bantuan-darurat.html?modus=${encodeURIComponent(reqId)}`;
+        }
+      } catch (_) {}
+    }
+
+    const currentNav = nav.map(([key, href, label]) => {
+      let targetHref = href;
+      if (page === "detail") {
+        if (key === "consult") targetHref = consultHref;
+        if (key === "reports") targetHref = reportHref;
+      }
+      return [key, targetHref, label];
+    });
+
     return `
       <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
       <div class="notice-bar"><div class="container"><span class="notice-dot"></span>Inisiatif Perlindungan Digital Warga & Panduan Keamanan Mandiri</div></div>
       <header class="site-header">
         <div class="container header-row">
-          <a class="brand" href="index.html" aria-label="WargaSiaga, beranda"><span class="brand-mark">${icon("shield")}</span><span>WargaSiaga</span></a>
+          <a class="brand" href="${toCleanUrl("index.html")}" aria-label="WargaSiaga, beranda"><span class="brand-mark">${icon("shield")}</span><span>WargaSiaga</span></a>
           <nav class="desktop-nav" aria-label="Navigasi utama">
-            ${nav.map(([key, href, label]) => `<a class="nav-link${current === key ? " active" : ""}" href="${href}"${current === key ? ' aria-current="page"' : ""}>${label}</a>`).join("")}
+            ${currentNav.map(([key, href, label]) => `<a class="nav-link${current === key ? " active" : ""}" href="${toCleanUrl(href)}"${current === key ? ' aria-current="page"' : ""}>${label}</a>`).join("")}
           </nav>
           <div class="header-actions">
             <button class="icon-button" id="contrast-toggle" type="button" aria-label="Aktifkan kontras tinggi" aria-pressed="false" title="Aktifkan kontras tinggi">${icon("eye")}</button>
-            <a class="urgent-header" href="bantuan-darurat.html">${icon("alert")} Bantuan sekarang</a>
+            <a class="urgent-header" href="${toCleanUrl(urgentHref)}">${icon("alert")} Bantuan sekarang</a>
             <button class="icon-button menu-button" id="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Buka menu">${icon("menu")}</button>
           </div>
         </div>
         <nav class="mobile-menu" id="mobile-menu" aria-label="Navigasi seluler">
-          ${nav.map(([key, href, label]) => `<a class="nav-link${current === key ? " active" : ""}" href="${href}"${current === key ? ' aria-current="page"' : ""}>${label}</a>`).join("")}
-          <a class="nav-link" href="bantuan-darurat.html">Butuh bantuan sekarang</a>
+          ${currentNav.map(([key, href, label]) => `<a class="nav-link${current === key ? " active" : ""}" href="${toCleanUrl(href)}"${current === key ? ' aria-current="page"' : ""}>${label}</a>`).join("")}
+          <a class="nav-link" href="${toCleanUrl(urgentHref)}">Butuh bantuan sekarang</a>
         </nav>
       </header>`;
   }
 
   function footer() {
     const current = sectionFor(page);
+    let consultHref = "konsultasi.html";
+    let urgentHref = "bantuan-darurat.html";
+
+    if (page === "detail") {
+      try {
+        const p = new URLSearchParams(location.search);
+        const reqId = p.get("id");
+        if (reqId) {
+          consultHref = `konsultasi.html?modus=${encodeURIComponent(reqId)}`;
+          urgentHref = `bantuan-darurat.html?modus=${encodeURIComponent(reqId)}`;
+        }
+      } catch (_) {}
+    }
+
     return `
       <footer class="site-footer">
-        <div class="container footer-compact"><a class="brand" href="index.html"><span class="brand-mark">${icon("shield")}</span><span>WargaSiaga</span></a><nav aria-label="Tautan footer"><a href="konsultasi.html">Periksa dengan AI</a><a href="bantu-orang-lain.html">Bantu orang lain</a><a href="bantuan-darurat.html">Bantuan darurat</a><a href="tentang.html#layanan-resmi">Layanan resmi</a><a href="tentang.html#privasi">Privasi</a></nav></div>
+        <div class="container footer-compact"><a class="brand" href="${toCleanUrl("index.html")}"><span class="brand-mark">${icon("shield")}</span><span>WargaSiaga</span></a><nav aria-label="Tautan footer"><a href="${toCleanUrl(consultHref)}">Periksa dengan AI</a><a href="${toCleanUrl("bantu-orang-lain.html")}">Bantu orang lain</a><a href="${toCleanUrl(urgentHref)}">Bantuan darurat</a><a href="${toCleanUrl("tentang.html#layanan-resmi")}">Layanan resmi</a><a href="${toCleanUrl("tentang.html#privasi")}">Privasi</a></nav></div>
         <div class="container footer-bottom"><span>© 2026 WargaSiaga · Panduan Keamanan Digital Warga</span><span>Jangan bagikan OTP, PIN, atau kata sandi.</span></div>
       </footer>
       <nav class="mobile-bottom-nav" aria-label="Navigasi cepat">
-        <a class="bottom-link${page === "home" ? " active" : ""}" href="index.html"${page === "home" ? ' aria-current="page"' : ""}>${icon("home")}<span>Beranda</span></a>
-        <a class="bottom-link${current === "consult" ? " active" : ""}" href="konsultasi.html"${current === "consult" ? ' aria-current="page"' : ""}>${icon("chat")}<span>Tanya</span></a>
-        <a class="bottom-link${current === "modus" ? " active" : ""}" href="modus.html"${current === "modus" ? ' aria-current="page"' : ""}>${icon("search")}<span>Modus</span></a>
-        <a class="bottom-link urgent${page === "urgent" ? " active" : ""}" href="bantuan-darurat.html"${page === "urgent" ? ' aria-current="page"' : ""}>${icon("alert")}<span>Darurat</span></a>
+        <a class="bottom-link${page === "home" ? " active" : ""}" href="${toCleanUrl("index.html")}"${page === "home" ? ' aria-current="page"' : ""}>${icon("home")}<span>Beranda</span></a>
+        <a class="bottom-link${current === "consult" ? " active" : ""}" href="${toCleanUrl(consultHref)}"${current === "consult" ? ' aria-current="page"' : ""}>${icon("chat")}<span>Tanya</span></a>
+        <a class="bottom-link${current === "modus" ? " active" : ""}" href="${toCleanUrl("modus.html")}"${current === "modus" ? ' aria-current="page"' : ""}>${icon("search")}<span>Modus</span></a>
+        <a class="bottom-link urgent${page === "urgent" ? " active" : ""}" href="${toCleanUrl(urgentHref)}"${page === "urgent" ? ' aria-current="page"' : ""}>${icon("alert")}<span>Darurat</span></a>
       </nav>
       <div class="toast" id="toast" role="status" aria-live="polite"></div>`;
   }
 
   function shell(content) { return `${header()}<main id="main-content">${content}</main>${footer()}`; }
-  function arrowLink(label, href) { return `<a class="text-link" href="${href}">${label}${icon("arrow")}</a>`; }
-  function crumb(items) { return `<nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Beranda</a><span>/</span>${items.map((x, i) => i === items.length - 1 ? `<span aria-current="page">${x[0]}</span>` : `<a href="${x[1]}">${x[0]}</a><span>/</span>`).join("")}</nav>`; }
+  function arrowLink(label, href) { return `<a class="text-link" href="${toCleanUrl(href)}">${label}${icon("arrow")}</a>`; }
+  function crumb(items) { return `<nav class="breadcrumb" aria-label="Breadcrumb"><a href="${toCleanUrl("index.html")}">Beranda</a><span>/</span>${items.map((x, i) => i === items.length - 1 ? `<span aria-current="page">${x[0]}</span>` : `<a href="${toCleanUrl(x[1])}">${x[0]}</a><span>/</span>`).join("")}</nav>`; }
 
   function modusCard(card) {
     const imageUrl=GUIDE_IMAGE_URLS[card.id];
     const category = MODUS_CATEGORIES.find(c => c.cardIds?.includes(card.id)) || MODUS_CATEGORIES[1];
     return `<article class="modus-card" data-accent="${card.accent}" data-category="${category.id}" data-card-id="${card.id}" data-search="${[card.title,card.summary,category.label,...card.channels,...card.contexts,...card.tactics].join(" ").toLowerCase()}">
-      <div class="card-accent"></div>${imageUrl?`<a class="modus-card-media" data-guide-link href="modus-detail.html?id=${card.id}" tabindex="-1" aria-hidden="true"><img src="${imageUrl}" width="1280" height="853" alt="" loading="lazy"><span class="risk-badge">Perlu diwaspadai</span><span class="card-category-pill">${icon(category.icon)} ${category.label}</span></a>`:""}<div class="modus-card-body"><div class="card-top"><div class="card-header-left"><span class="card-icon">${icon(card.icon)}</span><button class="card-category-badge" type="button" data-filter-category="${category.id}" title="Filter kategori ${category.label}">${icon(category.icon)} <span>${category.label}</span></button></div>${imageUrl?"":'<span class="risk-badge">Perlu diwaspadai</span>'}</div>
-      <h3><a data-guide-link href="modus-detail.html?id=${card.id}">${card.title}</a></h3><p>${card.summary}</p><div class="card-evidence-callout">${icon("scanText")}<span>Dilengkapi <strong class="text-brand-highlight">contoh chat HP</strong> & 3 tanda bahaya</span></div><div class="card-audience">${icon("users")}<span>${card.ageGroups.map(value=>AGE_GROUPS.find(group=>group.value===value)?.label).filter(Boolean).join(" · ")}</span></div><div class="tag-row">${card.channels.slice(0,2).map(x=>`<span class="tag">${x}</span>`).join("")}</div>
-      <div class="card-footer"><a class="text-link" data-guide-link href="modus-detail.html?id=${card.id}">Buka panduan${icon("arrow")}</a></div></div></article>`;
+      <div class="card-accent"></div>${imageUrl?`<a class="modus-card-media" data-guide-link href="${toCleanUrl(`modus-detail.html?id=${card.id}`)}" tabindex="-1" aria-hidden="true"><img src="${imageUrl}" width="1280" height="853" alt="" loading="lazy"><span class="risk-badge">Perlu diwaspadai</span><span class="card-category-pill">${icon(category.icon)} ${category.label}</span></a>`:""}<div class="modus-card-body"><div class="card-top"><div class="card-header-left"><span class="card-icon">${icon(card.icon)}</span><button class="card-category-badge" type="button" data-filter-category="${category.id}" title="Filter kategori ${category.label}">${icon(category.icon)} <span>${category.label}</span></button></div>${imageUrl?"":'<span class="risk-badge">Perlu diwaspadai</span>'}</div>
+      <h3><a data-guide-link href="${toCleanUrl(`modus-detail.html?id=${card.id}`)}">${card.title}</a></h3><p>${card.summary}</p><div class="card-evidence-callout">${icon("scanText")}<span>Dilengkapi <strong class="text-brand-highlight">contoh chat HP</strong> & 3 tanda bahaya</span></div><div class="card-audience">${icon("users")}<span>${card.ageGroups.map(value=>AGE_GROUPS.find(group=>group.value===value)?.label).filter(Boolean).join(" · ")}</span></div><div class="tag-row">${card.channels.slice(0,2).map(x=>`<span class="tag">${x}</span>`).join("")}</div>
+      <div class="card-footer"><a class="text-link" data-guide-link href="${toCleanUrl(`modus-detail.html?id=${card.id}`)}">Buka panduan${icon("arrow")}</a></div></div></article>`;
   }
 
   function formatDate(date) {
@@ -182,23 +228,23 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       <section class="hero"><div class="container hero-grid">
         <div><span class="eyebrow highlight-pill">${icon("sparkles")} Asisten Keamanan Warga</span><h1>Ada pesan yang membuat <span class="text-gradient">Anda ragu?</span></h1><p>Tulis singkat apa yang terjadi. AI akan memetakan tanda dan mengarahkan Anda ke fitur yang tepat.</p>
           <form class="hero-ask" id="home-ask-form" novalidate><label for="home-ask"><strong>Apa yang ingin Anda periksa?</strong><span>Privasi aman: Jangan sertakan OTP, PIN, atau kata sandi.</span></label><div class="hero-ask-control"><textarea id="home-ask" maxlength="600" required aria-describedby="home-ask-error" placeholder="Contoh: Saya diminta membayar deposit sebelum mulai bekerja."></textarea><button class="btn btn-primary btn-prominent" type="submit">${icon("bot")} Tanya AI</button></div><div class="form-error hidden" id="home-ask-error" role="alert" tabindex="-1"></div></form>
-          <a class="hero-emergency-link" href="bantuan-darurat.html">${icon("alert")}<span>Sudah terlanjur kirim uang atau data?<strong>Buka bantuan sekarang</strong></span>${icon("arrow")}</a>
+          <a class="hero-emergency-link" href="${toCleanUrl("bantuan-darurat.html")}">${icon("alert")}<span>Sudah terlanjur kirim uang atau data?<strong>Buka bantuan sekarang</strong></span>${icon("arrow")}</a>
           <div class="trust-row"><span class="trust-item">${icon("lock")} Rahasia disamarkan</span><span class="trust-item">${icon("shieldCheck")} Bukan vonis otomatis</span></div>
         </div>
         <aside class="hero-panel" aria-labelledby="scenario-title"><div class="hero-media"><img class="hero-illustration" src="${homeCheckUrl}" width="1280" height="853" alt="" aria-hidden="true" fetchpriority="high"><img class="hero-safety-mark" src="${safetyOrbitUrl}" width="82" height="82" alt="" aria-hidden="true"></div><div class="hero-panel-intro"><div><span class="pulse-label">Pilih cepat</span><h2 id="scenario-title">Situasi saya</h2></div></div>
           <div class="scenario-list">
-            <a class="scenario-link" href="modus.html?context=Pencari%20kerja"><span class="scenario-icon">${icon("briefcase")}</span><span class="scenario-text"><strong>Ditawari kerja atau tugas</strong><span>Diminta deposit atau isi saldo</span></span><span class="scenario-arrow">${icon("arrow")}</span></a>
-            <a class="scenario-link" href="modus.html?context=Belanja%20online"><span class="scenario-icon">${icon("bag")}</span><span class="scenario-text"><strong>Sedang jual beli online</strong><span>Diajak keluar dari marketplace</span></span><span class="scenario-arrow">${icon("arrow")}</span></a>
-            <a class="scenario-link" href="modus.html?context=Keluarga"><span class="scenario-icon">${icon("users")}</span><span class="scenario-text"><strong>Mengatasnamakan orang dekat</strong><span>Ada permintaan uang mendadak</span></span><span class="scenario-arrow">${icon("arrow")}</span></a>
+            <a class="scenario-link" href="${toCleanUrl("modus.html?context=Pencari%20kerja")}"><span class="scenario-icon">${icon("briefcase")}</span><span class="scenario-text"><strong>Ditawari kerja atau tugas</strong><span>Diminta deposit atau isi saldo</span></span><span class="scenario-arrow">${icon("arrow")}</span></a>
+            <a class="scenario-link" href="${toCleanUrl("modus.html?context=Belanja%20online")}"><span class="scenario-icon">${icon("bag")}</span><span class="scenario-text"><strong>Sedang jual beli online</strong><span>Diajak keluar dari marketplace</span></span><span class="scenario-arrow">${icon("arrow")}</span></a>
+            <a class="scenario-link" href="${toCleanUrl("modus.html?context=Keluarga")}"><span class="scenario-icon">${icon("users")}</span><span class="scenario-text"><strong>Mengatasnamakan orang dekat</strong><span>Ada permintaan uang mendadak</span></span><span class="scenario-arrow">${icon("arrow")}</span></a>
           </div>
         </aside>
       </div></section>
-      <section class="section-sm"><div class="container"><div class="urgent-banner compact"><span class="urgent-banner-icon">${icon("alert")}</span><div><h2>Sudah terlanjur kirim uang atau data?</h2><p>Lewati pemeriksaan. Amankan akun dan transaksi sekarang.</p></div><a class="btn btn-urgent" href="bantuan-darurat.html">Buka langkah darurat</a></div></div></section>
+      <section class="section-sm"><div class="container"><div class="urgent-banner compact"><span class="urgent-banner-icon">${icon("alert")}</span><div><h2>Sudah terlanjur kirim uang atau data?</h2><p>Lewati pemeriksaan. Amankan akun dan transaksi sekarang.</p></div><a class="btn btn-urgent" href="${toCleanUrl("bantuan-darurat.html")}">Buka langkah darurat</a></div></div></section>
       <section class="section"><div class="container"><div class="section-heading-row"><div><span class="eyebrow highlight-pill teal">Jalur Layanan</span><h2 class="section-title">Pilih tujuan</h2></div></div><div class="route-grid">
-        <a class="route-card" href="modus.html"><span class="route-icon">${icon("book")}</span><span><strong>Kenali modus</strong><small>Cari pola berdasarkan situasi</small></span>${icon("arrow")}</a>
-        <a class="route-card" href="laporan.html"><span class="route-icon">${icon("users")}</span><span><strong>Lapor warga</strong><small>Lihat contoh atau buat laporan</small></span>${icon("arrow")}</a>
-        <a class="route-card" href="bantu-orang-lain.html"><span class="route-icon">${icon("users")}</span><span><strong>Bantu orang terdekat</strong><small>Mulai percakapan tanpa menyalahkan</small></span>${icon("arrow")}</a>
-        <a class="route-card" href="tentang.html"><span class="route-icon">${icon("shieldCheck")}</span><span><strong>Tentang & sumber</strong><small>Batasan dan layanan resmi</small></span>${icon("arrow")}</a>
+        <a class="route-card" href="${toCleanUrl("modus.html")}"><span class="route-icon">${icon("book")}</span><span><strong>Kenali modus</strong><small>Cari pola berdasarkan situasi</small></span>${icon("arrow")}</a>
+        <a class="route-card" href="${toCleanUrl("laporan.html")}"><span class="route-icon">${icon("users")}</span><span><strong>Lapor warga</strong><small>Lihat contoh atau buat laporan</small></span>${icon("arrow")}</a>
+        <a class="route-card" href="${toCleanUrl("bantu-orang-lain.html")}"><span class="route-icon">${icon("users")}</span><span><strong>Bantu orang terdekat</strong><small>Mulai percakapan tanpa menyalahkan</small></span>${icon("arrow")}</a>
+        <a class="route-card" href="${toCleanUrl("tentang.html")}"><span class="route-icon">${icon("shieldCheck")}</span><span><strong>Tentang & sumber</strong><small>Batasan dan layanan resmi</small></span>${icon("arrow")}</a>
       </div></div></section>`);
   }
 
@@ -206,7 +252,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     const channels = [...new Set(DATA.cards.flatMap(c=>c.channels))].sort();
     const contexts = [...new Set(DATA.cards.flatMap(c=>c.contexts))].sort();
     return shell(`
-      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Kenali Modus"]])}<span class="eyebrow">Katalog panduan</span><h1 class="section-title">Cari modus yang mirip</h1><p class="section-copy">Pilih kelompok usia atau kategori, lalu cari berdasarkan pesan atau situasi.</p></div><div class="page-hero-visual ratio-3-2 catalog-hero-visual"><img src="${modusLibraryUrl}" width="1536" height="1024" alt="" aria-hidden="true"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Sudah terlanjur?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
+      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Kenali Modus"]])}<span class="eyebrow">Katalog panduan</span><h1 class="section-title">Cari modus yang mirip</h1><p class="section-copy">Pilih kelompok usia atau kategori, lalu cari berdasarkan pesan atau situasi.</p></div><div class="page-hero-visual ratio-3-2 catalog-hero-visual"><img src="${modusLibraryUrl}" width="1536" height="1024" alt="" aria-hidden="true"><a class="urgent-shortcut" href="${toCleanUrl("bantuan-darurat.html")}">${icon("alert")}<span><strong>Sudah terlanjur?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
       <section class="section-sm"><div class="container"><fieldset class="age-selector" id="age-selector" aria-describedby="age-selector-help"><legend><span class="eyebrow">Langkah 1</span><strong>Panduan ini untuk siapa?</strong></legend><p id="age-selector-help">Pilih usia orang yang menghadapi situasi ini. Pilihan hanya memfilter panduan dan tidak disimpan.</p><div class="age-options">${AGE_GROUPS.map((group,index)=>`<label><input type="radio" name="age" value="${group.value}"${index===0?" checked":""}><span>${group.value==="all"?`<span class="age-portrait age-all">${icon("users")}</span>`:`<img class="age-portrait" src="${AGE_IMAGES[group.value]}" width="640" height="640" alt="" loading="lazy">`}<span class="age-option-copy"><strong>${group.label}</strong>${group.description?`<small>${group.description}</small>`:""}</span></span></label>`).join("")}</div></fieldset></div></section>
       <section class="section-sm catalog-section"><div class="container filter-shell">
         <aside class="filter-panel" id="filter-panel" aria-label="Filter modus"><div class="spread"><strong>Filter panduan</strong><button class="btn btn-ghost" id="reset-filter" type="button">Hapus filter</button></div>
@@ -247,29 +293,31 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     const card = DATA.cards.find(c=>c.id === requestedId || c.slug === requestedId);
     if (!card) {
       document.title = "Panduan tidak ditemukan | WargaSiaga";
-      return shell(`<section class="page-hero"><div class="container">${crumb([["Kenali Modus","modus.html"],["Tidak ditemukan"]])}<span class="eyebrow">Tautan tidak dikenali</span><h1 class="section-title">Panduan tidak ditemukan</h1><p class="section-copy">Alamat mungkin tidak lengkap atau panduan telah dipindahkan. Pilih panduan dari pustaka agar informasi yang tampil sesuai.</p><div class="hero-actions"><a class="btn btn-primary" href="modus.html">Buka pustaka modus</a><a class="btn btn-urgent" href="bantuan-darurat.html">Butuh bantuan sekarang</a></div></div></section>`);
+      return shell(`<section class="page-hero"><div class="container">${crumb([["Kenali Modus","modus.html"],["Tidak ditemukan"]])}<span class="eyebrow">Tautan tidak dikenali</span><h1 class="section-title">Panduan tidak ditemukan</h1><p class="section-copy">Alamat mungkin tidak lengkap atau panduan telah dipindahkan. Pilih panduan dari pustaka agar informasi yang tampil sesuai.</p><div class="hero-actions"><a class="btn btn-primary" href="${toCleanUrl("modus.html")}">Buka pustaka modus</a><a class="btn btn-urgent" href="${toCleanUrl("bantuan-darurat.html")}">Butuh bantuan sekarang</a></div></div></section>`);
     }
     const selectedAge=AGE_GROUPS.find(group=>group.value!=="all"&&group.value===params.get("age")&&card.ageGroups.includes(group.value));
-    const catalogueHref=selectedAge?`modus.html?age=${encodeURIComponent(selectedAge.value)}`:"modus.html";
+    const catalogueHref=selectedAge?toCleanUrl(`modus.html?age=${encodeURIComponent(selectedAge.value)}`):toCleanUrl("modus.html");
     const guideImageUrl=GUIDE_IMAGE_URLS[card.id];
     const visual=GUIDE_VISUAL_META[card.id];
     const literacy=LITERACY_GUIDANCE[card.id];
     const capture=CASE_CAPTURES[card.id];
     const captureImageUrl=CAPTURE_IMAGE_URLS[card.id];
+    const category = MODUS_CATEGORIES.find(c => c.cardIds?.includes(card.id) || c.id === card.categoryId) || MODUS_CATEGORIES[1];
+    const categoryHref = toCleanUrl(`modus.html?category=${encodeURIComponent(category.id)}`);
     document.title = `${card.title} | WargaSiaga`;
     const list = (items, cls="") => `<ul class="check-list ${cls}">${items.map(i=>`<li>${i}</li>`).join("")}</ul>`;
     return shell(`
-      <section class="page-hero detail-hero"><div class="container">${crumb([["Kenali Modus",catalogueHref],[card.title]])}</div></section>
-      <section class="section-sm"><div class="container detail-layout"><article class="article-card"><header class="article-head"><div class="inline"><span class="risk-badge">Perlu diwaspadai</span>${card.channels.slice(0,2).map(x=>`<span class="tag">${x}</span>`).join("")}</div><h1><span class="text-gradient">${card.title}</span></h1><p class="section-copy">${card.summary}</p>${selectedAge?`<div class="audience-note"><img class="audience-avatar" src="${AGE_IMAGES[selectedAge.value]}" width="640" height="640" alt=""><div><strong>Panduan untuk ${selectedAge.label}</strong><span>${AGE_GUIDANCE[selectedAge.value]}</span></div></div>`:""}<div class="hero-actions"><a class="btn btn-primary" href="konsultasi.html">${icon("bot")} Periksa kasus saya</a><a class="btn btn-urgent" href="bantuan-darurat.html">${icon("alert")} Saya sudah bertindak</a></div></header>
+      <section class="page-hero detail-hero"><div class="container">${crumb([["Kenali Modus",catalogueHref],[category.label,categoryHref],[card.title]])}</div></section>
+      <section class="section-sm"><div class="container detail-layout"><article class="article-card"><header class="article-head"><div class="inline"><span class="card-category-pill" style="margin-right:6px">${icon(category.icon)} ${category.label}</span><span class="risk-badge">Perlu diwaspadai</span>${card.channels.slice(0,2).map(x=>`<span class="tag">${x}</span>`).join("")}</div><h1><span class="text-gradient">${card.title}</span></h1><p class="section-copy">${card.summary}</p>${selectedAge?`<div class="audience-note"><img class="audience-avatar" src="${AGE_IMAGES[selectedAge.value]}" width="640" height="640" alt=""><div><strong>Panduan untuk ${selectedAge.label}</strong><span>${AGE_GUIDANCE[selectedAge.value]}</span></div></div>`:""}<div class="hero-actions"><a class="btn btn-primary" href="${toCleanUrl("konsultasi.html")}">${icon("bot")} Periksa kasus serupa dengan AI</a><a class="btn btn-secondary" href="${toCleanUrl(`lapor.html?modus=${encodeURIComponent(card.id)}`)}">${icon("file")} Laporkan modus ini</a><a class="btn btn-urgent" href="${toCleanUrl("bantuan-darurat.html")}">${icon("alert")} Saya sudah bertindak</a></div></header>
         ${capture&&captureImageUrl?`<section class="case-learning" aria-labelledby="case-learning-title"><div class="case-capture-column"><span class="capture-label">Contoh pesan</span><button class="capture-open" id="capture-open" type="button" aria-haspopup="dialog" aria-controls="capture-dialog"><img src="${captureImageUrl}" width="800" height="1000" alt="${capture.alt}" fetchpriority="high"><span class="capture-zoom">${icon("search")} Perbesar contoh</span></button><p class="capture-disclaimer">Contoh fiktif berdasarkan pola yang dilaporkan. Bukan chat asli dan bukan bukti bahwa pengirim tertentu adalah penipu.</p></div><div class="case-analysis"><span class="eyebrow highlight-pill">Contoh yang sering muncul</span><h2 id="case-learning-title">Baca pesannya, cari tiga tanda</h2><ol class="capture-signals">${capture.signals.map((signal,index)=>`<li><span>${index+1}</span><p>${signal}</p></li>`).join("")}</ol><a class="source-link capture-source" href="${capture.source.url}" target="_blank" rel="noopener noreferrer">${icon("external")}<span>Sumber pola: ${capture.source.label}</span></a>${guideImageUrl&&visual?`<figure class="context-visual"><img src="${guideImageUrl}" width="1280" height="853" alt="${visual.alt}" loading="lazy"><figcaption>Gambaran situasi</figcaption></figure>`:""}</div></section><dialog class="capture-dialog" id="capture-dialog" aria-labelledby="capture-dialog-title"><div class="capture-dialog-head"><div><span class="eyebrow">Rekonstruksi edukasi</span><h2 id="capture-dialog-title">Contoh pesan yang perlu diperiksa</h2></div><button class="icon-button" id="capture-close" type="button" aria-label="Tutup contoh pesan">${icon("close")}</button></div><div class="capture-dialog-body"><img src="${captureImageUrl}" width="800" height="1000" alt="${capture.alt}"><div class="capture-transcript"><h3>Transkrip</h3><ol>${capture.messages.map((message,index)=>`<li><strong>${index+1}</strong><span>${message}</span></li>`).join("")}</ol><p>${capture.alt}</p></div></div></dialog>`:""}
         <div class="article-content"><section class="article-section priority-section"><span class="eyebrow highlight-pill amber">Lihat dahulu</span><h2>Tanda yang patut diwaspadai</h2>${list(card.warningSigns,"warning-list")}</section>
         ${visual?`<section class="article-section safe-flow" aria-labelledby="safe-flow-title"><span class="eyebrow highlight-pill teal">Alur aman</span><h2 id="safe-flow-title">Jeda, periksa, lalu amankan</h2><ol class="safe-flow-grid"><li><span class="safe-flow-icon">${icon("clock")}</span><span><strong>1. Jeda</strong><small>${visual.steps[0]}</small></span></li><li><span class="safe-flow-icon">${icon("search")}</span><span><strong>2. Periksa</strong><small>${visual.steps[1]}</small></span></li><li><span class="safe-flow-icon">${icon("shieldCheck")}</span><span><strong>3. Amankan</strong><small>${visual.steps[2]}</small></span></li></ol></section>`:""}
         ${literacy?`<details class="content-disclosure literacy-reference"><summary><span>${icon("book")} Materi literasi terkait</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content literacy-reference-grid"><figure class="literacy-reference-figure"><img src="${literacy.imageUrl}" alt="${literacy.alt}" loading="lazy"><figcaption>Cuplikan materi PDF, halaman ${literacy.page}. Teks penting dijelaskan kembali di samping gambar.</figcaption></figure><div class="literacy-reference-copy"><span class="reference-kicker">Inti yang perlu diingat</span><h3>${literacy.title}</h3><p>${literacy.summary}</p>${list(literacy.actions)}<a class="source-link" href="${literacy.source.url}" target="_blank" rel="noopener noreferrer">${icon("external")}<span>Periksa rujukan: ${literacy.source.label}</span></a><p class="asset-credit">Cuplikan dari <cite>Pandu Literasi Digital: Bongkar Dunia Tipu-Tipu Digital</cite>, Azaria Zada Noordika (Desember 2025). Digunakan pada prototipe lokal; hak publikasi perlu dikonfirmasi.</p></div></div></details>`:""}
         <details class="content-disclosure"><summary><span>${icon("chat")} Contoh pola dan permintaan</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content"><div class="example-box"><p>${card.fictionalExample}</p><div class="example-label">Contoh edukasi</div></div><h3>Apa yang diminta</h3><p>${card.requestedAction}</p></div></details>
         <details class="content-disclosure"><summary><span>${icon("shieldCheck")} Cara memeriksa dengan aman</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content">${list(card.independentChecks)}</div></details>
-        <section class="article-section urgent-section"><h2>${icon("alert")} <span class="text-gradient-urgent">Jika sudah terlanjur</span></h2>${list(card.alreadyActedSteps,"urgent-list")}<a class="btn btn-urgent" href="bantuan-darurat.html">Buka langkah darurat ${icon("arrow")}</a></section>
+        <section class="article-section urgent-section"><h2>${icon("alert")} <span class="text-gradient-urgent">Jika sudah terlanjur</span></h2>${list(card.alreadyActedSteps,"urgent-list")}<a class="btn btn-urgent" href="${toCleanUrl("bantuan-darurat.html")}">Buka langkah darurat ${icon("arrow")}</a></section>
         <details class="content-disclosure"><summary><span>${icon("info")} Catatan penting</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content"><p>Tidak ditemukannya laporan bukan bukti bahwa nomor, rekening, atau tautan aman. Tetap verifikasi melalui penyedia layanan resmi.</p></div></details></div></article>
-        <aside class="side-stack"><div class="side-card related-action-card"><span class="side-card-icon">${icon("bot")}</span><h3>Masih ragu?</h3><p>Tanyakan situasi ini kepada WargaSiaga.</p><a class="btn btn-primary btn-block" href="konsultasi.html">Periksa dengan AI</a></div>
+        <aside class="side-stack"><div class="side-card related-action-card"><span class="side-card-icon">${icon("bot")}</span><h3>Masih ragu?</h3><p>Tanyakan situasi ini kepada asisten WargaSiaga.</p><a class="btn btn-primary btn-block" href="${toCleanUrl(`konsultasi.html?modus=${encodeURIComponent(card.id)}`)}">Periksa Kasus Ini dengan AI</a><a class="btn btn-secondary btn-block" href="${toCleanUrl(`lapor.html?modus=${encodeURIComponent(card.id)}`)}" style="margin-top:8px">${icon("file")} Laporkan Modus ke Warga</a></div>
           <div class="side-card"><h3>Kanal resmi</h3>${card.officialLinks.map(s=>`<a class="source-link" href="${s.url}" target="_blank" rel="noopener noreferrer">${icon("external")}<span>${s.label}<br><span class="muted">${s.purpose}</span></span></a>`).join("")}</div>
           <details class="side-card side-disclosure"><summary>Sumber & peninjauan ${icon("arrow")}</summary><div class="side-disclosure-body"><p>Ditinjau ${formatDate(card.reviewedAt)} · diperbarui berkala</p>${card.sources.map(s=>`<a class="source-link" href="${s.url}" target="_blank" rel="noopener noreferrer">${icon("external")}<span>${s.publisher}</span></a>`).join("")}<p class="small">Standar Panduan Keamanan Digital WargaSiaga (Tinjauan Ahli Keamanan Siber)</p></div></details>
           <details class="side-card side-disclosure"><summary>Bagikan panduan ${icon("copy")}</summary><div class="side-disclosure-body"><label class="sr-only" for="share-url">Tautan panduan</label><input class="share-field" id="share-url" type="url" readonly><button class="btn btn-secondary btn-block" id="share-guide" type="button">${icon("copy")} Salin tautan</button></div></details></aside>
@@ -278,11 +326,12 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
 
   function consultPage() {
     return shell(`
-      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Periksa dengan AI"]])}<span class="eyebrow highlight-pill">${icon("sparkles")} Asisten Keamanan Warga</span><h1 class="section-title">Apa yang ingin <span class="text-gradient">Anda periksa?</span></h1><p class="section-copy">Ceritakan situasi yang mencurigakan. Anda juga dapat menambahkan link atau tangkapan layar untuk dianalisis.</p></div><div class="page-hero-visual"><img src="${aiInputsUrl}" width="1280" height="720" alt="" aria-hidden="true"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Sudah terlanjur?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
+      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Periksa dengan AI"]])}<span class="eyebrow highlight-pill">${icon("sparkles")} Asisten Keamanan Warga</span><h1 class="section-title">Apa yang ingin <span class="text-gradient">Anda periksa?</span></h1><p class="section-copy">Ceritakan situasi yang mencurigakan. Anda juga dapat menambahkan link atau tangkapan layar untuk dianalisis.</p></div><div class="page-hero-visual"><img src="${aiInputsUrl}" width="1280" height="720" alt="" aria-hidden="true"><a class="urgent-shortcut" href="${toCleanUrl("bantuan-darurat.html")}">${icon("alert")}<span><strong>Sudah terlanjur?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
       <section class="section-sm consult-workspace">
         <div class="container consult-workbench">
           <div class="consult-grid">
             <div class="consult-input-col">
+              <div id="consult-modus-context-wrap"></div>
               <div class="chat-shell" id="consult-shell">
                 <div class="chat-head"><div class="assistant-id"><span class="assistant-avatar">${icon("bot")}<span class="assistant-spark" aria-hidden="true">${icon("sparkles")}</span></span><div><strong>Asisten Keamanan Warga</strong><span id="consult-service-state">Sistem analisis siap membantu</span></div></div><span class="status-badge status-review" id="consult-mode-badge">Siaga Aktif</span></div>
                 <div class="chat-body" id="chat-body"><div class="message assistant"><strong>Pilih contoh kasus atau tuliskan dengan kalimat Anda sendiri.</strong><span>Privasi terjaga: Jangan pernah sertakan OTP, PIN, atau kata sandi.</span></div><div class="quick-prompts"><button class="quick-prompt" type="button" data-prompt="Saya ditawari kerja, tetapi diminta transfer deposit sebelum mulai.">Kerja & Deposit</button><button class="quick-prompt" type="button" data-prompt="Ada yang mengaku dari bank dan meminta kode OTP.">Bank & OTP</button><button class="quick-prompt" type="button" data-prompt="Pembeli meminta saya klik tautan kurir di luar marketplace.">Tautan Pembeli</button></div></div>
@@ -340,12 +389,29 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
                     </div>
                   </div>
                 </div>
+                <div class="ready-category-explorer">
+                  <div class="ready-category-head">
+                    <span class="eyebrow highlight-pill teal">${icon("search")} Mulai dari Kategori Kasus</span>
+                    <p>Pilih kategori di bawah untuk mengisi contoh simulasi konsultasi sesuai pola modus resmi:</p>
+                  </div>
+                  <div class="ready-categories-grid">
+                    ${MODUS_CATEGORIES.filter(cat => cat.id !== "all").map(cat => `
+                      <button class="ready-category-chip" type="button" data-category-prompt-id="${cat.id}">
+                        <span class="chip-icon">${icon(cat.icon)}</span>
+                        <div class="chip-text">
+                          <strong>${cat.label}</strong>
+                          <small>${cat.desc}</small>
+                        </div>
+                      </button>
+                    `).join("")}
+                  </div>
+                </div>
                 <div class="ready-quick-tips">
                   <div class="ready-tip-title">${icon("alert")} Catatan Penting Sebelum Memeriksa:</div>
                   <p>Bila Anda sudah terlanjur mentransfer uang atau membagikan kode OTP, segera buka <strong>Bantuan Sekarang</strong> untuk menghubungi call center darurat bank tanpa harus menunggu hasil analisis.</p>
                   <div class="ready-tip-actions">
-                    <a class="btn btn-secondary btn-sm" href="bantuan-darurat.html">${icon("phone")} Buka Bantuan Darurat</a>
-                    <a class="btn btn-ghost btn-sm" href="modus.html">${icon("book")} Katalog Modus</a>
+                    <a class="btn btn-secondary btn-sm" href="${toCleanUrl("bantuan-darurat.html")}">${icon("phone")} Buka Bantuan Darurat</a>
+                    <a class="btn btn-ghost btn-sm" href="${toCleanUrl("modus.html")}">${icon("book")} Katalog Modus</a>
                   </div>
                 </div>
               </div>
@@ -421,16 +487,16 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
   function supportPage() {
     const familyImageUrl = GUIDE_IMAGE_URLS["family-emergency"] || "";
     return shell(`
-      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Bantu orang lain"]])}<span class="eyebrow highlight-pill">${icon("users")} Dukungan tanpa menghakimi</span><h1 class="section-title">Bantu orang terdekat tetap aman</h1><p class="section-copy">Mulai dari rasa khawatir, lalu periksa bersama. Jangan menyalahkan atau memaksa.</p></div><div class="page-hero-visual ratio-3-2"><img src="${familyImageUrl}" width="1280" height="853" alt="Dua orang berdiskusi tenang memeriksa pesan mencurigakan" loading="lazy"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Uang sudah terkirim?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
+      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Bantu orang lain"]])}<span class="eyebrow highlight-pill">${icon("users")} Dukungan tanpa menghakimi</span><h1 class="section-title">Bantu orang terdekat tetap aman</h1><p class="section-copy">Mulai dari rasa khawatir, lalu periksa bersama. Jangan menyalahkan atau memaksa.</p></div><div class="page-hero-visual ratio-3-2"><img src="${familyImageUrl}" width="1280" height="853" alt="Dua orang berdiskusi tenang memeriksa pesan mencurigakan" loading="lazy"><a class="urgent-shortcut" href="${toCleanUrl("bantuan-darurat.html")}">${icon("alert")}<span><strong>Uang sudah terkirim?</strong><small>Buka bantuan sekarang</small></span>${icon("arrow")}</a></div></div></section>
       <section class="section-sm"><div class="narrow"><div class="support-callout"><span class="support-callout-icon">${icon("chat")}</span><div><span class="eyebrow highlight-pill">Kalimat pembuka</span><blockquote>“Saya khawatir karena ada permintaan uang mendadak. Boleh kita periksa bersama sebelum melanjutkan?”</blockquote></div></div></div></section>
       <section class="section-sm" style="padding-top:0"><div class="container"><span class="eyebrow highlight-pill teal">Tiga langkah</span><h2 class="section-title">Dampingi, periksa, lalu bertindak</h2><div class="steps support-steps"><article class="step"><span class="step-num">1</span><h3>Dengarkan dulu</h3><p>Tanyakan apa yang terjadi dan apa yang sudah dilakukan. Hindari kalimat “kok bisa percaya?”.</p></article><article class="step"><span class="step-num">2</span><h3>Periksa bersama</h3><p>Hentikan pembayaran. Hubungi orang atau lembaga melalui nomor resmi yang dicari sendiri.</p></article><article class="step"><span class="step-num">3</span><h3>Amankan bila perlu</h3><p>Jika uang, OTP, kata sandi, atau akses sudah diberikan, buka langkah bantuan tanpa menunggu analisis AI.</p></article></div></div></section>
       <section class="section-sm surface-section"><div class="container support-grid"><div class="support-list"><span class="support-list-icon positive">${icon("check")}</span><div><h2>Yang membantu</h2><ul><li>Tetap tenang dan jaga privasi orang tersebut.</li><li>Simpan bukti tanpa meneruskannya ke grup publik.</li><li>Tawarkan bantuan menghubungi bank atau layanan resmi.</li></ul></div></div><div class="support-list"><span class="support-list-icon caution">${icon("close")}</span><div><h2>Yang sebaiknya dihindari</h2><ul><li>Menyalahkan, mempermalukan, atau mengambil alih paksa.</li><li>Menghubungi balik pelaku untuk berdebat.</li><li>Membayar pihak yang menjanjikan dana pasti kembali.</li></ul></div></div></div></section>
-      <section class="section-sm"><div class="container"><div class="cta-band"><div class="cta-band-grid"><div><h2>Periksa situasinya bersama</h2><p>Gunakan AI untuk mengenali tanda, atau buka katalog panduan tanpa membagikan identitas.</p></div><div class="inline"><a class="btn btn-secondary" href="konsultasi.html">Periksa dengan AI</a><a class="btn btn-secondary" href="modus.html?context=Keluarga">Buka panduan keluarga</a></div></div></div></div></section>`);
+      <section class="section-sm"><div class="container"><div class="cta-band"><div class="cta-band-grid"><div><h2>Periksa situasinya bersama</h2><p>Gunakan AI untuk mengenali tanda, atau buka katalog panduan tanpa membagikan identitas.</p></div><div class="inline"><a class="btn btn-secondary" href="${toCleanUrl("konsultasi.html")}">Periksa dengan AI</a><a class="btn btn-secondary" href="${toCleanUrl("modus.html?context=Keluarga")}">Buka panduan keluarga</a></div></div></div></div></section>`);
   }
 
   function reportsPage() {
     return shell(`
-      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Lapor Warga"]])}<span class="eyebrow highlight-pill teal">Pola Komunitas</span><h1 class="section-title">Pola yang <span class="text-gradient">Dilaporkan Warga</span></h1><p class="section-copy">Kumpulan pola modus terkini yang dibagikan oleh warga dan telah diverifikasi oleh pipeline AI demi keamanan bersama.</p><div class="hero-actions"><a class="btn btn-primary" href="lapor.html">${icon("file")} Buat Laporan Warga</a><a class="btn btn-secondary" href="status-laporan.html">Pantau Status Laporan</a></div></div><div class="page-hero-visual"><img src="${communityUrl}" width="1280" height="853" alt="" aria-hidden="true" loading="lazy"><a class="urgent-shortcut" href="bantuan-darurat.html">${icon("alert")}<span><strong>Kehilangan uang?</strong><small>Hubungi penyedia lebih dahulu</small></span>${icon("arrow")}</a></div></div></section>
+      <section class="page-hero compact-hero"><div class="container page-hero-row"><div>${crumb([["Lapor Warga"]])}<span class="eyebrow highlight-pill teal">Pola Komunitas</span><h1 class="section-title">Pola yang <span class="text-gradient">Dilaporkan Warga</span></h1><p class="section-copy">Kumpulan pola modus terkini yang dibagikan oleh warga dan telah diverifikasi oleh pipeline AI demi keamanan bersama.</p><div class="hero-actions"><a class="btn btn-primary" href="${toCleanUrl("lapor.html")}">${icon("file")} Buat Laporan Warga</a><a class="btn btn-secondary" href="${toCleanUrl("status-laporan.html")}">Pantau Status Laporan</a></div></div><div class="page-hero-visual"><img src="${communityUrl}" width="1280" height="853" alt="" aria-hidden="true" loading="lazy"><a class="urgent-shortcut" href="${toCleanUrl("bantuan-darurat.html")}">${icon("alert")}<span><strong>Kehilangan uang?</strong><small>Hubungi penyedia lebih dahulu</small></span>${icon("arrow")}</a></div></div></section>
       <section class="section-sm" style="padding-bottom:0"><div class="container">
         <div class="report-stats-grid">
           <div class="report-stat-card"><span class="report-stat-val">1.428+</span><span class="report-stat-label">Laporan Warga Terkumpul</span></div>
@@ -443,25 +509,25 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
           <span class="status-badge status-official">Diperbarui berkala</span>
         </div>
         <div class="trending-modus-grid">
-          <a class="trending-modus-card" href="modus-detail.html?id=apk-phishing">
+          <a class="trending-modus-card" href="${toCleanUrl("modus-detail.html?id=apk-phishing")}">
             <div class="trending-modus-top"><span class="trending-rank">#1 Tren Tertinggi</span><span class="trending-badge">+46% minggu ini</span></div>
             <h3>Penyebaran File APK Surat Undangan & Pajak Palsu</h3>
             <p>Modus mengirimkan file APK melalui pesan instan WhatsApp dengan dalih dokumen penting atau tagihan listrik.</p>
             <span class="trending-modus-link">Buka panduan pencegahan ${icon("arrow")}</span>
           </a>
-          <a class="trending-modus-card" href="modus-detail.html?id=marketplace-diversion">
+          <a class="trending-modus-card" href="${toCleanUrl("modus-detail.html?id=marketplace-diversion")}">
             <div class="trending-modus-top"><span class="trending-rank">#2 Waspada Transaksi</span><span class="trending-badge">+31% minggu ini</span></div>
             <h3>Pengalihan Transaksi ke Luar Aplikasi Marketplace</h3>
             <p>Calon pembeli atau penjual mengajak transaksi via chat pribadi dengan tautan pembayaran rekayasa.</p>
             <span class="trending-modus-link">Buka panduan pencegahan ${icon("arrow")}</span>
           </a>
-          <a class="trending-modus-card" href="modus-detail.html?id=job-deposit">
+          <a class="trending-modus-card" href="${toCleanUrl("modus-detail.html?id=job-deposit")}">
             <div class="trending-modus-top"><span class="trending-rank">#3 Tawaran Kerja</span><span class="trending-badge">+24% minggu ini</span></div>
             <h3>Tawaran Freelance Like Video dengan Deposit Saldo</h3>
             <p>Iming-iming gaji harian tinggi dari tugas sederhana, namun diwajibkan menyetor uang jaminan berjenjang.</p>
             <span class="trending-modus-link">Buka panduan pencegahan ${icon("arrow")}</span>
           </a>
-          <a class="trending-modus-card" href="modus-detail.html?id=recovery-scam">
+          <a class="trending-modus-card" href="${toCleanUrl("modus-detail.html?id=recovery-scam")}">
             <div class="trending-modus-top"><span class="trending-rank">#4 Pantauan Khusus</span><span class="trending-badge">+18% minggu ini</span></div>
             <h3>Janji Jasa Pemulihan Uang Hilang (Recovery Scam)</h3>
             <p>Pihak mengatasnamakan pakar keamanan atau pengacara menjanjikan dana penipuan kembali dengan imbalan awal.</p>
@@ -469,7 +535,20 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
           </a>
         </div>
       </div></section>
-      <section class="section"><div class="container"><div class="section-heading-row"><div><span class="eyebrow highlight-pill">Laporan Terkini</span><h2 class="section-title">Pola Terbaru</h2></div><span class="status-badge status-public">Belum terverifikasi</span></div><div class="report-grid">${DATA.reports.map(r=>`<article class="report-card"><div class="report-meta"><span>${icon("chat")} ${r.channel}</span><span>${icon("clock")} ${r.period}</span></div><h3>${r.title}</h3><p>${r.summary}</p><div class="card-footer">${arrowLink("Buka modus",`modus-detail.html?id=${r.related}`)}</div></article>`).join("")}</div></div></section>
+      <section class="section"><div class="container"><div class="section-heading-row"><div><span class="eyebrow highlight-pill">Laporan Terkini</span><h2 class="section-title">Pola Terbaru</h2></div><span class="status-badge status-public">Belum terverifikasi</span></div>
+      <div class="category-classification" style="margin-bottom:20px" role="region" aria-label="Filter kategori laporan warga">
+        <div class="category-chip-group" id="report-category-group" role="tablist" aria-label="Pilih kategori laporan">
+          ${MODUS_CATEGORIES.map((cat, idx) => `
+            <button class="category-tab${idx === 0 ? " active" : ""}" type="button" role="tab" data-report-category-id="${cat.id}">
+              ${icon(cat.icon)} <span>${cat.label}</span>
+            </button>
+          `).join("")}
+        </div>
+      </div>
+      <div class="report-grid">${DATA.reports.map(r=>{
+        const cat = MODUS_CATEGORIES.find(c => c.cardIds?.includes(r.related)) || MODUS_CATEGORIES[1];
+        return `<article class="report-card" data-report-cat="${cat.id}"><div class="report-meta"><span>${icon("chat")} ${r.channel}</span><span>${icon("clock")} ${r.period}</span><span class="card-category-pill" style="margin-left:auto">${icon(cat.icon)} ${cat.label}</span></div><h3>${r.title}</h3><p>${r.summary}</p><div class="card-footer">${arrowLink("Buka modus",`modus-detail.html?id=${r.related}`)}</div></article>`;
+      }).join("")}</div></div></section>
       <section class="section-sm surface-section"><div class="narrow"><details class="content-disclosure"><summary><span>${icon("info")} Cara membaca status laporan</span><span class="summary-action">Buka ${icon("arrow")}</span></summary><div class="disclosure-content status-explainer"><div><span class="status-badge status-review">Ditinjau</span><p>Masih privat.</p></div><div><span class="status-badge status-public">Dilaporkan warga</span><p>Sudah disamarkan, belum terbukti.</p></div><div><span class="status-badge status-official">Peringatan resmi</span><p>Memiliki sumber otoritas.</p></div></div></details><p class="demo-note">${icon("shieldCheck")} Perlindungan Privasi: Data pribadi disamarkan secara otomatis di perangkat sebelum dikirimkan ke moderasi komunitas.</p></div></section>`);
   }
 
@@ -478,11 +557,25 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       <section class="page-hero compact-hero"><div class="container">${crumb([["Lapor Warga","laporan.html"],["Formulir Laporan"]])}<span class="eyebrow highlight-pill teal">Perlindungan Warga</span><h1 class="section-title"><span class="text-gradient">Laporkan Modus Mencurigakan</span></h1><p class="section-copy">Bantu warga lain mengenali modus baru dengan membagikan alur kejadian tanpa data pribadi.</p></div></section>
       <section class="section-sm"><div class="container form-layout"><div class="form-card">
         <div class="prefill-notice highlight-pill teal hidden" id="prefill-notice"></div>
+        <div class="report-consult-hint">
+          <div class="report-consult-hint-content">
+            <span class="highlight-pill teal">${icon("bot")} Belum Yakin Ini Penipuan?</span>
+            <span>Ragu apakah kejadian yang dialami termasuk tindak kejahatan digital? Anda dapat berkonsultasi terlebih dahulu dengan asisten AI kami sebelum mengirimkan laporan komunitas.</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="btn-report-to-consult" type="button">${icon("sparkles")} Konsultasikan dengan AI Dulu</button>
+        </div>
         <div class="progress" role="list" aria-label="Tahapan laporan warga"><div class="progress-step active" data-progress="1" role="listitem" aria-current="step"><span class="progress-num">1</span><span>Ceritakan</span></div><div class="progress-step" data-progress="2" role="listitem"><span class="progress-num">2</span><span>Periksa data</span></div><div class="progress-step" data-progress="3" role="listitem"><span class="progress-num">3</span><span>Konfirmasi</span></div></div>
         <form id="report-form" novalidate><section data-step="1"><h2 tabindex="-1">Apa yang terjadi?</h2><p>Jangan tulis nama lengkap, nomor telepon/rekening penuh, NIK, alamat, OTP, PIN, atau kata sandi.</p><div class="form-error hidden" id="report-error" role="alert" tabindex="-1"></div>
           <div class="field"><label for="report-channel">Cara dihubungi</label><select id="report-channel" required aria-describedby="report-error"><option value="">Pilih kanal</option><option>WhatsApp</option><option>Telepon</option><option>SMS</option><option>Email</option><option>Telegram</option><option>Media sosial</option><option>Marketplace</option><option>Lainnya</option></select></div>
           <div class="field"><label for="report-period">Kapan terjadi?</label><select id="report-period" required aria-describedby="report-error"><option value="">Pilih rentang</option><option>7 hari terakhir</option><option>30 hari terakhir</option><option>2 sampai 3 bulan lalu</option><option>Lebih lama</option></select></div>
-          <div class="field"><label for="report-type">Pola yang paling dekat</label><select id="report-type" required aria-describedby="report-error"><option value="">Pilih pola</option>${DATA.cards.map(c=>`<option value="${c.id}">${c.title}</option>`).join("")}<option value="other">Lainnya — tulis sendiri</option></select></div>
+          <div class="field"><label for="report-type">Pola yang paling dekat</label><select id="report-type" required aria-describedby="report-error"><option value="">Pilih pola modus</option>${MODUS_CATEGORIES.filter(cat => cat.id !== "all").map(cat => `
+            <optgroup label="${cat.label} (${cat.desc})">
+              ${(cat.cardIds || []).map(cid => {
+                const c = DATA.cards.find(card => card.id === cid);
+                return c ? `<option value="${c.id}">${c.title}</option>` : "";
+              }).join("")}
+            </optgroup>
+          `).join("")}<option value="other">Lainnya — tulis sendiri</option></select></div>
           <div class="field conditional-field hidden" id="report-type-other-wrap"><label for="report-type-other">Tulis pola lainnya</label><input id="report-type-other" type="text" maxlength="120" aria-describedby="report-error report-type-other-help" placeholder="Contoh: penipuan tiket konser"><span class="field-help" id="report-type-other-help">Tulis jenis polanya saja. Jangan masukkan nama, nomor, link, atau data pribadi.</span></div>
           <div class="field"><label for="report-story">Cerita singkat</label><textarea id="report-story" maxlength="1200" required aria-describedby="report-error" placeholder="Contoh: Saya dihubungi akun yang mengaku perekrut dan diminta membayar deposit…"></textarea><div class="spread"><span class="field-help">Sebutkan pola dan tindakan yang diminta, bukan identitas.</span><span class="char-count"><span id="report-count">0</span>/1200</span></div></div>
           <div class="evidence-box">
@@ -520,11 +613,11 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
               </div>
             </div>
           </div>
-          <div class="form-actions"><a class="btn btn-secondary" href="laporan.html">Batal</a><button class="btn btn-primary" type="button" data-next="2">Lanjutkan Laporan ${icon("arrow")}</button></div></section>
+          <div class="form-actions"><a class="btn btn-secondary" href="${toCleanUrl("laporan.html")}">Batal</a><button class="btn btn-primary" type="button" data-next="2">Lanjutkan Laporan ${icon("arrow")}</button></div></section>
           <section class="hidden" data-step="2"><h2 tabindex="-1">Periksa data yang disamarkan</h2><p>Sistem otomatis menyamarkan nomor telepon, pola angka, kode OTP, alamat email, dan link agar privasi Anda terjaga seutuhnya.</p><div class="preview-box"><div class="tag-row"><span class="tag" id="preview-channel"></span><span class="tag" id="preview-period"></span><span class="tag" id="preview-type"></span></div><p id="preview-story"></p></div><div class="preview-evidence-box"><h3>${icon("shieldCheck")} Bukti Pendukung Terlindungi</h3><div class="preview-evidence-list" id="preview-evidence-list"></div></div><div class="privacy-box" style="margin-top:16px"><strong>Pemeriksaan ganda demi privasi Anda</strong>Pastikan tidak ada nama lengkap atau informasi rahasia sebelum melanjutkan laporan.</div><div class="form-actions"><button class="btn btn-secondary" type="button" data-back="1">Kembali</button><button class="btn btn-primary" type="button" data-next="3">Lanjut ke konfirmasi ${icon("arrow")}</button></div></section>
           <section class="hidden" data-step="3"><h2 tabindex="-1">Konfirmasi Pengiriman Laporan</h2><p>Laporan Anda akan dianalisis secara otomatis oleh pipeline AI WargaSiaga dan dimoderasi demi privasi.</p><label class="consent-line"><input type="checkbox" id="report-consent"><span>Saya menyatakan bahwa informasi ini dibagikan untuk edukasi bersama dan tidak mengandung data sensitif pribadi.</span></label><div class="form-actions"><button class="btn btn-secondary" type="button" data-back="2">Kembali</button><button class="btn btn-primary" id="submit-demo" type="submit" disabled>Kirimkan Laporan ${icon("arrow")}</button></div></section>
-        </form><div class="hidden" id="report-success" role="status" tabindex="-1"><div class="empty-state"><span class="empty-icon">${icon("check")}</span><h2>Laporan berhasil dikirim</h2><p>Terima kasih telah berkontribusi melindungi sesama warga. Catat kode pelacakan Anda: <strong id="report-success-code">WS-DEMO-2401</strong></p><div class="inline" style="justify-content:center;margin-top:18px"><a class="btn btn-primary" id="report-success-status-link" href="status-laporan.html?code=WS-DEMO-2401">Pantau status laporan</a><a class="btn btn-secondary" href="laporan.html">Kembali ke laporan warga</a></div></div></div></div>
-        <aside class="side-stack"><div class="side-card"><h3>Jangan masukkan</h3><p>OTP, PIN, kata sandi, NIK lengkap, nomor kartu/rekening penuh, alamat rumah, nama korban, atau foto identitas.</p></div><div class="side-card"><h3>Bukan kanal darurat</h3><p>WargaSiaga adalah sarana edukasi komunitas. Jika Anda membutuhkan penyelidikan kepolisian atau pemblokiran perbankan, segera hubungi lembaga resmi terkait.</p><a class="text-link" href="bantuan-darurat.html">Butuh bantuan darurat sekarang ${icon("arrow")}</a></div></aside></div></section>`);
+        </form><div class="hidden" id="report-success" role="status" tabindex="-1"><div class="empty-state"><span class="empty-icon">${icon("check")}</span><h2>Laporan berhasil dikirim</h2><p>Terima kasih telah berkontribusi melindungi sesama warga. Catat kode pelacakan Anda: <strong id="report-success-code">WS-DEMO-2401</strong></p><div class="inline" style="justify-content:center;margin-top:18px"><a class="btn btn-primary" id="report-success-status-link" href="${toCleanUrl("status-laporan.html?code=WS-DEMO-2401")}">Pantau status laporan</a><a class="btn btn-secondary" href="${toCleanUrl("laporan.html")}">Kembali ke laporan warga</a></div></div></div></div>
+        <aside class="side-stack"><div class="side-card"><h3>Jangan masukkan</h3><p>OTP, PIN, kata sandi, NIK lengkap, nomor kartu/rekening penuh, alamat rumah, nama korban, atau foto identitas.</p></div><div class="side-card"><h3>Bukan kanal darurat</h3><p>WargaSiaga adalah sarana edukasi komunitas. Jika Anda membutuhkan penyelidikan kepolisian atau pemblokiran perbankan, segera hubungi lembaga resmi terkait.</p><a class="text-link" href="${toCleanUrl("bantuan-darurat.html")}">Butuh bantuan darurat sekarang ${icon("arrow")}</a></div></aside></div></section>`);
   }
 
   function statusPage() {
@@ -620,7 +713,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       if(!question){showFormError(error,"Tulis situasi singkat yang ingin diperiksa.",[input]);return;}
       clearFormError(error,[input]);
       try{sessionStorage.setItem("ws-home-question",question);}catch(_){showFormError(error,"Browser tidak dapat memindahkan pertanyaan. Buka halaman Tanya dan tempel teks secara manual.",[input]);return;}
-      location.assign("konsultasi.html");
+      location.assign(toCleanUrl("konsultasi.html"));
     });
   }
 
@@ -690,7 +783,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         if (!el) return;
         const detailParams=new URLSearchParams({id:card.id});
         if(selectedAge!=="all")detailParams.set("age",selectedAge);
-        el.querySelectorAll("[data-guide-link]").forEach(link=>link.setAttribute("href",`modus-detail.html?${detailParams}`));
+        el.querySelectorAll("[data-guide-link]").forEach(link=>link.setAttribute("href", toCleanUrl(`modus-detail.html?${detailParams}`)));
         const matchQ = !q || el.dataset.search.includes(q);
         const matchAge=selectedAge==="all" || card.ageGroups?.includes(selectedAge);
         const matchCategory = selectedCategory === "all" || (currentCat?.cardIds?.includes(card.id));
@@ -701,7 +794,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         if(visible) shown++;
       });
       grid.querySelector(".empty-state")?.remove();
-      if (!shown) grid.insertAdjacentHTML("beforeend",`<div class="empty-state"><span class="empty-icon">${icon("search")}</span><h2>Tidak ada panduan yang cocok</h2><p>Coba istilah lebih umum atau hapus salah satu filter. Jika sudah ada kerugian, buka bantuan sekarang.</p><a class="btn btn-urgent" href="bantuan-darurat.html">Bantuan sekarang</a></div>`);
+      if (!shown) grid.insertAdjacentHTML("beforeend",`<div class="empty-state"><span class="empty-icon">${icon("search")}</span><h2>Tidak ada panduan yang cocok</h2><p>Coba istilah lebih umum atau hapus salah satu filter. Jika sudah ada kerugian, buka bantuan sekarang.</p><a class="btn btn-urgent" href="${toCleanUrl("bantuan-darurat.html")}">Bantuan sekarang</a></div>`);
       count.textContent = `${shown} panduan ditemukan`; clear.classList.toggle("hidden",!q);
       const chips = [
         ...(selectedAge!=="all" ? [{ key:"age", value:selectedAge, label:`Usia: ${AGE_GROUPS.find(group=>group.value===selectedAge)?.label || selectedAge}` }] : []),
@@ -742,6 +835,30 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     clear.addEventListener("click",()=>{search.value="";search.focus();apply();});
     document.getElementById("reset-filter").addEventListener("click",()=>{checks.forEach(c=>c.checked=false);const allAge=ageChoices.find(choice=>choice.value==="all");if(allAge)allAge.checked=true;selectedCategory="all";updateCategoryTabs();search.value="";search.focus();apply();});
     activeFilters.addEventListener("click",event=>{const button=event.target.closest("[data-filter-key]");if(!button)return;if(button.dataset.filterKey==="q")search.value="";else if(button.dataset.filterKey==="age"){const allAge=ageChoices.find(choice=>choice.value==="all");if(allAge)allAge.checked=true;}else if(button.dataset.filterKey==="category"){selectedCategory="all";updateCategoryTabs();}else{const target=checks.find(check=>check.name===button.dataset.filterKey&&check.value===button.dataset.filterValue);if(target)target.checked=false;}apply();});
+    grid.addEventListener("click", (event) => {
+      const guideLink = event.target.closest("[data-guide-link]");
+      if (!guideLink) return;
+      const cardEl = guideLink.closest(".modus-card");
+      const cardId = cardEl?.dataset?.cardId;
+      const card = DATA.cards.find(c => c.id === cardId);
+      if (card) {
+        const category = MODUS_CATEGORIES.find(c => c.cardIds?.includes(card.id) || c.id === card.categoryId) || MODUS_CATEGORIES[1];
+        try {
+          sessionStorage.setItem("ws-last-viewed-modus", JSON.stringify({
+            id: card.id,
+            slug: card.slug,
+            title: card.title,
+            summary: card.summary,
+            example: card.fictionalExample,
+            categoryId: category.id,
+            categoryLabel: category.label,
+            channels: card.channels,
+            warningSigns: card.warningSigns,
+            timestamp: Date.now()
+          }));
+        } catch (_) {}
+      }
+    });
     document.getElementById("filter-toggle")?.addEventListener("click",e=>{const panel=document.getElementById("filter-panel");const open=panel.classList.toggle("open");e.currentTarget.setAttribute("aria-expanded",String(open));e.currentTarget.innerHTML=`${icon("filter")} ${open?"Tutup filter":"Filter"}`;});
     apply();
   }
@@ -778,7 +895,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     let previewUrl="";
     let imageAnalyzerModule=null;
     const officialAllowlist=new Set(["https://iasc.ojk.go.id/","https://sipasti.ojk.go.id/","https://cekrekening.id/","https://aduannomor.id/","https://aduankonten.id/"]);
-    const healthCheck=fetch("api/health",{headers:{Accept:"application/json"},cache:"no-store"}).then(async response=>{
+    const healthCheck=fetch("/api/health",{headers:{Accept:"application/json"},cache:"no-store"}).then(async response=>{
       if(!response.ok)throw new Error("health_failed");
       const health=await response.json();
       aiAvailable=(health.aiConfigured??health.aiAvailable)===true;
@@ -798,16 +915,144 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     exposureFields.forEach(field=>field.addEventListener("change",clearError));
     consent.addEventListener("change",clearError);
     document.querySelectorAll(".quick-prompt").forEach(btn=>btn.addEventListener("click",()=>{input.value=btn.dataset.prompt;input.dispatchEvent(new Event("input"));input.focus();}));
-    let handoffQuestion="";
-    try{handoffQuestion=String(sessionStorage.getItem("ws-home-question")||"").trim().slice(0,600);sessionStorage.removeItem("ws-home-question");}catch(_){}
-    if(handoffQuestion){
-      input.value=handoffQuestion;
-      input.dispatchEvent(new Event("input"));
-      const bubble=document.createElement("div");
-      bubble.className="message user handoff-message";
-      bubble.textContent=handoffQuestion;
-      document.getElementById("chat-body")?.append(bubble);
+
+    // Cross-feature autofill & context handling
+    const consultUrlParams = new URLSearchParams(location.search);
+    const modusParam = consultUrlParams.get("modus");
+    let fromReportDraft = "";
+    try { fromReportDraft = sessionStorage.getItem("ws-consult-draft") || ""; sessionStorage.removeItem("ws-consult-draft"); } catch (_) {}
+    const contextWrap = document.getElementById("consult-modus-context-wrap");
+
+    if (modusParam) {
+      const card = DATA.cards.find(c => c.id === modusParam || c.slug === modusParam);
+      if (card) {
+        if (contextWrap) {
+          contextWrap.innerHTML = `
+            <div class="consult-context-banner">
+              <div class="context-banner-text">
+                <span class="highlight-pill teal">${icon("book")} Terhubung dengan Panduan</span>
+                <strong>Mengecek Kasus: ${escapeHtml(card.title)}</strong>
+                <p>Contoh situasi telah diisikan otomatis. Silakan ubah teks di bawah sesuai pengalaman nyata Anda.</p>
+              </div>
+              <button class="btn btn-ghost btn-sm" id="btn-clear-modus-context" type="button">${icon("close")} Hapus Contoh</button>
+            </div>`;
+          document.getElementById("btn-clear-modus-context")?.addEventListener("click", () => {
+            input.value = "";
+            count.textContent = "0";
+            contextWrap.innerHTML = "";
+            input.focus();
+          });
+        }
+        const cleanExample = card.fictionalExample ? card.fictionalExample.replace(/[“”"]/g, "") : `Saya menghadapi situasi mencurigakan terkait ${card.title.toLowerCase()}: ${card.summary}`;
+        input.value = cleanExample;
+        count.textContent = input.value.length;
+        consent.checked = true;
+        const defaultRadio = document.querySelector('input[name="exposure"][value="none"]');
+        if (defaultRadio && ![...document.querySelectorAll('input[name="exposure"]')].some(r => r.checked)) {
+          defaultRadio.checked = true;
+        }
+        input.focus();
+      }
+    } else if (fromReportDraft) {
+      input.value = fromReportDraft;
+      count.textContent = input.value.length;
+      consent.checked = true;
+      if (contextWrap) {
+        contextWrap.innerHTML = `
+          <div class="consult-context-banner">
+            <div class="context-banner-text">
+              <span class="highlight-pill teal">${icon("sparkles")} Draf dari Laporan Warga</span>
+              <strong>Uraian Berhasil Dipindahkan ke Konsultasi AI</strong>
+              <p>Cerita Anda telah disalin dari formulir laporan agar dapat dianalisis terlebih dahulu oleh sistem.</p>
+            </div>
+          </div>`;
+      }
+      input.focus();
+    } else {
+      let handoffQuestion="";
+      try{handoffQuestion=String(sessionStorage.getItem("ws-home-question")||"").trim().slice(0,600);sessionStorage.removeItem("ws-home-question");}catch(_){}
+      if(handoffQuestion){
+        input.value=handoffQuestion;
+        input.dispatchEvent(new Event("input"));
+        const bubble=document.createElement("div");
+        bubble.className="message user handoff-message";
+        bubble.textContent=handoffQuestion;
+        document.getElementById("chat-body")?.append(bubble);
+      } else {
+        // Check if user recently read a guide
+        try {
+          const rawRecent = sessionStorage.getItem("ws-last-viewed-modus");
+          if (rawRecent) {
+            const recent = JSON.parse(rawRecent);
+            if (contextWrap && recent?.title) {
+              contextWrap.innerHTML = `
+                <div class="consult-recent-prompt" id="consult-recent-prompt">
+                  <div class="recent-prompt-info">${icon("sparkles")} Baru membaca panduan <strong>${escapeHtml(recent.title)}</strong>? Ingin menguji kasus ini?</div>
+                  <div class="recent-prompt-actions">
+                    <button class="btn btn-primary btn-sm" id="btn-autofill-recent" type="button">Isi Otomatis</button>
+                    <button class="btn btn-ghost btn-sm" id="btn-dismiss-recent" type="button" aria-label="Tutup">${icon("close")}</button>
+                  </div>
+                </div>`;
+              document.getElementById("btn-autofill-recent")?.addEventListener("click", () => {
+                const cleanExample = recent.example ? recent.example.replace(/[“”"]/g, "") : `Saya mendapati situasi terkait ${recent.title}: ${recent.summary}`;
+                input.value = cleanExample;
+                count.textContent = input.value.length;
+                consent.checked = true;
+                const defaultRadio = document.querySelector('input[name="exposure"][value="none"]');
+                if (defaultRadio && ![...document.querySelectorAll('input[name="exposure"]')].some(r => r.checked)) {
+                  defaultRadio.checked = true;
+                }
+                contextWrap.innerHTML = `
+                  <div class="consult-context-banner" id="consult-recent-autofill-banner">
+                    <div class="context-banner-text">
+                      <span class="highlight-pill teal">${icon("book")} Terhubung dari Panduan Modus</span>
+                      <strong>Mengecek Kasus: ${escapeHtml(recent.title)}</strong>
+                      <p>Contoh situasi dari modul panduan telah diisikan otomatis ke kotak konsultasi. Anda dapat langsung menekan tombol <strong>Periksa sekarang</strong> atau menyesuaikan teks dengan kejadian nyata Anda.</p>
+                    </div>
+                    <div class="context-banner-actions">
+                      <button class="btn btn-ghost btn-sm" id="btn-clear-modus-context" type="button">${icon("trash")} Hapus & Tulis Sendiri</button>
+                    </div>
+                  </div>`;
+                document.getElementById("btn-clear-modus-context")?.addEventListener("click", () => {
+                  input.value = "";
+                  count.textContent = "0";
+                  contextWrap.innerHTML = "";
+                  consent.checked = false;
+                  try { sessionStorage.removeItem("ws-last-viewed-modus"); } catch (_) {}
+                  input.focus();
+                });
+                sessionStorage.removeItem("ws-last-viewed-modus");
+                input.focus();
+              });
+              document.getElementById("btn-dismiss-recent")?.addEventListener("click", () => {
+                contextWrap.innerHTML = "";
+                sessionStorage.removeItem("ws-last-viewed-modus");
+              });
+            }
+          }
+        } catch (_) {}
+      }
     }
+
+    // Category explorer chips in ready state
+    document.querySelectorAll(".ready-category-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const catId = btn.dataset.categoryPromptId;
+        const cat = MODUS_CATEGORIES.find(c => c.id === catId);
+        if (!cat) return;
+        const card = DATA.cards.find(c => cat.cardIds?.includes(c.id));
+        if (card) {
+          const exampleText = card.fictionalExample ? card.fictionalExample.replace(/[“”"]/g, "") : `Saya menghadapi situasi mencurigakan terkait ${card.title.toLowerCase()}.`;
+          input.value = exampleText;
+          count.textContent = input.value.length;
+          consent.checked = true;
+          const defaultRadio = document.querySelector('input[name="exposure"][value="none"]');
+          if (defaultRadio) defaultRadio.checked = true;
+          input.focus();
+          input.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+    });
 
     function resetImage(){
       if(previewUrl)URL.revokeObjectURL(previewUrl);
@@ -885,9 +1130,29 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         if(raw.length>160)signals.push({label:"Link sangat panjang sehingga tujuan utamanya lebih sulit diperiksa."});
         if((raw.match(/%[0-9a-f]{2}/gi)||[]).length>=4)signals.push({label:"Link memakai banyak karakter yang dikodekan."});
         const host=parsed.hostname.toLowerCase();
-        const brandDomains={facebook:["facebook.com","fb.com","fbcdn.net","facebook.net"],instagram:["instagram.com","cdninstagram.com"],whatsapp:["whatsapp.com","whatsapp.net"],linkedin:["linkedin.com","licdn.com"],roblox:["roblox.com"],amazon:["amazon.com","amazonaws.com","amazonvideo.com","amazon.dev","amazon-adsystem.com","media-amazon.com"],netflix:["netflix.com","nflxvideo.net","nflximg.net"],microsoft:["microsoft.com","microsoftonline.com","live.com","cloud.microsoft","static.microsoft","office.com","windows.com"],apple:["apple.com","apple-dns.net","cdn-apple.com","icloud.com"],paypal:["paypal.com"],coinbase:["coinbase.com"],ledger:["ledger.com"],trezor:["trezor.io"],shopee:["shopee.co.id","shopee.com"],tokopedia:["tokopedia.com"],mandiri:["bankmandiri.co.id"],bca:["bca.co.id"],bri:["bri.co.id"],bni:["bni.co.id"],dana:["dana.id"]};
+        const brandDomains={facebook:["facebook.com","fb.com","fbcdn.net","facebook.net"],instagram:["instagram.com","cdninstagram.com"],whatsapp:["whatsapp.com","whatsapp.net"],linkedin:["linkedin.com","licdn.com"],roblox:["roblox.com"],amazon:["amazon.com","amazonaws.com","amazonvideo.com","amazon.dev","amazon-adsystem.com","media-amazon.com"],netflix:["netflix.com","nflxvideo.net","nflximg.net"],microsoft:["microsoft.com","microsoftonline.com","live.com","cloud.microsoft","static.microsoft","office.com","windows.com"],apple:["apple.com","apple-dns.net","cdn-apple.com","icloud.com"],paypal:["paypal.com"],coinbase:["coinbase.com"],ledger:["ledger.com"],trezor:["trezor.io"],shopee:["shopee.co.id","shopee.com"],tokopedia:["tokopedia.com"],mandiri:["bankmandiri.co.id","mandiri.co.id"],bca:["bca.co.id","klikbca.com"],bri:["bri.co.id","ib.bri.co.id"],bni:["bni.co.id"],dana:["dana.id"],gopay:["gopay.co.id","gojek.com"],ovo:["ovo.id"],telegram:["telegram.org","t.me"]};
         const compactHost=host.replace(/[^a-z0-9]/g,"");
-        for(const [brand,official] of Object.entries(brandDomains)){const appears=brand.length<=4?new RegExp(`(?:^|[.-])${brand}(?:[.-]|$)`,"i").test(host):host.includes(brand)||compactHost.includes(brand);if(appears&&!official.some(domain=>host===domain||host.endsWith(`.${domain}`))){signals.push({label:`Nama domain memuat “${brand}”, tetapi bukan bagian dari keluarga domain resmi yang dikenali.`});break;}}
+        const normHost=host.replace(/rn/g,"m").replace(/vv/g,"w").replace(/cl/g,"d").replace(/0/g,"o").replace(/1/g,"l").replace(/5/g,"s").replace(/@/g,"a");
+        let brandFound=false;
+        for(const [brand,official] of Object.entries(brandDomains)){
+          const appears=brand.length<=4?new RegExp(`(?:^|[.-])${brand}(?:[.-]|$)`,"i").test(host):host.includes(brand)||compactHost.includes(brand);
+          if(appears&&!official.some(domain=>host===domain||host.endsWith(`.${domain}`))){
+            signals.push({label:`Nama domain memuat “${brand}”, tetapi bukan bagian dari keluarga domain resmi yang dikenali.`});
+            brandFound=true;break;
+          }
+        }
+        if(!brandFound){
+          for(const [brand,official] of Object.entries(brandDomains)){
+            if(official.some(domain=>host===domain||host.endsWith(`.${domain}`)))continue;
+            const lookalikeMatch=brand.length<=4?new RegExp(`(?:^|[.-])${brand}(?:[.-]|$)`,"i").test(normHost):normHost.includes(brand);
+            if(lookalikeMatch){
+              const hasRnTrick=host.includes("rn")&&brand.includes("m");
+              const noteTrick=hasRnTrick?" (teknik visual: huruf “rn” menyerupai “m”)":"";
+              signals.push({label:`Nama domain “${host}” menggunakan teknik lookalike / domain tiruan yang meniru merek resmi “${brand}”${noteTrick}. Ini adalah indikasi kuat upaya penipuan atau phishing.`});
+              brandFound=true;break;
+            }
+          }
+        }
         const hosting=["pages.dev","vercel.app","netlify.app","github.io","blogspot.com","wasmer.app","replit.app","workers.dev","webflow.io","framer.website","framer.app","gitbook.io","onrender.com","railway.app","azurewebsites.net","jimdofree.com"].find(domain=>host!==domain&&host.endsWith(`.${domain}`));
         if(hosting){const tenant=host.slice(0,-(hosting.length+1)),digits=(tenant.match(/\d/g)||[]).length,hyphens=(tenant.match(/-/g)||[]).length,generated=tenant.length>=12&&digits>=2&&(hyphens>=1||/^[a-z0-9]{14,}$/i.test(tenant)),sensitive=/(?:login|auth|account|verify|verification|appeal|wallet|secure|support|facebook|instagram|amazon|netflix|ledger|trezor|roblox|whatsapp|coinbase|paypal)/i.test(`${tenant}${parsed.pathname}`);if(generated||sensitive)signals.push({label:"Halaman berada pada layanan hosting yang dapat dibuat pengguna dan memakai nama acak atau tema akun/merek."});}
         if(new Set(["bit.ly","tinyurl.com","tiny.cc","t.co","goo.su","did.li","g5.lu","1url.at","py.md","qr2.it","urlz.li"]).has(host))signals.push({label:"Tautan memakai layanan pemendek sehingga tujuan akhirnya tidak terlihat."});
@@ -904,12 +1169,93 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       const low=raw.toLowerCase();
       const scored=DATA.cards.map(card=>({card,score:[card.title,card.summary,...card.channels,...card.contexts,...card.tactics,card.requestedAction].join(" ").toLowerCase().split(/\W+/).filter(word=>word.length>3&&low.includes(word)).length})).sort((left,right)=>right.score-left.score);
       const matches=scored.filter(item=>item.score>0).slice(0,2).map(item=>({id:item.card.id,title:item.card.title}));
+      
+      const isGreeting = /^(?:hi|halo|hei|hello|pagi|siang|sore|malam|assalamu(?:'|a)?laikum|permisi|bisa bantu|tolong|tes)\b/i.test(low);
+      const isGratitude = /(?:terima\s*kasih|makasih|thanks|thank\s*you|alhamdulillah|baik\s*terima\s*kasih)/i.test(low);
+      const isBankQuery = /(?:rekening|cek\s*rekening|cekrekening|nomor\s*rekening|transfer\s*ke\s*siapa)/i.test(low);
+      const isPhoneQuery = /(?:nomor\s*(?:hp|telepon|wa|whatsapp)|aduan\s*nomor|cek\s*nomor)/i.test(low);
+      const isMoneyRecovery = /(?:uang\s*(?:kembali|bisa\s*balik|hilang)|kembalikan\s*uang|bisa\s*kembali)/i.test(low);
+      const isCallCenter = /(?:call\s*center|nomor\s*resmi|telepon\s*bank|hotline)/i.test(low);
+      const isPoliceReport = /(?:lapor\s*polisi|lapor\s*ke\s*polisi|kantor\s*polisi|bikin\s*laporan)/i.test(low);
+      const isApkMalware = /(?:apk|unduh\s*file|surat\s*undangan|resi\s*paket|instal\s*aplikasi)/i.test(low);
+
+      let customHeadline = null;
+      let customSummary = null;
+      let customClues = null;
+      let customUncertainties = null;
+      let customNextActions = null;
+      let customSuggestions = null;
+
+      if (!urgent && !submittedUrl) {
+        if (isGreeting) {
+          customHeadline = "Asisten Konsultasi WargaSiaga";
+          customSummary = "Halo! Saya Asisten Keamanan WargaSiaga siap membantu konsultasi Anda. Ada pesan mencurigakan, nomor kontak terduga, atau transaksi yang ingin Anda tanyakan langkah pengamanannya?";
+          customClues = ["Pengguna membuka sesi konsultasi dan bantuan."];
+          customUncertainties = ["Belum ada rincian peristiwa atau bukti transaksi yang dibagikan."];
+          customNextActions = ["Tuliskan peristiwa atau pertanyaan yang ingin Anda periksa.", "Gunakan tombol contoh pertanyaan di bawah ini untuk panduan cepat."];
+          customSuggestions = ["Bagaimana cara memastikan keaslian rekening bank?", "Apa langkah darurat jika sudah terlanjur transfer uang?", "Bagaimana cara membedakan link resmi dan palsu?"];
+        } else if (isGratitude) {
+          customHeadline = "Konsultasi Selesai";
+          customSummary = "Sama sama! Tetap selalu waspada dan jaga kerahasiaan data perbankan Anda. Jangan ragu bertanya kembali jika menemui kejanggalan digital lainnya.";
+          customClues = ["Pengguna menyampaikan apresiasi dan menutup sesi."];
+          customUncertainties = ["Tidak ada kendala aktif yang dilaporkan saat ini."];
+          customNextActions = ["Simpan bukti percakapan atau tautan resmi jika diperlukan di kemudian hari.", "Bagikan edukasi kewaspadaan ini kepada orang terdekat dan keluarga Anda."];
+          customSuggestions = ["Bagaimana cara melaporkan modus baru ke Lapor Warga?", "Apa saja ciri ciri akun media sosial tiruan?", "Ke mana harus melapor jika ada nomor mencurigakan baru?"];
+        } else if (isBankQuery) {
+          customHeadline = "Panduan Periksa Rekening Bank";
+          customSummary = "Untuk memeriksa rekam jejak rekening bank atau dompet digital yang mencurigakan, gunakan portal resmi CekRekening.id milik Kementerian Komdigi.";
+          customClues = ["Pertanyaan mengenai pengecekan keaslian nomor rekening atau dompet digital."];
+          customUncertainties = ["Status rekening dapat berubah sewaktu waktu berdasarkan riwayat aduan masyarakat."];
+          customNextActions = ["Buka situs resmi https://cekrekening.id melalui peramban mandiri.", "Masukkan nama bank dan nomor rekening untuk melihat riwayat pelaporan.", "Jangan transfer dana sebelum status rekening dipastikan wajar."];
+          customSuggestions = ["Bagaimana jika rekening sudah terlanjur saya transfer?", "Apakah bisa minta blokir rekening penipu ke bank?", "Ke mana harus melapor selain CekRekening.id?"];
+        } else if (isPhoneQuery) {
+          customHeadline = "Panduan Periksa Nomor Telepon / WA";
+          customSummary = "Nomor telepon seluler, SMS, atau WhatsApp yang terindikasi penipuan dapat diperiksa dan dilaporkan melalui portal resmi AduanNomor.id milik Komdigi.";
+          customClues = ["Pertanyaan mengenai pengecekan reputasi nomor kontak atau pengirim pesan."];
+          customUncertainties = ["Pelaku kerap mengganti nomor baru atau menggunakan teknik pemalsuan identitas."];
+          customNextActions = ["Buka portal resmi https://aduannomor.id.", "Laporkan nomor yang mengirim pesan penipuan dengan melampirkan tangkapan layar bukti.", "Blokir nomor tersebut pada perangkat Anda."];
+          customSuggestions = ["Bagaimana jika pelaku menghubungi lewat nomor tidak dikenal?", "Apakah aman membalas pesan nomor penipu?", "Bagaimana membedakan pesan resmi bank dari SMS biasa?"];
+        } else if (isMoneyRecovery) {
+          customHeadline = "Waspada Modus Pengembalian Dana";
+          customSummary = "Hati hati terhadap tawaran oknum di media sosial atau peretas yang mengklaim dapat mengembalikan uang korban penipuan dengan meminta bayaran di muka. Itu adalah penipuan tahap kedua.";
+          customClues = ["Pertanyaan seputar penarikan kembali atau pemulihan dana yang telah terkirim."];
+          customUncertainties = ["Hanya pihak bank penerbit dan penegak hukum yang berwenang menelusuri aliran dana secara legal."];
+          customNextActions = ["Jangan membayar biaya administrasi atau jasa kepada siapa pun yang mengaku bisa menarik uang kembali.", "Segera hubungi bank Anda dan bank tujuan penerima melalui call center resmi.", "Buat laporan resmi kepolisian dan aduan ke Kontak OJK 157."];
+          customSuggestions = ["Berapa nomor call center resmi bank saya?", "Bagaimana alur pembuatan laporan ke kantor polisi?", "Apa berkas yang perlu disiapkan untuk pengaduan ke bank?"];
+        } else if (isCallCenter) {
+          customHeadline = "Verifikasi Kontak Call Center Resmi";
+          customSummary = "Gunakan hanya nomor call center resmi perbankan atau lembaga keuangan yang terdaftar di OJK. Jangan gunakan nomor yang Anda dapatkan dari kolom komentar, iklan sponsor mesin pencari, atau bio media sosial tidak bercentang.";
+          customClues = ["Pertanyaan mengenai kontak darurat atau call center resmi."];
+          customUncertainties = ["Nomor kontak di internet bisa dipalsukan oleh oknum pencari mangsa."];
+          customNextActions = ["Lihat nomor hotline resmi yang tertera pada bagian belakang kartu ATM Anda.", "Akses aplikasi perbankan resmi untuk fitur panggilan terintegrasi.", "Hubungi OJK melalui kontak 157 untuk verifikasi legalitas lembaga."];
+          customSuggestions = ["Berapa kontak WhatsApp resmi bank?", "Apakah bank pernah menghubungi nasabah lewat nomor seluler biasa?", "Bagaimana jika ada yang mengaku petugas bank minta kode OTP?"];
+        } else if (isPoliceReport) {
+          customHeadline = "Langkah Pembuatan Laporan Polisi";
+          customSummary = "Laporan kepolisian dibuat di kantor SPKT (Sentra Pelayanan Kepolisian Terpadu) terdekat, Polda, atau Polres setempat untuk tindak pidana siber dan penipuan transaksi digital.";
+          customClues = ["Pertanyaan mengenai pelaporan pidana ke pihak kepolisian."];
+          customUncertainties = ["Proses penegakan hukum membutuhkan alat bukti yang sah dan kronologi runtut."];
+          customNextActions = ["Kumpulkan dan cetak bukti percakapan utuh, bukti transfer, dan identitas nomor atau rekening pelaku.", "Bawa bukti fisik ke kantor polisi terdekat bagian SPKT.", "Dapatkan tanda bukti Surat Tanda Terima Laporan Polisi untuk pengajuan blokir ke bank."];
+          customSuggestions = ["Apakah pengurusan laporan polisi dipungut biaya?", "Berapa lama batas waktu efektif pemblokiran rekening pelaku?", "Bagaimana cara membuat draf kronologi laporan polisi?"];
+        } else if (isApkMalware) {
+          customHeadline = "Peringatan File Aplikasi APK Berbahaya";
+          customSummary = "File aplikasi (.apk) yang dikirim lewat WhatsApp atau Telegram sering kali merupakan malware pencuri SMS OTP, data m-banking, dan pengambil alih izin perangkat.";
+          customClues = ["Uraian berkaitan dengan file APK, aplikasi tidak resmi, atau undangan digital mencurigakan."];
+          customUncertainties = ["Malware dapat langsung aktif berjalan di latar belakang begitu izin akses diberikan."];
+          customNextActions = ["Jangan pernah mengunduh atau memasang file berekstensi .apk dari ruang obrolan.", "Jika terlanjur dipasang, segera aktifkan Mode Pesawat untuk memutus internet.", "Copot pemasangan aplikasi lewat Pengaturan dan periksa riwayat izin aplikasi."];
+          customSuggestions = ["Apa yang harus dilakukan jika m-banking sudah terlanjur tidak bisa dibuka?", "Bagaimana cara memulihkan ponsel setelah terkena malware APK?", "Apakah data kontak di ponsel saya bisa diambil pelaku?"];
+        }
+      }
+
       const clues=[];
-      if(/otp|pin|password|kata sandi|kode/.test(low))clues.push("Uraian menyebut data akses atau kode rahasia.");
-      if(/transfer|deposit|top up|bayar|rekening|dana/.test(low))clues.push("Uraian menyebut pembayaran atau pemindahan dana.");
-      if(/segera|sekarang|hari ini|cepat|dibekukan|hangus/.test(low))clues.push("Uraian memuat tekanan waktu atau ancaman akibat jika menunda.");
-      if(/link|tautan|apk|unduh|download|qr/.test(low))clues.push("Uraian menyebut tautan, file, aplikasi, atau QR yang perlu diverifikasi.");
-      if(!clues.length)clues.push("Belum ada tanda spesifik yang dapat dikenali dari uraian singkat ini.");
+      if(customClues){
+        clues.push(...customClues);
+      } else {
+        if(/otp|pin|password|kata sandi|kode/.test(low))clues.push("Uraian menyebut data akses atau kode rahasia.");
+        if(/transfer|deposit|top up|bayar|rekening|dana/.test(low))clues.push("Uraian menyebut pembayaran atau pemindahan dana.");
+        if(/segera|sekarang|hari ini|cepat|dibekukan|hangus/.test(low))clues.push("Uraian memuat tekanan waktu atau ancaman akibat jika menunda.");
+        if(/link|tautan|apk|unduh|download|qr/.test(low))clues.push("Uraian menyebut tautan, file, aplikasi, atau QR yang perlu diverifikasi.");
+        if(!clues.length)clues.push("Belum ada tanda spesifik yang dapat dikenali dari uraian singkat ini.");
+      }
       const urlAnalysis=inspectUrlLocally(submittedUrl);
       if(urlAnalysis?.signals?.length)clues.unshift(...urlAnalysis.signals.map(signal=>signal.label));
       const localAssessment=urgent||matches.length||urlAnalysis?.signals?.length?"warning_signs":submittedUrl?"verify_independently":"insufficient_information";
@@ -917,12 +1263,12 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         ? { id: "korban_mendesak", label: "Kondisi Mendesak", description: "Telah mengirimkan uang atau data rahasia." }
         : { id: "warga_umum", label: "Warga Umum", description: "Panduan keselamatan digital terarah." };
       const credibility = {
-        score: urgent ? 95 : clues.length ? 70 : 20,
-        level: urgent ? "tinggi" : clues.length ? "waspada" : "aman_bersyarat",
-        label: urgent ? "Tingkat Risiko Indikasi: Tinggi (95%)" : clues.length ? "Tingkat Risiko Indikasi: Waspada (70%)" : "Tingkat Risiko Indikasi: Rendah (20%)",
+        score: urgent ? 95 : (customHeadline ? 25 : clues.length ? 70 : 20),
+        level: urgent ? "tinggi" : (customHeadline ? "aman_bersyarat" : clues.length ? "waspada" : "aman_bersyarat"),
+        label: urgent ? "Tingkat Risiko Indikasi: Tinggi (95%)" : (customHeadline ? "Tingkat Risiko Indikasi: Rendah (25%)" : clues.length ? "Tingkat Risiko Indikasi: Waspada (70%)" : "Tingkat Risiko Indikasi: Rendah (20%)"),
         indicators: clues.slice(0, 4)
       };
-      const followUpSuggestions = [
+      const followUpSuggestions = customSuggestions || [
         "Bagaimana cara memastikan keaslian pihak yang menghubungi saya?",
         "Apa langkah pengamanan akun yang perlu saya lakukan sekarang?",
         "Ke mana saya bisa melaporkan nomor atau tautan mencurigakan ini?"
@@ -930,11 +1276,11 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       return {
         mode:urgent?"urgent":"rules",
         assessment:localAssessment,
-        headline:urgent?"Ambil langkah pengamanan sekarang":localAssessment==="warning_signs"?"Ada tanda yang patut dicurigai":localAssessment==="verify_independently"?"Tetap periksa melalui kanal terpisah":"Belum cukup informasi",
-        summary:urgent?"Karena uang, data, atau akses sudah diberikan, jangan menunggu analisis AI.":"Pemeriksaan tanpa AI tidak dapat memastikan pesan aman atau penipuan.",
+        headline:customHeadline || (urgent?"Ambil langkah pengamanan sekarang":localAssessment==="warning_signs"?"Ada tanda yang patut dicurigai":localAssessment==="verify_independently"?"Tetap periksa melalui kanal terpisah":"Belum cukup informasi"),
+        summary:customSummary || (urgent?"Karena uang, data, atau akses sudah diberikan, jangan menunggu analisis AI.":"Pemeriksaan tanpa AI tidak dapat memastikan pesan aman atau penipuan."),
         observedClues:clues,
-        uncertainties:["Identitas pihak yang menghubungi belum terverifikasi.","Keaslian nomor, akun, dokumen, atau tautan tidak dapat dipastikan dari teks."],
-        nextActions:urgent?["Buka bantuan sekarang dan ikuti urutan pengamanan.","Gunakan aplikasi atau kontak resmi yang Anda temukan secara mandiri."]:["Jangan klik, membayar, atau memberikan data tambahan.","Periksa melalui aplikasi, situs, atau nomor resmi yang Anda temukan sendiri."],
+        uncertainties:customUncertainties || ["Identitas pihak yang menghubungi belum terverifikasi.","Keaslian nomor, akun, dokumen, atau tautan tidak dapat dipastikan dari teks."],
+        nextActions:customNextActions || (urgent?["Buka bantuan sekarang dan ikuti urutan pengamanan.","Gunakan aplikasi atau kontak resmi yang Anda temukan secara mandiri."]:["Jangan klik, membayar, atau memberikan data tambahan.","Periksa melalui aplikasi, situs, atau nomor resmi yang Anda temukan sendiri."]),
         immediateActions:urgent?[exposure==="money"?"Hubungi bank atau penyedia dompet digital melalui kanal resmi sekarang.":"Amankan akun dari perangkat tepercaya dan hubungi penyedia layanan resmi.","Simpan bukti tanpa menyebarkan data sensitif."]:[],
         relatedCards:matches,
         officialLinks:[],
@@ -950,7 +1296,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     }
 
     function renderList(items){return `<ul>${(Array.isArray(items)?items:[]).map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>`;}
-    function attachHelpdeskEvents(){
+    function attachHelpdeskEvents(payload = {}){
       const followupForm=document.getElementById("helpdesk-followup-form");
       const followupInput=document.getElementById("helpdesk-followup-input");
       const dialogueMessages=document.getElementById("dialogue-messages");
@@ -968,10 +1314,11 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
 
       document.getElementById("btn-escalate-report")?.addEventListener("click", () => {
         const rawText = input.value.trim() || "";
+        const clues = Array.isArray(payload?.observedClues) ? payload.observedClues.join(". ") : "";
         const prefill = {
-          story: rawText || (payload.observedClues || []).join(". ") || payload.summary || "",
+          story: rawText || clues || payload?.summary || "",
           channel: (rawText.toLowerCase().includes("whatsapp") || rawText.toLowerCase().includes("wa")) ? "WhatsApp" : (rawText.toLowerCase().includes("telegram") ? "Telegram" : (rawText.toLowerCase().includes("sms") ? "SMS" : (rawText.toLowerCase().includes("email") ? "Email" : "WhatsApp"))),
-          type: payload.relatedCards?.[0]?.id || "",
+          type: payload?.relatedCards?.[0]?.id || "",
           url: urlInput.value.trim(),
           evidence: {
             phone: (rawText.match(/(?:\+?62|0)8[1-9][0-9]{6,11}/) || [])[0] || "",
@@ -983,7 +1330,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         try {
           sessionStorage.setItem("ws-report-prefill", JSON.stringify(prefill));
         } catch (_) {}
-        location.assign("lapor.html");
+        location.assign(toCleanUrl("lapor.html"));
       });
 
       document.getElementById("btn-escalate-urgent")?.addEventListener("click", () => {
@@ -992,7 +1339,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
           incidents: ["money", "otp"],
           bank: (rawText.match(/(?:bca|bri|mandiri|bni|bsi|jago|seabank|dana|ovo|gopay)\s*\d{8,18}/i) || [])[0] || "",
           contact: (rawText.match(/(?:\+?62|0)8[1-9][0-9]{6,11}/) || [])[0] || "",
-          chronology: rawText || payload.summary || ""
+          chronology: rawText || payload?.summary || ""
         };
         try {
           sessionStorage.setItem("ws-urgent-prefill", JSON.stringify(urgentPrefill));
@@ -1030,7 +1377,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         dialogueMessages.scrollTop=dialogueMessages.scrollHeight;
 
         try{
-          const response=await fetch("api/consult",{
+          const response=await fetch("/api/consult",{
             method:"POST",
             headers:{"Content-Type":"application/json","Accept":"application/json"},
             body:JSON.stringify({
@@ -1048,7 +1395,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
           loadingBubble.innerHTML=`<div><strong>${escapeHtml(followUpPayload.headline||"Panduan Lanjutan")}</strong>: ${escapeHtml(followUpPayload.summary)}</div>${actionsHtml}<span class="bubble-meta">${icon("bot")} Asisten WargaSiaga</span>`;
 
           consultHistory.push({role:"user",content:query});
-          consultHistory.push({role:"assistant",content:`${followUpPayload.headline}. ${followUpPayload.summary}`});
+          consultHistory.push({role:"assistant",content:`${followUpPayload.headline||"Panduan Lanjutan"}. ${followUpPayload.summary}`});
 
           if(Array.isArray(followUpPayload.followUpSuggestions)&&followUpPayload.followUpSuggestions.length){
             suggestionsChips.innerHTML=followUpPayload.followUpSuggestions.map(q=>`<button class="suggestion-chip" type="button" data-question="${escapeHtml(q)}">${escapeHtml(q)}</button>`).join("");
@@ -1060,7 +1407,21 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
             });
           }
         }catch(err){
-          loadingBubble.innerHTML=`<div>${escapeHtml(err.message||"Tidak dapat memuat respons lanjutan. Periksa koneksi Anda.")}</div><span class="bubble-meta">${icon("bot")} Sistem</span>`;
+          // Fallback to intelligent local helpdesk response
+          const localFallback = localResult(query, currentExposure, false, "");
+          const actionsHtml = localFallback.nextActions?.length ? `<div style="margin-top:6px;font-size:12px;opacity:0.95"><strong>Langkah disarankan:</strong><ul style="margin:4px 0 0 16px;padding:0">${localFallback.nextActions.map(a=>`<li>${escapeHtml(a)}</li>`).join("")}</ul></div>` : "";
+          loadingBubble.innerHTML = `<div><strong>${escapeHtml(localFallback.headline || "Panduan Lanjutan")}</strong>: ${escapeHtml(localFallback.summary)}</div>${actionsHtml}<span class="bubble-meta">${icon("bot")} Asisten WargaSiaga (Panduan Lokal)</span>`;
+          consultHistory.push({role:"user",content:query});
+          consultHistory.push({role:"assistant",content:`${localFallback.headline||"Panduan Lanjutan"}. ${localFallback.summary}`});
+          if(Array.isArray(localFallback.followUpSuggestions)&&localFallback.followUpSuggestions.length){
+            suggestionsChips.innerHTML=localFallback.followUpSuggestions.map(q=>`<button class="suggestion-chip" type="button" data-question="${escapeHtml(q)}">${escapeHtml(q)}</button>`).join("");
+            document.querySelectorAll(".suggestion-chip").forEach(btn=>{
+              btn.addEventListener("click",()=>{
+                followupInput.value=btn.dataset.question;
+                followupForm.requestSubmit();
+              });
+            });
+          }
         }finally{
           sendBtn.disabled=false;
           dialogueMessages.scrollTop=dialogueMessages.scrollHeight;
@@ -1087,12 +1448,12 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       const featureKeys=new Set();
       const features=requestedFeatures.map(item=>{
         const reason=String(item?.reason||"").trim().slice(0,140);
-        if(item?.feature==="urgent-help")return {key:"urgent-help",label:"Buka bantuan darurat",description:reason||"Amankan uang, akun, dan perangkat.",href:"bantuan-darurat.html",iconName:"alert",urgent:true};
-        if(item?.feature==="modus-library")return {key:"modus-library",label:"Cari modus serupa",description:reason||"Bandingkan dengan katalog panduan.",href:"modus.html",iconName:"book"};
-        if(item?.feature==="community-patterns")return {key:"community-patterns",label:"Buka Lapor Warga",description:reason||"Baca contoh anonim atau buat laporan demo.",href:"laporan.html",iconName:"users"};
+        if(item?.feature==="urgent-help")return {key:"urgent-help",label:"Buka bantuan darurat",description:reason||"Amankan uang, akun, dan perangkat.",href:toCleanUrl("bantuan-darurat.html"),iconName:"alert",urgent:true};
+        if(item?.feature==="modus-library")return {key:"modus-library",label:"Cari modus serupa",description:reason||"Bandingkan dengan katalog panduan.",href:toCleanUrl("modus.html"),iconName:"book"};
+        if(item?.feature==="community-patterns")return {key:"community-patterns",label:"Buka Lapor Warga",description:reason||"Baca contoh anonim atau buat laporan demo.",href:toCleanUrl("laporan.html"),iconName:"users"};
         if(item?.feature==="guide"){
           const card=DATA.cards.find(candidate=>candidate.id===item.cardId);
-          if(card)return {key:`guide:${card.id}`,label:card.title,description:reason||"Buka panduan modus terkait.",href:`modus-detail.html?id=${encodeURIComponent(card.id)}`,iconName:card.icon||"book"};
+          if(card)return {key:`guide:${card.id}`,label:card.title,description:reason||"Buka panduan modus terkait.",href:toCleanUrl(`modus-detail.html?id=${encodeURIComponent(card.id)}`),iconName:card.icon||"book"};
         }
         return null;
       }).filter(item=>item&&!featureKeys.has(item.key)&&featureKeys.add(item.key));
@@ -1179,7 +1540,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
             <h3>Jadikan Konsultasi Ini sebagai Laporan Warga</h3>
             <p>AI telah mengidentifikasi pola ini. Teruskan sebagai laporan anonim untuk melindungi warga lain dari modus serupa.</p>
           </div>
-          <button class="btn btn-primary btn-sm" id="btn-escalate-report" type="button">${icon("file")} Buat Laporan Warga ${icon("arrow")}</button>
+          <a class="btn btn-primary btn-sm" id="btn-escalate-report" href="${toCleanUrl("lapor.html")}">${icon("file")} Buat Laporan Warga ${icon("arrow")}</a>
         </div>
         ${(urgent || (activeCredibility && (activeCredibility.level === "tinggi" || activeCredibility.score >= 50))) ? `
         <div class="consult-urgent-escalation-card">
@@ -1189,7 +1550,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
             <p>Jangan menunda. Akses bantuan darurat untuk panduan telepon call center bank, naskah bicara resmi, dan draf email aduan ke OJK 157.</p>
           </div>
           <div class="consult-urgent-actions">
-            <a class="btn btn-urgent btn-sm" id="btn-escalate-urgent" href="bantuan-darurat.html">${icon("phone")} Bantuan Darurat & Draf Laporan ${icon("arrow")}</a>
+            <a class="btn btn-urgent btn-sm" id="btn-escalate-urgent" href="${toCleanUrl("bantuan-darurat.html")}">${icon("phone")} Bantuan Darurat & Draf Laporan ${icon("arrow")}</a>
             <a class="btn btn-secondary btn-sm" href="tel:157">${icon("phone")} Telepon OJK 157</a>
           </div>
         </div>` : ""}
@@ -1197,7 +1558,41 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
         <details class="result-disclosure"><summary>${icon("shieldCheck")} Privasi dan batasan</summary><div class="privacy-box"><p>${escapeHtml(redaction)}</p><p>${escapeHtml(payload.notice||"")}</p><p>${escapeHtml(payload.disclaimer||"")}</p><p>${escapeHtml(payload.retention||"")}</p></div></details>`;
       document.getElementById("consult-ready-state")?.classList.add("hidden");
       result.classList.remove("hidden");
-      attachHelpdeskEvents();
+
+      document.getElementById("btn-escalate-report")?.addEventListener("click", () => {
+        const rawText = input.value.trim() || "";
+        const clues = Array.isArray(payload?.observedClues) ? payload.observedClues.join(". ") : "";
+        const prefill = {
+          story: rawText || clues || payload?.summary || "",
+          channel: (rawText.toLowerCase().includes("whatsapp") || rawText.toLowerCase().includes("wa")) ? "WhatsApp" : (rawText.toLowerCase().includes("telegram") ? "Telegram" : (rawText.toLowerCase().includes("sms") ? "SMS" : (rawText.toLowerCase().includes("email") ? "Email" : "WhatsApp"))),
+          type: payload?.relatedCards?.[0]?.id || "",
+          url: urlInput.value.trim(),
+          evidence: {
+            phone: (rawText.match(/(?:\+?62|0)8[1-9][0-9]{6,11}/) || [])[0] || "",
+            bank: (rawText.match(/(?:bca|bri|mandiri|bni|bsi|jago|seabank|dana|ovo|gopay)\s*\d{8,18}/i) || [])[0] || "",
+            email: (rawText.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i) || [])[0] || "",
+            url: urlInput.value.trim() || (rawText.match(/https?:\/\/[^\s]+/i) || [])[0] || ""
+          }
+        };
+        try {
+          sessionStorage.setItem("ws-report-prefill", JSON.stringify(prefill));
+        } catch (_) {}
+      });
+
+      document.getElementById("btn-escalate-urgent")?.addEventListener("click", () => {
+        const rawText = input.value.trim() || "";
+        const urgentPrefill = {
+          incidents: ["money", "otp"],
+          bank: (rawText.match(/(?:bca|bri|mandiri|bni|bsi|jago|seabank|dana|ovo|gopay)\s*\d{8,18}/i) || [])[0] || "",
+          contact: (rawText.match(/(?:\+?62|0)8[1-9][0-9]{6,11}/) || [])[0] || "",
+          chronology: rawText || payload?.summary || ""
+        };
+        try {
+          sessionStorage.setItem("ws-urgent-prefill", JSON.stringify(urgentPrefill));
+        } catch (_) {}
+      });
+
+      attachHelpdeskEvents(payload);
       result.focus({preventScroll:true});
       result.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
     }
@@ -1225,7 +1620,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       result.classList.remove("hidden");
       const controller=new AbortController(), timeout=setTimeout(()=>controller.abort(),18000);
       try{
-        const response=await fetch("api/consult",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({text:raw,url:submittedUrl,exposure,consent:consent.checked}),signal:controller.signal});
+        const response=await fetch("/api/consult",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({text:raw,url:submittedUrl,exposure,consent:consent.checked}),signal:controller.signal});
         const payload=await response.json().catch(()=>null);
         if(!response.ok)throw new Error(payload?.error?.message||"Layanan belum dapat memproses permintaan.");
         renderAssessment(payload, raw);
@@ -1357,6 +1752,24 @@ Terima kasih atas perhatian dan perlindungan kepada konsumen.`;
       }
     } catch (_) {}
 
+    // Check modus param from URL
+    try {
+      const urgentUrlParams = new URLSearchParams(location.search);
+      const urgentModus = urgentUrlParams.get("modus");
+      if (urgentModus) {
+        const card = DATA.cards.find(c => c.id === urgentModus || c.slug === urgentModus);
+        if (card) {
+          if (["bank-otp", "apk-phishing", "game-reward-account"].includes(card.id)) {
+            choices.forEach(ch => { if (ch.value === "otp" || ch.value === "access") ch.checked = true; });
+          }
+          if (["job-deposit", "investment-return", "prize-refund", "recovery-scam", "illegal-online-loan", "family-emergency", "romance-scam", "marketplace-diversion", "invoice-redirection"].includes(card.id)) {
+            choices.forEach(ch => { if (ch.value === "money") ch.checked = true; });
+          }
+          update();
+        }
+      }
+    } catch (_) {}
+
     renderOfficialDraft();
   }
 
@@ -1407,6 +1820,53 @@ Terima kasih atas perhatian dan perlindungan kepada konsumen.`;
         if (prefill.evidence.url && document.getElementById("report-evidence-url")) document.getElementById("report-evidence-url").value = prefill.evidence.url;
       }
     }
+
+    // Check modus param from URL
+    try {
+      const reportParams = new URLSearchParams(location.search);
+      const modusQuery = reportParams.get("modus");
+      if (modusQuery && !prefill) {
+        const matchingCard = [...type.options].find(o => o.value === modusQuery);
+        if (matchingCard) {
+          type.value = modusQuery;
+          const cObj = DATA.cards.find(c => c.id === modusQuery);
+          const notice = document.getElementById("prefill-notice");
+          if (notice && cObj) {
+            notice.innerHTML = `
+              <div class="prefill-notice-content">
+                <div>${icon("sparkles")} <strong>Pola Terpilih Otomatis:</strong> Modus “${escapeHtml(cObj.title)}” dari panduan yang baru Anda baca telah diterapkan pada laporan ini. Lengkapi cerita dan bukti Anda di bawah.</div>
+                <button class="btn-text-xs" type="button" id="btn-clear-report-modus">${icon("close")} Ganti Pola</button>
+              </div>`;
+            notice.classList.remove("hidden");
+            document.getElementById("btn-clear-report-modus")?.addEventListener("click", () => {
+              type.value = "";
+              story.value = "";
+              document.getElementById("report-count").textContent = "0";
+              notice.classList.add("hidden");
+            });
+          }
+          if (!story.value.trim() && cObj) {
+            story.value = `Saya ingin melaporkan dugaan penipuan terkait modus "${cObj.title}":\n\nKronologi kejadian:\n`;
+            document.getElementById("report-count").textContent = story.value.length;
+          }
+          if (cObj?.channels?.length) {
+            const chanEl = document.getElementById("report-channel");
+            if ([...chanEl.options].some(o => o.value.toLowerCase() === cObj.channels[0].toLowerCase())) {
+              chanEl.value = cObj.channels[0];
+            }
+          }
+          document.getElementById("report-period").value = "7 hari terakhir";
+        }
+      }
+    } catch (_) {}
+
+    document.getElementById("btn-report-to-consult")?.addEventListener("click", () => {
+      const currentDraft = story.value.trim();
+      if (currentDraft) {
+        try { sessionStorage.setItem("ws-consult-draft", currentDraft); } catch (_) {}
+      }
+      location.assign(toCleanUrl("konsultasi.html?from=lapor"));
+    });
 
     const fileInput = document.getElementById("report-evidence-file");
     const filePreview = document.getElementById("report-file-preview");
@@ -1483,7 +1943,7 @@ Terima kasih atas perhatian dan perlindungan kepada konsumen.`;
       const cVal = document.getElementById("report-evidence-contact")?.value.trim() || "";
       const uVal = document.getElementById("report-evidence-url")?.value.trim() || "";
 
-      fetch("api/report", {
+      fetch("/api/report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1498,7 +1958,7 @@ Terima kasih atas perhatian dan perlindungan kepada konsumen.`;
           const codeEl = document.getElementById("report-success-code");
           if (codeEl) codeEl.textContent = data.code;
           const linkEl = document.getElementById("report-success-status-link");
-          if (linkEl) linkEl.href = `status-laporan.html?code=${encodeURIComponent(data.code)}`;
+          if (linkEl) linkEl.href = toCleanUrl(`status-laporan.html?code=${encodeURIComponent(data.code)}`);
         }
       }).catch(() => {});
 
@@ -1577,7 +2037,7 @@ Terima kasih atas perhatian dan perlindungan kepada konsumen.`;
       if(ok){
         updateResultView(code, null);
         result.focus();
-        fetch(`api/report/status?code=${encodeURIComponent(code)}`)
+        fetch(`/api/report/status?code=${encodeURIComponent(code)}`)
           .then(r => r.ok ? r.json() : null)
           .then(data => {
             if (data?.report) updateResultView(code, data.report);
@@ -1591,17 +2051,121 @@ Terima kasih atas perhatian dan perlindungan kepada konsumen.`;
   }
 
   function initDetail() {
+    try {
+      const detailParams = new URLSearchParams(location.search);
+      const reqId = detailParams.get("id");
+      const card = DATA.cards.find(c => c.id === reqId || c.slug === reqId);
+      if (card) {
+        const category = MODUS_CATEGORIES.find(c => c.cardIds?.includes(card.id) || c.id === card.categoryId) || MODUS_CATEGORIES[1];
+        sessionStorage.setItem("ws-last-viewed-modus", JSON.stringify({
+          id: card.id,
+          slug: card.slug,
+          title: card.title,
+          summary: card.summary,
+          example: card.fictionalExample,
+          categoryId: category.id,
+          categoryLabel: category.label,
+          channels: card.channels,
+          warningSigns: card.warningSigns,
+          timestamp: Date.now()
+        }));
+      }
+    } catch (_) {}
+
     const field=document.getElementById("share-url"), button=document.getElementById("share-guide");
     if(field)field.value=location.href;
     button?.addEventListener("click",async()=>{const disclosure=button.closest("details");if(disclosure)disclosure.open=true;try{await navigator.clipboard.writeText(location.href);button.innerHTML=`${icon("check")} Tautan disalin`;toast("Tautan panduan disalin");setTimeout(()=>button.innerHTML=`${icon("copy")} Salin tautan`,1800);}catch(_){field?.focus();field?.select();toast("Tautan dipilih. Tekan Ctrl+C untuk menyalin.");}});
     const dialog=document.getElementById("capture-dialog"), open=document.getElementById("capture-open"), close=document.getElementById("capture-close");
     open?.addEventListener("click",()=>dialog?.showModal());
-    close?.addEventListener("click",()=>dialog?.close());
+    close?.addEventListener("click",()=>{dialog?.close();open?.focus();});
     dialog?.addEventListener("click",event=>{const bounds=dialog.getBoundingClientRect();if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)dialog.close();});
     dialog?.addEventListener("close",()=>open?.focus());
   }
 
+  function initReportsList() {
+    const tabs = document.querySelectorAll("[data-report-category-id]");
+    const cards = document.querySelectorAll(".report-card[data-report-cat]");
+    if (!tabs.length || !cards.length) return;
+
+    let recentModus = null;
+    try {
+      const rawRecent = sessionStorage.getItem("ws-last-viewed-modus");
+      if (rawRecent) recentModus = JSON.parse(rawRecent);
+    } catch (_) {}
+
+    function applyCategory(catId) {
+      tabs.forEach(t => {
+        const isMatch = t.dataset.reportCategoryId === catId;
+        t.classList.toggle("active", isMatch);
+        t.setAttribute("aria-selected", String(isMatch));
+      });
+      cards.forEach(c => {
+        const match = catId === "all" || c.dataset.reportCat === catId;
+        c.classList.toggle("hidden", !match);
+      });
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        applyCategory(tab.dataset.reportCategoryId);
+      });
+    });
+
+    if (recentModus) {
+      const cat = MODUS_CATEGORIES.find(c => c.cardIds?.includes(recentModus.id) || c.id === recentModus.categoryId);
+      if (cat && cat.id !== "all") {
+        applyCategory(cat.id);
+        const container = document.getElementById("report-category-group")?.closest(".category-classification");
+        if (container) {
+          const banner = document.createElement("div");
+          banner.className = "report-context-banner";
+          banner.id = "report-recent-context-banner";
+          banner.innerHTML = `
+            <div class="context-banner-text">
+              <span class="highlight-pill teal">${icon("sparkles")} Modus Terkait dari Panduan</span>
+              <strong>Menampilkan Laporan Kategori: ${escapeHtml(cat.label)}</strong>
+              <p>Disesuaikan dengan panduan “${escapeHtml(recentModus.title)}” yang baru Anda baca. Lihat laporan yang dibagikan sesama warga.</p>
+            </div>
+            <div class="context-banner-actions">
+              <a class="btn btn-primary btn-sm" href="${toCleanUrl(`lapor.html?modus=${encodeURIComponent(recentModus.id)}`)}">${icon("file")} Buat Laporan Kasus Ini</a>
+              <button class="btn btn-ghost btn-sm" id="btn-show-all-reports" type="button">Tampilkan Semua Kategori</button>
+            </div>`;
+          container.parentNode.insertBefore(banner, container);
+          document.getElementById("btn-show-all-reports")?.addEventListener("click", () => {
+            applyCategory("all");
+            banner.remove();
+          });
+        }
+      }
+    }
+  }
+
+  function normalizeUrlBar() {
+    try {
+      const p = window.location.pathname;
+      if (p.endsWith(".html") || p.includes(".html")) {
+        const clean = p.replace(/\/index\.html$/, "/")
+                       .replace(/index\.html$/, "")
+                       .replace(/\.html$/, "");
+        window.history.replaceState(null, "", (clean || "/") + window.location.search + window.location.hash);
+      }
+    } catch (_) {}
+  }
+
+  function initCleanNavigation() {
+    normalizeUrlBar();
+    document.addEventListener("click", (event) => {
+      const anchor = event.target.closest("a");
+      if (!anchor || !anchor.getAttribute("href")) return;
+      const rawHref = anchor.getAttribute("href");
+      if (rawHref.startsWith("http:") || rawHref.startsWith("https:") || rawHref.startsWith("mailto:") || rawHref.startsWith("tel:") || rawHref.startsWith("#")) return;
+      if (rawHref.includes(".html")) {
+        anchor.setAttribute("href", toCleanUrl(rawHref));
+      }
+    }, true);
+  }
+
   window.WS_UTILS = Object.freeze({ redactSensitive, detectUrgentExposure, escapeHtml });
 
-  initShell(); initHomeAsk(); initFilters(); initConsult(); initUrgent(); initReport(); initStatus(); initDetail();
+  initCleanNavigation(); initShell(); initHomeAsk(); initFilters(); initConsult(); initUrgent(); initReport(); initStatus(); initDetail(); initReportsList();
 })();

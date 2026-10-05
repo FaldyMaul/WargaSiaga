@@ -9,6 +9,7 @@ vm.createContext(sandbox);
 vm.runInContext(dataSource, sandbox, { timeout: 1000, filename: "assets/js/data.js" });
 
 export const cards = Object.freeze(sandbox.window.WS_DATA.cards.map((card) => Object.freeze(card)));
+export const categories = Object.freeze((sandbox.window.WS_DATA.categories || []).map((cat) => Object.freeze(cat)));
 
 export const officialLinks = Object.freeze({
   iasc: Object.freeze({ id: "iasc", label: "IASC — OJK / Satgas PASTI", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi finansial" }),
@@ -46,7 +47,7 @@ export function retrieveCards(text, limit = 3) {
 }
 
 export function toPublicCard(card) {
-  return { id: card.id, title: card.title, href: `modus-detail.html?id=${encodeURIComponent(card.id)}` };
+  return { id: card.id, title: card.title, categoryId: card.categoryId || null, categoryLabel: card.categoryLabel || null, href: `modus-detail?id=${encodeURIComponent(card.id)}` };
 }
 
 export function officialIdFromUrl(url) {

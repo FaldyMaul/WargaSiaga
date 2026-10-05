@@ -83,7 +83,10 @@ function serveProductionFile(request, response) {
   try { requestPath = decodeURIComponent(new URL(request.url, "http://local").pathname); }
   catch (_) { response.writeHead(400); response.end("Permintaan tidak valid."); return; }
   const relative = requestPath === "/" ? "index.html" : requestPath.replace(/^\/+/, "");
-  const filePath = path.resolve(distRoot, relative);
+  let filePath = path.resolve(distRoot, relative);
+  if ((!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) && fs.existsSync(`${filePath}.html`)) {
+    filePath = `${filePath}.html`;
+  }
   if (!filePath.startsWith(`${distRoot}${path.sep}`) || !fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
     setSecurityHeaders(response, true);
     response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
@@ -174,7 +177,17 @@ export async function createWargaSiagaServer(options = {}) {
       }
       return sendJson(response, 200, { found: true, code: requestedCode, report }, production);
     }
-    if (vite) return vite.middlewares(request, response, () => { response.writeHead(404); response.end("Halaman tidak ditemukan."); });
+    if (vite) {
+      const cleanPath = pathname.replace(/^\/+/, "");
+      if (cleanPath && !path.extname(cleanPath)) {
+        const candidateHtml = `${cleanPath}.html`;
+        if (fs.existsSync(path.resolve(projectRoot, candidateHtml))) {
+          const queryPart = request.url.includes("?") ? request.url.slice(request.url.indexOf("?")) : "";
+          request.url = `/${candidateHtml}${queryPart}`;
+        }
+      }
+      return vite.middlewares(request, response, () => { response.writeHead(404); response.end("Halaman tidak ditemukan."); });
+    }
     return serveProductionFile(request, response);
   });
 

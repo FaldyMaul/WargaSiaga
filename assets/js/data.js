@@ -1,10 +1,21 @@
 (function () {
   "use strict";
 
+  const MODUS_CATEGORIES = [
+    { id: "all", label: "Semua Kategori", icon: "search", count: 13 },
+    { id: "banking", label: "Perbankan & Akun", icon: "shieldCheck", desc: "OTP, rekening, dan pemulihan dana", cardIds: ["bank-otp", "recovery-scam"] },
+    { id: "job-investment", label: "Kerja & Investasi", icon: "briefcase", desc: "Deposit lowongan dan janji untung", cardIds: ["job-deposit", "investment-return"] },
+    { id: "malware-phishing", label: "Pesan & File Bahaya", icon: "link", desc: "APK, link phising, dan deepfake AI", cardIds: ["apk-phishing", "deepfake-impersonation"] },
+    { id: "commerce", label: "Jual Beli & Bisnis", icon: "bag", desc: "Transaksi luar platform & tagihan invoice", cardIds: ["marketplace-diversion", "invoice-redirection"] },
+    { id: "social-family", label: "Keluarga & Relasi", icon: "users", desc: "Panggilan darurat dan manipulasi asmara", cardIds: ["family-emergency", "romance-scam"] },
+    { id: "prize-loan", label: "Hadiah & Pinjaman", icon: "gift", desc: "Undian, reward game, dan pinjol ilegal", cardIds: ["prize-refund", "game-reward-account", "illegal-online-loan"] }
+  ];
+
   window.WS_DATA = {
+    categories: MODUS_CATEGORIES,
     cards: [
       {
-        id: "bank-otp",
+        id: "bank-otp", categoryId: "banking", categoryLabel: "Perbankan & Akun",
         slug: "penyamaran-bank-dan-permintaan-otp",
         title: "Mengaku dari bank dan meminta OTP",
         summary: "Pelaku mengaku petugas bank, membuat situasi terasa darurat, lalu meminta kode OTP, PIN, atau data untuk masuk ke akun.",
@@ -22,7 +33,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "blue", icon: "shield"
       },
       {
-        id: "job-deposit",
+        id: "job-deposit", categoryId: "job-investment", categoryLabel: "Kerja & Investasi",
         slug: "lowongan-kerja-dengan-deposit",
         title: "Lowongan kerja yang meminta deposit",
         summary: "Tawaran kerja atau tugas sederhana menjanjikan komisi, lalu meminta isi saldo (top up), biaya aktivasi, atau deposit agar hasil bisa dicairkan.",
@@ -40,7 +51,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "orange", icon: "briefcase"
       },
       {
-        id: "marketplace-diversion",
+        id: "marketplace-diversion", categoryId: "commerce", categoryLabel: "Jual Beli & Bisnis",
         slug: "transaksi-di-luar-marketplace",
         title: "Diajak bertransaksi di luar platform jual-beli",
         summary: "Pembeli atau penjual diarahkan keluar dari platform jual-beli (marketplace) ke tautan pembayaran, kurir, atau rekening pribadi yang tidak dikenal.",
@@ -58,7 +69,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "blue", icon: "bag"
       },
       {
-        id: "investment-return",
+        id: "investment-return", categoryId: "job-investment", categoryLabel: "Kerja & Investasi",
         slug: "investasi-imbal-hasil-tidak-wajar",
         title: "Investasi dengan imbal hasil tidak wajar",
         summary: "Tawaran investasi, aset kripto, atau pinjaman menjanjikan untung pasti, cepat, dan tanpa risiko sambil menekan Anda segera setor.",
@@ -76,7 +87,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "violet", icon: "chart"
       },
       {
-        id: "apk-phishing",
+        id: "apk-phishing", categoryId: "malware-phishing", categoryLabel: "Pesan & File Bahaya",
         slug: "tautan-phishing-apk-dan-qr-palsu",
         title: "Tautan pencurian data, APK, atau QR palsu",
         summary: "Pesan menyamar sebagai undangan, tagihan, kurir, atau pemulihan akun agar Anda membuka tautan atau memasang aplikasi berbahaya.",
@@ -94,7 +105,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "orange", icon: "link"
       },
       {
-        id: "family-emergency",
+        id: "family-emergency", categoryId: "social-family", categoryLabel: "Keluarga & Relasi",
         slug: "keluarga-dalam-darurat-palsu",
         title: "Keluarga atau teman dalam “darurat”",
         summary: "Akun atau nomor baru mengaku sebagai orang dekat yang kehilangan ponsel, sakit, atau tertahan dan meminta transfer cepat.",
@@ -112,7 +123,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "violet", icon: "users"
       },
       {
-        id: "prize-refund",
+        id: "prize-refund", categoryId: "prize-loan", categoryLabel: "Hadiah & Pinjaman",
         slug: "hadiah-bantuan-atau-refund-palsu",
         title: "Hadiah, bantuan, atau pengembalian dana palsu",
         summary: "Pesan mengabarkan hadiah, bantuan, atau pengembalian dana (refund) yang tidak Anda minta, lalu meminta biaya atau data akun.",
@@ -130,7 +141,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "orange", icon: "gift"
       },
       {
-        id: "invoice-redirection",
+        id: "invoice-redirection", categoryId: "commerce", categoryLabel: "Jual Beli & Bisnis",
         slug: "perubahan-rekening-tagihan-bisnis",
         title: "Perubahan rekening pada tagihan bisnis",
         summary: "Pelaku menyusup atau meniru email pemasok, lalu mengirim perubahan rekening pembayaran untuk tagihan (invoice) yang tampak sah.",
@@ -148,7 +159,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "blue", icon: "invoice"
       },
       {
-        id: "recovery-scam",
+        id: "recovery-scam", categoryId: "banking", categoryLabel: "Perbankan & Akun",
         slug: "jasa-pemulihan-dana-palsu",
         title: "Jasa pemulihan dana palsu",
         summary: "Setelah seseorang mengalami kerugian, pihak lain mengaku bisa mengembalikan dana dengan meminta biaya, data, atau akses akun terlebih dahulu.",
@@ -166,7 +177,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "violet", icon: "refresh"
       },
       {
-        id: "game-reward-account",
+        id: "game-reward-account", categoryId: "prize-loan", categoryLabel: "Hadiah & Pinjaman",
         slug: "hadiah-game-gratis-dan-pencurian-akun",
         title: "Hadiah game atau item gratis yang mencuri akun",
         summary: "Pemain ditawari item, koin, akun, atau hadiah game gratis lalu diarahkan ke link lain untuk memasukkan kata sandi, kode, atau data orang tua.",
@@ -184,7 +195,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli dan uji bahasa anak diperlukan sebelum publikasi", status: "draft", accent: "blue", icon: "gift"
       },
       {
-        id: "deepfake-impersonation",
+        id: "deepfake-impersonation", categoryId: "malware-phishing", categoryLabel: "Pesan & File Bahaya",
         slug: "suara-video-palsu-mengatasnamakan-orang-dikenal",
         title: "Suara atau video palsu mengatasnamakan orang dikenal",
         summary: "Pelaku memakai suara, foto, atau video buatan AI agar terlihat seperti keluarga, atasan, atau figur publik yang meminta uang atau data.",
@@ -202,7 +213,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "violet", icon: "image"
       },
       {
-        id: "illegal-online-loan",
+        id: "illegal-online-loan", categoryId: "prize-loan", categoryLabel: "Hadiah & Pinjaman",
         slug: "pinjaman-online-ilegal-dan-dana-cepat-palsu",
         title: "Pinjaman online ilegal atau dana cepat palsu",
         summary: "Aplikasi atau akun menawarkan pinjaman cepat, lalu meminta biaya di muka, akses kontak berlebihan, atau memakai data pribadi untuk tekanan dan penagihan.",
@@ -220,7 +231,7 @@
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim editorial prototipe — validasi ahli diperlukan sebelum publikasi", status: "draft", accent: "orange", icon: "invoice"
       },
       {
-        id: "romance-scam",
+        id: "romance-scam", categoryId: "social-family", categoryLabel: "Keluarga & Relasi",
         slug: "hubungan-romantis-online-dan-permintaan-uang",
         title: "Hubungan romantis online yang berujung permintaan uang",
         summary: "Seseorang membangun kedekatan secara online, menghindari pertemuan nyata, lalu meminta uang untuk keadaan darurat, hadiah tertahan, perjalanan, atau investasi.",
@@ -239,12 +250,13 @@
       }
     ],
     reports: [
-      { id:"demo-1", title:"Tawaran tugas harian berujung permintaan isi saldo", summary:"Pelapor menerima tawaran tugas melalui pesan. Setelah komisi kecil ditampilkan, akun diminta menambah saldo untuk membuka tugas berikutnya.", channel:"Telegram", period:"September 2026", related:"job-deposit", status:"published_unverified", moderatedAt:"2026-10-02" },
-      { id:"demo-2", title:"Perubahan rekening pembayaran pemasok", summary:"Email yang menyerupai pemasok meminta pembayaran invoice ke rekening baru. Ringkasan ini disamarkan dan belum merupakan kesimpulan resmi.", channel:"Email", period:"September 2026", related:"invoice-redirection", status:"published_unverified", moderatedAt:"2026-10-01" },
-      { id:"demo-3", title:"Pesan nomor baru mengatasnamakan anggota keluarga", summary:"Nomor tak dikenal mengaku sebagai anggota keluarga dan meminta bantuan transfer karena keadaan darurat.", channel:"WhatsApp", period:"Agustus 2026", related:"family-emergency", status:"published_unverified", moderatedAt:"2026-09-28" },
-      { id:"demo-4", title:"Pengiriman file APK surat undangan pernikahan di WhatsApp", summary:"Pesan dari nomor asing mengirimkan file berekstensi APK dengan nama Surat Undangan Pernikahan digital dan mendesak penerima membuka file tersebut.", channel:"WhatsApp", period:"Oktober 2026", related:"apk-phishing", status:"published_unverified", moderatedAt:"2026-10-03" },
-      { id:"demo-5", title:"Pembeli marketplace meminta transaksi lewat chat pribadi", summary:"Calon pembeli beralasan saldo akun bermasalah dan mengirimkan link verifikasi transaksi palsu di luar sistem resmi aplikasi jual beli.", channel:"Marketplace", period:"Oktober 2026", related:"marketplace-diversion", status:"published_unverified", moderatedAt:"2026-10-03" },
-      { id:"demo-6", title:"Tawaran pinjaman dana cepat via SMS tanpa agunan", summary:"Pesan SMS menjanjikan pinjaman instan langsung cair dengan syarat mentransfer biaya administrasi provisi ke rekening pribadi lebih dahulu.", channel:"SMS", period:"September 2026", related:"illegal-online-loan", status:"published_unverified", moderatedAt:"2026-09-30" }
+      { id:"demo-0", title:"Penelepon mengaku call center bank meminta kode verifikasi SMS", summary:"Pelapor dihubungi nomor seluler yang mengaku dari call center bank mengabarkan adanya transaksi mencurigakan dan meminta 6 digit kode OTP.", channel:"Telepon", period:"Oktober 2026", related:"bank-otp", category:"banking", status:"published_unverified", moderatedAt:"2026-10-04" },
+      { id:"demo-1", title:"Tawaran tugas harian berujung permintaan isi saldo", summary:"Pelapor menerima tawaran tugas melalui pesan. Setelah komisi kecil ditampilkan, akun diminta menambah saldo untuk membuka tugas berikutnya.", channel:"Telegram", period:"September 2026", related:"job-deposit", category:"job-investment", status:"published_unverified", moderatedAt:"2026-10-02" },
+      { id:"demo-2", title:"Perubahan rekening pembayaran pemasok", summary:"Email yang menyerupai pemasok meminta pembayaran invoice ke rekening baru. Ringkasan ini disamarkan dan belum merupakan kesimpulan resmi.", channel:"Email", period:"September 2026", related:"invoice-redirection", category:"commerce", status:"published_unverified", moderatedAt:"2026-10-01" },
+      { id:"demo-3", title:"Pesan nomor baru mengatasnamakan anggota keluarga", summary:"Nomor tak dikenal mengaku sebagai anggota keluarga dan meminta bantuan transfer karena keadaan darurat.", channel:"WhatsApp", period:"Agustus 2026", related:"family-emergency", category:"social-family", status:"published_unverified", moderatedAt:"2026-09-28" },
+      { id:"demo-4", title:"Pengiriman file APK surat undangan pernikahan di WhatsApp", summary:"Pesan dari nomor asing mengirimkan file berekstensi APK dengan nama Surat Undangan Pernikahan digital dan mendesak penerima membuka file tersebut.", channel:"WhatsApp", period:"Oktober 2026", related:"apk-phishing", category:"malware-phishing", status:"published_unverified", moderatedAt:"2026-10-03" },
+      { id:"demo-5", title:"Pembeli marketplace meminta transaksi lewat chat pribadi", summary:"Calon pembeli beralasan saldo akun bermasalah dan mengirimkan link verifikasi transaksi palsu di luar sistem resmi aplikasi jual beli.", channel:"Marketplace", period:"Oktober 2026", related:"marketplace-diversion", category:"commerce", status:"published_unverified", moderatedAt:"2026-10-03" },
+      { id:"demo-6", title:"Tawaran pinjaman dana cepat via SMS tanpa agunan", summary:"Pesan SMS menjanjikan pinjaman instan langsung cair dengan syarat mentransfer biaya administrasi provisi ke rekening pribadi lebih dahulu.", channel:"SMS", period:"September 2026", related:"illegal-online-loan", category:"prize-loan", status:"published_unverified", moderatedAt:"2026-09-30" }
     ]
   };
 })();

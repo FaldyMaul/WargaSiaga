@@ -42,13 +42,26 @@ async function run() {
   if (!healthResponse.ok || health.aiAvailable !== false || "apiKey" in health) throw new Error("Production API health contract failed.");
   const assetUrls = new Set();
 
-  for (const route of routes) {
+  const cleanRoutes = [
+    "",
+    "modus",
+    "modus-detail?id=bank-otp",
+    "konsultasi",
+    "bantu-orang-lain",
+    "bantuan-darurat",
+    "laporan",
+    "lapor",
+    "status-laporan",
+    "tentang"
+  ];
+
+  for (const route of [...routes, ...cleanRoutes]) {
     const url = `${baseUrl}/${route}`;
     const response = await fetch(url);
-    if (!response.ok) throw new Error(`${route} returned ${response.status}.`);
-    if (!response.headers.get("content-security-policy")?.includes("default-src 'self'")) throw new Error(`${route} is missing the production Content-Security-Policy.`);
+    if (!response.ok) throw new Error(`${route || "/"} returned ${response.status}.`);
+    if (!response.headers.get("content-security-policy")?.includes("default-src 'self'")) throw new Error(`${route || "/"} is missing the production Content-Security-Policy.`);
     const html = await response.text();
-    if (!html.includes('<div id="app"></div>')) throw new Error(`${route} is missing the application mount point.`);
+    if (!html.includes('<div id="app"></div>')) throw new Error(`${route || "/"} is missing the application mount point.`);
 
     for (const match of html.matchAll(/(?:src|href)="([^"]+\/assets\/[^"]+)"/g)) {
       assetUrls.add(new URL(match[1], url).href);
