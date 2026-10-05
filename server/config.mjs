@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const serverDir = path.dirname(fileURLToPath(import.meta.url));
 export const projectRoot = path.resolve(serverDir, "..");
+export const localEnvPath = path.resolve(projectRoot, ".env");
 export const workspaceEnvPath = path.resolve(projectRoot, "..", ".env");
 
 function parseEnvFile(filePath) {
@@ -36,7 +37,9 @@ function numberValue(value, fallback, minimum, maximum) {
 }
 
 export function loadRuntimeConfig(overrides = {}) {
-  const fileValues = overrides.skipEnv ? {} : parseEnvFile(workspaceEnvPath);
+  const localValues = overrides.skipEnv ? {} : parseEnvFile(localEnvPath);
+  const workspaceValues = overrides.skipEnv ? {} : parseEnvFile(workspaceEnvPath);
+  const fileValues = { ...workspaceValues, ...localValues };
   const read = (key, fallback = "") => process.env[key] ?? fileValues[key] ?? fallback;
   const apiDisabled = booleanValue(read("AI_DISABLE"));
   const apiKey = apiDisabled ? "" : read("AI_API_KEY");
@@ -50,6 +53,8 @@ export function loadRuntimeConfig(overrides = {}) {
     } catch (_) { return false; }
   })();
 
+  const isCloudOrProd = Boolean(process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_STATIC_URL || (process.env.PORT && !process.env.HOST));
+
   return Object.freeze({
     apiKey,
     baseUrl,
@@ -57,7 +62,7 @@ export function loadRuntimeConfig(overrides = {}) {
     apiDisabled,
     allowInsecureProvider,
     configured: Boolean(!apiDisabled && apiKey && baseUrl && model && validProviderUrl),
-    host: read("HOST", "127.0.0.1"),
+    host: read("HOST", isCloudOrProd ? "0.0.0.0" : "127.0.0.1"),
     port: numberValue(read("PORT"), 4173, 0, 65535),
     timeoutMs: numberValue(read("AI_TIMEOUT_MS", "15000"), 15000, 250, 30000),
     rateLimitWindowMs: numberValue(read("AI_RATE_WINDOW_MS", "60000"), 60000, 1000, 3600000),
