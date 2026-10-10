@@ -2,12 +2,12 @@
   "use strict";
 
   const MODUS_CATEGORIES = [
-    { id: "all", label: "Semua Kategori", icon: "search", count: 13 },
-    { id: "banking", label: "Perbankan & Akun", icon: "shieldCheck", desc: "OTP, rekening, dan pemulihan dana", cardIds: ["bank-otp", "recovery-scam"] },
+    { id: "all", label: "Semua Kategori", icon: "search", count: 17 },
+    { id: "banking", label: "Perbankan & Akun", icon: "shieldCheck", desc: "OTP, rekening, dan pemulihan dana", cardIds: ["bank-otp", "recovery-scam", "webapk-update-palsu"] },
     { id: "job-investment", label: "Kerja & Investasi", icon: "briefcase", desc: "Deposit lowongan dan janji untung", cardIds: ["job-deposit", "investment-return"] },
-    { id: "malware-phishing", label: "Pesan & File Bahaya", icon: "link", desc: "APK, link phising, dan deepfake AI", cardIds: ["apk-phishing", "deepfake-impersonation"] },
-    { id: "commerce", label: "Jual Beli & Bisnis", icon: "bag", desc: "Transaksi luar platform & tagihan invoice", cardIds: ["marketplace-diversion", "invoice-redirection"] },
-    { id: "social-family", label: "Keluarga & Relasi", icon: "users", desc: "Panggilan darurat dan manipulasi asmara", cardIds: ["family-emergency", "romance-scam"] },
+    { id: "malware-phishing", label: "Pesan & File Bahaya", icon: "link", desc: "APK, link phising, dan deepfake AI", cardIds: ["apk-phishing", "deepfake-impersonation", "sms-blaster-fake-bts"] },
+    { id: "commerce", label: "Jual Beli & Bisnis", icon: "bag", desc: "Transaksi luar platform & tagihan invoice", cardIds: ["marketplace-diversion", "invoice-redirection", "quishing-qris-palsu"] },
+    { id: "social-family", label: "Keluarga & Relasi", icon: "users", desc: "Panggilan darurat dan manipulasi asmara", cardIds: ["family-emergency", "romance-scam", "ai-voice-clone-emergency"] },
     { id: "prize-loan", label: "Hadiah & Pinjaman", icon: "gift", desc: "Undian, reward game, dan pinjol ilegal", cardIds: ["prize-refund", "game-reward-account", "illegal-online-loan"] }
   ];
 
@@ -247,6 +247,161 @@
         officialLinks: [{ label: "IASC", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi" }, { label: "AduanNomor", url: "https://aduannomor.id/", purpose: "Cek atau laporkan nomor mencurigakan" }],
         sources: [{ publisher: "Polda Jawa Timur — pengungkapan love scam 2026", url: "https://tribratanews.jatim.polri.go.id/ditressiber-polda-jatim-bongkar-sindikat-penipuan-online-modus-percintaan-love-scamming-internasional", accessedAt: "2026-10-04" }, { publisher: "Scamwatch — Relationship scams", url: "https://www.scamwatch.gov.au/types-of-scams/relationship-scams", accessedAt: "2026-10-04" }],
         reviewedAt: "2026-10-04", nextReviewAt: "2027-01-04", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "violet", icon: "users"
+      },
+      {
+        id: "sms-blaster-fake-bts", categoryId: "malware-phishing", categoryLabel: "Pesan & File Bahaya",
+        slug: "sms-dari-menara-bts-palsu-sms-blaster",
+        title: "SMS dari menara BTS palsu (SMS Blaster)",
+        summary: "Pelaku mengoperasikan pemancar sinyal seluler palsu (Fake BTS / IMSI-Catcher) untuk membajak sinyal ponsel terdekat dan mengirim SMS penipuan massal dengan nama resmi instansi tanpa nomor pengirim.",
+        fictionalExample: "“Poin Telko Anda sebanyak 1.500 poin akan hangus hari ini. Segera tukarkan hadiah smartphone di telko-poin.example/klaim sebelum pukul 24.00.”",
+        channels: ["SMS", "Jaringan Seluler"],
+        contexts: ["Perbankan", "Belanja online", "Telekomunikasi"],
+        ageGroups: ["teens", "adults", "elderly"],
+        tactics: ["Menyamar", "Mendesak", "Manipulasi Jaringan"],
+        requestedAction: "Membuka tautan dalam SMS, mengisi nomor kartu kredit/debit, atau memasukkan kode OTP pada situs tiruan.",
+        warningSigns: [
+          "SMS masuk dengan nama pengirim resmi (Alpha Sender ID) tetapi berada di thread pesan terpisah atau mencurigakan.",
+          "Sinyal ponsel mendadak turun dari 4G/5G ke 2G saat menerima pesan di area publik atau kemacetan.",
+          "Pesan berisi ancaman poin hangus atau pemblokiran akun yang mendesak Anda mengeklik tautan asing.",
+          "Tautan yang disertakan bukan domain resmi penyedia layanan melainkan domain asing atau tautan pemendek."
+        ],
+        independentChecks: [
+          "Jangan pernah mengeklik tautan yang ada di dalam SMS penukaran hadiah atau notifikasi mendesak.",
+          "Buka aplikasi resmi operator atau perbankan secara mandiri yang Anda unduh dari toko aplikasi resmi.",
+          "Hubungi call center resmi penyedia layanan melalui nomor resmi yang tercantum di kartu fisik atau situs resmi."
+        ],
+        alreadyActedSteps: [
+          "Jika sudah memasukkan data perbankan di situs web, segera blokir kartu dan rekening melalui aplikasi mobile banking atau call center.",
+          "Ganti kata sandi perbankan dan email yang terhubung melalui perangkat lain yang aman.",
+          "Simpan tangkapan layar SMS mencurigakan dan laporkan ke AduanNomor (Komdigi) serta kanal resmi kepolisian.",
+          "Gunakan layanan IASC jika terjadi kerugian finansial akibat transaksi tidak sah."
+        ],
+        officialLinks: [
+          { label: "AduanNomor — Komdigi", url: "https://aduannomor.id/", purpose: "Laporkan nomor dan SMS penipuan" },
+          { label: "IASC — OJK", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi keuangan" }
+        ],
+        sources: [
+          { publisher: "Komdigi & Bareskrim Polri — Penindakan SMS Blaster Fake BTS 2026", url: "https://aduannomor.id/", accessedAt: "2026-10-10" },
+          { publisher: "OJK / Indonesia Anti-Scam Centre", url: "https://iasc.ojk.go.id/", accessedAt: "2026-10-10" }
+        ],
+        reviewedAt: "2026-10-10", nextReviewAt: "2027-01-10", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "teal", icon: "link"
+      },
+      {
+        id: "ai-voice-clone-emergency", categoryId: "social-family", categoryLabel: "Keluarga & Relasi",
+        slug: "panggilan-darurat-dengan-kloning-suara-ai",
+        title: "Panggilan darurat dengan kloning suara AI",
+        summary: "Pelaku mencuplik rekaman suara kerabat Anda dari media sosial, lalu memakai teknologi AI voice clone untuk menirukan suara persis aslinya dan menelepon Anda mengaku tertimpa kecelakaan atau ditahan polisi.",
+        fictionalExample: "“Halo Ma, tolong Ma! Aku kena musibah tabrakan di kantor polisi, butuh uang jaminan Rp5 juta sekarang cepat Ma...”",
+        channels: ["Telepon", "WhatsApp", "Pesan Suara"],
+        contexts: ["Keluarga", "Darurat", "Sekolah"],
+        ageGroups: ["teens", "adults", "elderly"],
+        tactics: ["Menyamar", "Mendesak", "Kloning Suara AI", "Menakut-nakuti"],
+        requestedAction: "Mentransfer uang segera ke rekening perorangan yang ditunjuk pelaku dengan dalih uang tebusan atau jaminan darurat.",
+        warningSigns: [
+          "Penelepon bersuara sangat mirip kerabat dekat yang menangis atau panik dan meminta uang segera.",
+          "Panggilan menggunakan nomor ponsel asing atau nomor baru dengan alasan ponsel lama rusak atau disita.",
+          "Ada pihak lain yang mengaku polisi atau dokter yang mengambil alih telepon dan mengancam proses hukum.",
+          "Penelepon melarang Anda mematikan telepon atau menghubungi anggota keluarga lain."
+        ],
+        independentChecks: [
+          "Tarik napas dalam-dalam, tetap tenang, dan matikan panggilan telepon.",
+          "Segera hubungi nomor telepon kerabat yang bersangkutan melalui kontak yang tersimpan di ponsel Anda.",
+          "Tanyakan pertanyaan verifikasi rahasia keluarga (family safe word) yang hanya diketahui oleh keluarga inti.",
+          "Hubungi kerabat lain atau pihak sekolah/kantor untuk memastikan keberadaan kerabat tersebut secara nyata."
+        ],
+        alreadyActedSteps: [
+          "Jika uang sudah terlanjur ditransfer, segera hubungi call center bank Anda untuk memblokir rekening tujuan.",
+          "Laporkan nomor telepon dan nomor rekening penipu ke platform AduanNomor dan CekRekening.",
+          "Buat laporan pengaduan resmi ke IASC (OJK) dan Sentra Pelayanan Kepolisian Terpadu (SPKT) terdekat.",
+          "Beri tahu seluruh keluarga besar agar tidak merespons panggilan serupa dari sindikat yang sama."
+        ],
+        officialLinks: [
+          { label: "IASC — OJK", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi keuangan" },
+          { label: "AduanNomor", url: "https://aduannomor.id/", purpose: "Laporkan nomor telepon mencurigakan" },
+          { label: "CekRekening", url: "https://cekrekening.id/", purpose: "Periksa dan laporkan rekening penipu" }
+        ],
+        sources: [
+          { publisher: "BSSN & Polri — Peringatan Ancaman Deepfake Audio dan Voice Clone", url: "https://aduannomor.id/", accessedAt: "2026-10-10" },
+          { publisher: "OJK / Indonesia Anti-Scam Centre", url: "https://iasc.ojk.go.id/", accessedAt: "2026-10-10" }
+        ],
+        reviewedAt: "2026-10-10", nextReviewAt: "2027-01-10", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "violet", icon: "users"
+      },
+      {
+        id: "quishing-qris-palsu", categoryId: "commerce", categoryLabel: "Jual Beli & Bisnis",
+        slug: "stiker-qris-palsu-dan-qr-pencuri-data-quishing",
+        title: "Stiker QRIS palsu dan QR pencuri data (Quishing)",
+        summary: "Pelaku menempelkan stiker barcode QRIS palsu di atas QRIS merchant toko, tempat ibadah, atau fasilitas umum untuk mengalihkan pembayaran ke rekening pelaku atau mengarahkan korban ke situs pencuri data.",
+        fictionalExample: "“Silakan pindai stiker QRIS di meja kasir. Namun saat discan, nama penerima yang muncul bukan nama toko melainkan 'Donasi Mandiri' atau membuka link browser.”",
+        channels: ["QRIS", "Stiker Fisik", "Kamera HP"],
+        contexts: ["Belanja online", "Keluarga", "Perbankan"],
+        ageGroups: ["kids", "teens", "adults", "elderly"],
+        tactics: ["Tautan palsu", "Menyamar", "Mendesak"],
+        requestedAction: "Memindai kode QR, mentransfer uang ke rekening tak dikenal, atau memasukkan data login perbankan di situs web hasil scan QR.",
+        warningSigns: [
+          "Stiker QR terlihat bertumpuk, memiliki ketebalan ganda, atau miring menimpa label QRIS asli merchant.",
+          "Nama penerima (merchant name) yang muncul di aplikasi pembayaran berbeda dengan nama toko tempat Anda bertransaksi.",
+          "Setelah discan, kamera ponsel membuka browser internet yang meminta nomor kartu debit atau data login.",
+          "Stiker QR berada di tempat terbuka tanpa pengawasan langsung dari kasir toko."
+        ],
+        independentChecks: [
+          "Raba permukaan stiker QRIS untuk memastikan tidak ada lapisan stiker tempelan di atasnya.",
+          "Konfirmasikan secara lisan kepada kasir nama penerima yang tertera di layar sebelum menekan tombol bayar.",
+          "Jika kode QR membuka tautan web di browser, batalkan transaksi dan jangan memasukkan data apa pun."
+        ],
+        alreadyActedSteps: [
+          "Beri tahu pemilik toko atau kasir seketika bahwa stiker QRIS mereka telah ditimpa pihak tak bertanggung jawab.",
+          "Jika salah mentransfer uang, simpan bukti transaksi dan segera laporkan ke penyedia dompet digital atau bank Anda.",
+          "Laporkan rekening penampung penipuan ke CekRekening dan IASC OJK.",
+          "Laporkan temuan stiker palsu kepada pengelola tempat atau kepolisian setempat."
+        ],
+        officialLinks: [
+          { label: "IASC — OJK", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian transaksi keuangan" },
+          { label: "CekRekening", url: "https://cekrekening.id/", purpose: "Laporkan rekening penampung penipuan" }
+        ],
+        sources: [
+          { publisher: "Bank Indonesia — Panduan Edukasi Pelindungan Transaksi QRIS", url: "https://iasc.ojk.go.id/", accessedAt: "2026-10-10" },
+          { publisher: "Komdigi — CekRekening", url: "https://cekrekening.id/", accessedAt: "2026-10-10" }
+        ],
+        reviewedAt: "2026-10-10", nextReviewAt: "2027-01-10", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "amber", icon: "bag"
+      },
+      {
+        id: "webapk-update-palsu", categoryId: "banking", categoryLabel: "Perbankan & Akun",
+        slug: "pembaruan-aplikasi-bank-palsu-via-browser-webapk",
+        title: "Pembaruan aplikasi bank palsu via browser (WebAPK)",
+        summary: "Situs web phising memanfaatkan teknologi WebAPK untuk memasang aplikasi malware perbankan langsung dari browser Android tanpa peringatan keamanan standar toko aplikasi resmi.",
+        fictionalExample: "“M-Banking Anda mengalami pembaruan sistem. Klik pasang pembaruan Bank_Update.apk dari browser ini untuk mencegah pemblokiran akun.”",
+        channels: ["Browser Web", "WhatsApp", "SMS"],
+        contexts: ["Perbankan", "Keluarga"],
+        ageGroups: ["teens", "adults", "elderly"],
+        tactics: ["Menyamar", "Mendesak", "Tautan palsu"],
+        requestedAction: "Mengklik tombol 'Pasang Aplikasi' di browser, mengizinkan izin aksesibilitas dan SMS, serta memasukkan username/password perbankan.",
+        warningSigns: [
+          "Pemberitahuan pembaruan aplikasi bank muncul saat Anda membuka situs web internet, bukan di dalam aplikasi resmi.",
+          "Browser meminta izin untuk mengunduh dan menginstal aplikasi berformat .apk dari luar Play Store.",
+          "Aplikasi yang baru dipasang meminta izin Aksesibilitas (Accessibility Services) atau izin membaca SMS dan notifikasi.",
+          "Alamat web di bilah browser menggunakan nama domain aneh dan bukan domain resmi bank Anda."
+        ],
+        independentChecks: [
+          "Tolak dan tutup seluruh pop-up pembaruan aplikasi yang muncul dari dalam peramban web browser.",
+          "Periksa status pembaruan aplikasi hanya melalui Google Play Store atau Apple App Store resmi.",
+          "Ingat aturan baku: Perbankan nasional tidak pernah mendistribusikan pembaruan aplikasi lewat tautan browser."
+        ],
+        alreadyActedSteps: [
+          "Segera aktifkan Mode Pesawat (Airplane Mode) pada ponsel untuk memutus koneksi internet dan penyadapan OTP.",
+          "Buka Pengaturan HP > Aplikasi > temukan aplikasi mencurigakan yang baru diinstal dan lakukan 'Copot Pemasangan' (Uninstall).",
+          "Gunakan perangkat lain yang bersih untuk login ke mobile banking dan segera ganti kata sandi serta amankan rekening.",
+          "Hubungi call center resmi bank untuk pengamanan rekening dan laporkan ke IASC serta AduanKonten."
+        ],
+        officialLinks: [
+          { label: "IASC — OJK", url: "https://iasc.ojk.go.id/", purpose: "Pelaporan kerugian finansial perbankan" },
+          { label: "CekRekening", url: "https://cekrekening.id/", purpose: "Periksa dan laporkan rekening penipu" },
+          { label: "AduanKonten", url: "https://aduankonten.id/", purpose: "Laporkan tautan phishing dan malware web" }
+        ],
+        sources: [
+          { publisher: "Bank Indonesia — Panduan Pelindungan Nasabah terhadap Malware WebAPK", url: "https://iasc.ojk.go.id/", accessedAt: "2026-10-10" },
+          { publisher: "Komdigi — AduanKonten", url: "https://aduankonten.id/", accessedAt: "2026-10-10" }
+        ],
+        reviewedAt: "2026-10-10", nextReviewAt: "2027-01-10", reviewer: "Tim Editorial & Pakar Keamanan Siber WargaSiaga", status: "published", accent: "blue", icon: "shield"
       }
     ],
     reports: [
@@ -256,7 +411,11 @@
       { id:"demo-3", title:"Pesan nomor baru mengatasnamakan anggota keluarga", summary:"Nomor tak dikenal mengaku sebagai anggota keluarga dan meminta bantuan transfer karena keadaan darurat.", channel:"WhatsApp", period:"Agustus 2026", related:"family-emergency", category:"social-family", status:"published_unverified", moderatedAt:"2026-09-28" },
       { id:"demo-4", title:"Pengiriman file APK surat undangan pernikahan di WhatsApp", summary:"Pesan dari nomor asing mengirimkan file berekstensi APK dengan nama Surat Undangan Pernikahan digital dan mendesak penerima membuka file tersebut.", channel:"WhatsApp", period:"Oktober 2026", related:"apk-phishing", category:"malware-phishing", status:"published_unverified", moderatedAt:"2026-10-03" },
       { id:"demo-5", title:"Pembeli marketplace meminta transaksi lewat chat pribadi", summary:"Calon pembeli beralasan saldo akun bermasalah dan mengirimkan link verifikasi transaksi palsu di luar sistem resmi aplikasi jual beli.", channel:"Marketplace", period:"Oktober 2026", related:"marketplace-diversion", category:"commerce", status:"published_unverified", moderatedAt:"2026-10-03" },
-      { id:"demo-6", title:"Tawaran pinjaman dana cepat via SMS tanpa agunan", summary:"Pesan SMS menjanjikan pinjaman instan langsung cair dengan syarat mentransfer biaya administrasi provisi ke rekening pribadi lebih dahulu.", channel:"SMS", period:"September 2026", related:"illegal-online-loan", category:"prize-loan", status:"published_unverified", moderatedAt:"2026-09-30" }
+      { id:"demo-6", title:"Tawaran pinjaman dana cepat via SMS tanpa agunan", summary:"Pesan SMS menjanjikan pinjaman instan langsung cair dengan syarat mentransfer biaya administrasi provisi ke rekening pribadi lebih dahulu.", channel:"SMS", period:"September 2026", related:"illegal-online-loan", category:"prize-loan", status:"published_unverified", moderatedAt:"2026-09-30" },
+      { id:"demo-7", title:"SMS penukaran poin hadiah mencurigakan tanpa nomor pengirim", summary:"Pelapor menerima SMS mengatasnamakan operator seluler yang mengabarkan poin akan hangus dengan tautan klaim hadiah smartphone. Sinyal sempat turun ke 2G saat berada di keramaian.", channel:"SMS", period:"Oktober 2026", related:"sms-blaster-fake-bts", category:"malware-phishing", status:"published_unverified", moderatedAt:"2026-10-10" },
+      { id:"demo-8", title:"Panggilan telepon suara anak menangis meminta uang jaminan tabrakan", summary:"Pelapor ditelepon nomor tak dikenal dengan suara persis anak kandungnya yang menangis mengaku ditahan di kantor polisi dan meminta transfer Rp5.000.000 ke rekening orang lain.", channel:"Telepon", period:"Oktober 2026", related:"ai-voice-clone-emergency", category:"social-family", status:"published_unverified", moderatedAt:"2026-10-10" },
+      { id:"demo-9", title:"Stiker QRIS tempelan di meja kasir mengarah ke rekening perorangan", summary:"Pelapor memindai QRIS di kasir, namun di aplikasi pembayaran muncul nama penerima 'Donasi Umum' dan kasir mengonfirmasi stiker tersebut baru ditimpa orang asing.", channel:"QRIS", period:"Oktober 2026", related:"quishing-qris-palsu", category:"commerce", status:"published_unverified", moderatedAt:"2026-10-10" },
+      { id:"demo-10", title:"Pop-up browser meminta unduh Bank_Update.apk untuk aktivasi akun", summary:"Saat browsing di ponsel, muncul notifikasi bahwa m-banking kedaluwarsa dan mendesak mengunduh file WebAPK langsung dari halaman peramban web tersebut.", channel:"Browser", period:"Oktober 2026", related:"webapk-update-palsu", category:"banking", status:"published_unverified", moderatedAt:"2026-10-10" }
     ]
   };
 })();

@@ -41,12 +41,12 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
   };
   const AGE_IMAGES = { kids:ageKidsUrl, teens:ageTeensUrl, adults:ageAdultsUrl, elderly:ageElderlyUrl };
   const MODUS_CATEGORIES = window.WS_DATA?.categories || [
-    { id:"all", label:"Semua Kategori", icon:"search", count:13 },
-    { id:"banking", label:"Perbankan & Akun", icon:"shieldCheck", desc:"OTP, rekening, dan pemulihan dana", cardIds:["bank-otp", "recovery-scam"] },
+    { id:"all", label:"Semua Kategori", icon:"search", count:17 },
+    { id:"banking", label:"Perbankan & Akun", icon:"shieldCheck", desc:"OTP, rekening, dan pemulihan dana", cardIds:["bank-otp", "recovery-scam", "webapk-update-palsu"] },
     { id:"job-investment", label:"Kerja & Investasi", icon:"briefcase", desc:"Deposit lowongan dan janji untung", cardIds:["job-deposit", "investment-return"] },
-    { id:"malware-phishing", label:"Pesan & File Bahaya", icon:"link", desc:"APK, link phising, dan deepfake AI", cardIds:["apk-phishing", "deepfake-impersonation"] },
-    { id:"commerce", label:"Jual Beli & Bisnis", icon:"bag", desc:"Transaksi luar platform & tagihan invoice", cardIds:["marketplace-diversion", "invoice-redirection"] },
-    { id:"social-family", label:"Keluarga & Relasi", icon:"users", desc:"Panggilan darurat dan manipulasi asmara", cardIds:["family-emergency", "romance-scam"] },
+    { id:"malware-phishing", label:"Pesan & File Bahaya", icon:"link", desc:"APK, link phising, dan deepfake AI", cardIds:["apk-phishing", "deepfake-impersonation", "sms-blaster-fake-bts"] },
+    { id:"commerce", label:"Jual Beli & Bisnis", icon:"bag", desc:"Transaksi luar platform & tagihan invoice", cardIds:["marketplace-diversion", "invoice-redirection", "quishing-qris-palsu"] },
+    { id:"social-family", label:"Keluarga & Relasi", icon:"users", desc:"Panggilan darurat dan manipulasi asmara", cardIds:["family-emergency", "romance-scam", "ai-voice-clone-emergency"] },
     { id:"prize-loan", label:"Hadiah & Pinjaman", icon:"gift", desc:"Undian, reward game, dan pinjol ilegal", cardIds:["prize-refund", "game-reward-account", "illegal-online-loan"] }
   ];
   const ACCOUNT_SECRET_LITERACY = {
@@ -80,7 +80,10 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     "bank-otp":ACCOUNT_SECRET_LITERACY,
     "apk-phishing":ACCOUNT_SECRET_LITERACY,
     "illegal-online-loan":ACCOUNT_SECRET_LITERACY,
-    "game-reward-account":ACCOUNT_SECRET_LITERACY
+    "game-reward-account":ACCOUNT_SECRET_LITERACY,
+    "webapk-update-palsu":ACCOUNT_SECRET_LITERACY,
+    "sms-blaster-fake-bts":ACCOUNT_SECRET_LITERACY,
+    "quishing-qris-palsu":ACCOUNT_SECRET_LITERACY
   };
   const GUIDE_VISUAL_META = {
     "bank-otp":{alt:"Warga memeriksa panggilan tak dikenal melalui perangkat dan kanal terpisah.",steps:["Jangan berikan OTP, PIN, atau kata sandi.","Tutup panggilan lalu hubungi bank dari aplikasi atau nomor resmi.","Jika data sudah terbagi, amankan akun dan hubungi bank segera."]},
@@ -95,7 +98,11 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
     "game-reward-account":{alt:"Anak menunjukkan tawaran hadiah game kepada orang tua sebelum menekan apa pun.",steps:["Jangan buka link atau bagikan kode akun demi hadiah.","Tunjukkan pesan kepada orang dewasa tepercaya dan cek dari game resmi.","Jika akun terambil, ganti kata sandi dan keluarkan sesi lain."]},
     "deepfake-impersonation":{alt:"Visual wajah dan suara tiruan dibandingkan dengan kontak tepercaya dan perisai.",steps:["Jangan bertindak hanya karena suara atau wajah tampak dikenal.","Hubungi orang tersebut kembali lewat nomor lama atau kanal lain.","Jika uang terkirim, hubungi penyedia dan simpan bukti panggilan."]},
     "illegal-online-loan":{alt:"Warga memeriksa tawaran pinjaman di ponsel melalui informasi resmi di laptop.",steps:["Jangan memasang aplikasi atau membayar biaya pencairan dari chat.","Periksa legalitas penyedia melalui kanal resmi OJK.","Jika data terambil, cabut izin aplikasi dan amankan akun."]},
-    "romance-scam":{alt:"Dua teman memeriksa pesan hubungan online sebelum uang atau foto dikirim.",steps:["Jangan kirim uang, kripto, atau foto pribadi tambahan.","Ceritakan kepada orang tepercaya dan periksa identitas secara terpisah.","Jika rugi atau diancam, amankan akun, simpan bukti, dan laporkan."]}
+    "romance-scam":{alt:"Dua teman memeriksa pesan hubungan online sebelum uang atau foto dikirim.",steps:["Jangan kirim uang, kripto, atau foto pribadi tambahan.","Ceritakan kepada orang tepercaya dan periksa identitas secara terpisah.","Jika rugi atau diancam, amankan akun, simpan bukti, dan laporkan."]},
+    "sms-blaster-fake-bts":{alt:"Visual menara BTS palsu dan sinyal liar diblokir perisai keamanan ponsel pintar.",steps:["Jangan buka link hadiah atau verifikasi dari SMS pengirim tak dikenal.","Buka aplikasi resmi operator atau periksa nomor resmi call center secara mandiri.","Jika data rahasia sudah terbagi, amankan rekening bank dan laporkan ke AduanNomor."]},
+    "ai-voice-clone-emergency":{alt:"Dua anggota keluarga memeriksa panggilan suara darurat bersama-sama melalui kanal kedua yang aman.",steps:["Jangan langsung transfer saat mendengar suara keluarga meminta tolong darurat.","Tutup panggilan dan hubungi nomor lama anggota keluarga yang tersimpan di kontak Anda.","Jika uang terkirim, segera hubungi bank resmi Anda dan buat laporan di IASC."]},
+    "quishing-qris-palsu":{alt:"Pelaku usaha dan konsumen memverifikasi nama merchant pada stand QRIS sebelum bertransaksi.",steps:["Periksa fisik stiker QRIS dari stiker tempelan atau lapisan barcode mencurigakan.","Pastikan nama merchant di layar aplikasi pembayaran persis sama dengan nama toko fisik.","Jika QR membuka halaman website atau meminta data kartu, batalkan dan laporkan segera."]},
+    "webapk-update-palsu":{alt:"Perisai keamanan digital menghalau pop-up instalasi aplikasi bank palsu dari web browser.",steps:["Jangan pernah menginstal file APK atau pembaruan aplikasi perbankan lewat browser.","Unduh dan perbarui aplikasi perbankan hanya melalui Google Play Store atau App Store resmi.","Jika aplikasi terpasang, aktifkan Mode Pesawat, cabut izin aplikasi, dan ganti password dari perangkat lain."]}
   };
   const page = document.body.dataset.page || "home";
   const root = document.getElementById("app");
@@ -323,7 +330,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
             <div class="category-header">
               <span class="eyebrow">Langkah 2</span>
               <strong>Pilih Kategori Kasus</strong>
-              <span class="category-hint">Klasifikasi 13 panduan tersedia untuk mempermudah pencarian</span>
+              <span class="category-hint">Klasifikasi ${DATA.cards.length} panduan tersedia untuk mempermudah pencarian</span>
             </div>
             <div class="category-chip-group" id="category-chip-group" role="tablist" aria-label="Pilih kategori modus">
               ${MODUS_CATEGORIES.map((cat, idx) => `
@@ -492,7 +499,7 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
                   <div class="ready-tip-title">${icon("sparkles")} Tips Konsultasi Cepat & Aman:</div>
                   <p>Tempelkan tautan yang Anda ragukan atau ceritakan percakapan secara singkat. Data sensitif seperti nomor rekening dan kontak disaring otomatis di perangkat Anda.</p>
                   <div class="ready-tip-actions">
-                    <a class="btn btn-secondary btn-sm" href="${toCleanUrl("modus.html")}">${icon("search")} Jelajahi 13 Katalog Modus</a>
+                    <a class="btn btn-secondary btn-sm" href="${toCleanUrl("modus.html")}">${icon("search")} Jelajahi ${DATA.cards.length} Katalog Modus</a>
                     <a class="btn btn-ghost btn-sm" href="${toCleanUrl("bantu-orang-lain.html")}">${icon("users")} Panduan Dampingi Kerabat</a>
                   </div>
                 </div>
