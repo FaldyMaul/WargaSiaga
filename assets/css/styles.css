@@ -1549,19 +1549,43 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
 }
 .report-stat-val {
   display: block;
-  font-size: 24px;
+  font-size: clamp(16px, 1.8vw, 20px);
   font-weight: 850;
   background: linear-gradient(135deg, #7a5af8 0%, #4338ca 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 .report-stat-label {
   display: block;
-  margin-top: 4px;
+  margin-top: 5px;
   font-size: 11.5px;
   font-weight: 650;
   color: #64748b;
+  line-height: 1.35;
+}
+
+.consult-exposure-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid #fec84b;
+  border-radius: 12px;
+  background: #fffcf5;
+  color: #7a271a;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.consult-exposure-alert .alert-icon {
+  color: var(--urgent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.consult-exposure-alert .alert-icon svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* Trending Modus Section */
