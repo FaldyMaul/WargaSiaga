@@ -157,7 +157,8 @@ async function run() {
     const cardImages=[...document.querySelectorAll('.modus-card-media img')];
     return {heroLoaded:hero?.naturalWidth>0,heroRatio:Number((hero?.getBoundingClientRect().width/hero?.getBoundingClientRect().height).toFixed(2)),portraits:portraits.length,portraitsLoaded:portraits.every(image=>image.naturalWidth>0),cardImages:cardImages.length,cardImagesLoaded:cardImages.every(image=>image.naturalWidth>0),scrollWidth:document.documentElement.scrollWidth};
   })()`);
-  if (!catalogueVisuals.heroLoaded || Math.abs(catalogueVisuals.heroRatio-1.5)>.04 || catalogueVisuals.portraits !== 4 || !catalogueVisuals.portraitsLoaded || catalogueVisuals.cardImages !== 13 || !catalogueVisuals.cardImagesLoaded || catalogueVisuals.scrollWidth > home.width) throw new Error(`Catalogue visual system failed: ${JSON.stringify(catalogueVisuals)}`);
+  const expectedCardCount = await evaluate("WS_DATA.cards.length");
+  if (!catalogueVisuals.heroLoaded || Math.abs(catalogueVisuals.heroRatio-1.5)>.04 || catalogueVisuals.portraits !== 4 || !catalogueVisuals.portraitsLoaded || catalogueVisuals.cardImages !== expectedCardCount || !catalogueVisuals.cardImagesLoaded || catalogueVisuals.scrollWidth > home.width) throw new Error(`Catalogue visual system failed: ${JSON.stringify(catalogueVisuals)}`);
   const catalogueControls = await evaluate(`(() => {
     const toggle=document.querySelector('#filter-toggle'), panel=document.querySelector('#filter-panel');
     toggle.click(); const filterOpened=panel.classList.contains('open')&&toggle.getAttribute('aria-expanded')==='true'&&toggle.textContent.includes('Tutup filter');

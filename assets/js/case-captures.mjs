@@ -89,5 +89,34 @@ export const CASE_CAPTURES = {
     alt:"Rekonstruksi chat hubungan online yang cepat menjadi intens lalu meminta uang atau foto secara rahasia.",
     signals:["Kedekatan dan komitmen dibangun sangat cepat tanpa pertemuan nyata.","Krisis mendadak dipakai untuk mengubah rasa sayang menjadi kewajiban membayar.","Permintaan merahasiakan hubungan memisahkan Anda dari pendapat orang tepercaya."],
     source:{label:"Pusiknas Bareskrim Polri — pola umum love scam",url:"https://pusiknas.polri.go.id/detail_artikel/dari_rayuan_ke_ancaman%3A_jejak_kekerasan_dalam_modus_love_scam"}
+  },
+  "sms-blaster-fake-bts": {
+    channel:"SMS OPERATOR", sender:"INFO-OPERATOR?", time:"11.13",
+    messages:["Poin reward Anda 1.500 akan kedaluwarsa hari ini.","Tukarkan poin dengan hadiah smartphone di telko-poin.example/klaim.","Segera klaim sebelum pukul 24.00 atau poin otomatis hangus."],
+    alt:"Rekonstruksi SMS palsu dari BTS palsu (SMS Blaster) yang menyamar sebagai operator resmi dengan batas waktu klaim hadiah.",
+    signals:["SMS masuk tanpa nomor telepon pengirim berkat perangkat BTS palsu (SMS Blaster).","Tautan mengarah ke situs palsu untuk mencuri data pribadi dan kartu bank.","Tekanan batas waktu penukaran poin dipakai untuk memicu kepanikan penerima."],
+    source:{label:"Komdigi & Bareskrim Polri — penindakan sindikat SMS Blaster",url:"https://aduannomor.id/"}
+  },
+  "ai-voice-clone-emergency": {
+    channel:"PANGGILAN / PESAN SUARA", sender:"Nomor Tak Dikenal", time:"14.32",
+    messages:["Halo Ma, tolong Ma! Aku kena musibah tabrakan di kantor polisi.","Petugas minta uang damai Rp5.000.000 sekarang juga agar tidak ditahan.","Tolong transfer ke rekening petugas ini, jangan telepon balik dulu Ma!"],
+    alt:"Rekonstruksi panggilan suara tiruan AI yang meniru suara kerabat dekat dan meminta uang jaminan darurat.",
+    signals:["Suara sangat mirip kerabat dekat dibuat memakai teknologi kloning suara AI.","Skenario darurat dramatis dipakai agar korban panik dan kehilangan nalar kritis.","Larangan menelepon balik bertujuan memutus jalur verifikasi ke nomor asli keluarga."],
+    source:{label:"Bareskrim Polri & BSSN — waspada manipulasi suara AI",url:"https://iasc.ojk.go.id/"}
+  },
+  "quishing-qris-palsu": {
+    channel:"PINDAI QRIS", sender:"Kasir / Meja Toko", time:"12.45",
+    messages:["Silakan scan stiker QRIS di atas meja kasir untuk pembayaran.","Layar ponsel menampilkan nama penerima 'DONASI UMUM' bukan nama toko fisik.","Tautan QRIS membuka pay-qris-dana.example/transfer yang meminta nomor kartu."],
+    alt:"Rekonstruksi stiker QRIS palsu yang menimpa barcode merchant resmi untuk mencuri pembayaran atau data kartu.",
+    signals:["Stiker QR fisik ditempel menimpa kode QR resmi milik merchant toko.","Nama merchant yang muncul di layar ponsel tidak cocok dengan nama toko fisik.","QR mengarahkan ke website phishing alih-alih alur pembayaran aplikasi resmi."],
+    source:{label:"Bank Indonesia — edukasi pelindungan konsumen bertransaksi QRIS",url:"https://iasc.ojk.go.id/"}
+  },
+  "webapk-update-palsu": {
+    channel:"BROWSER HP", sender:"Pemberitahuan Web", time:"10.09",
+    messages:["Pembaruan Keamanan M-Banking wajib dipasang untuk melanjutkan transaksi.","Unduh dan pasang aplikasi pembaruan: Bank_Update_v2.apk dari browser.","Harap izinkan instalasi aplikasi dari sumber browser ini."],
+    alt:"Rekonstruksi notifikasi web browser yang menyamar sebagai pembaruan keamanan bank dan mendesak pemasangan WebAPK berbahaya.",
+    signals:["Bank resmi tidak pernah meminta pembaruan aplikasi lewat browser internet.","Situs mendesak penginstalan paket aplikasi di luar Google Play Store atau App Store.","Izin instalasi dan akses SMS dipakai untuk membajak kode OTP dan saldo perbankan."],
+    source:{label:"Bank Indonesia & BSSN — waspada file WebAPK berbahaya",url:"https://cekrekening.id/"}
   }
 };
+

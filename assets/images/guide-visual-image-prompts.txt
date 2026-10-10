@@ -65,3 +65,23 @@ TARGET: guide-romance-scam.webp
 Use case: photorealistic-natural
 Primary request: an Indonesian adult in a calm home setting reviewing an online relationship message with a trusted friend before sending money or personal images.
 Visual cue: generic video-call silhouette on the device, wallet and personal photo album kept safely closed and separate.
+
+TARGET: guide-sms-blaster-fake-bts.webp
+Use case: stylized-concept
+Primary request: a cellular antenna tower broadcasting rogue red radio waves blocked before reaching a sleek smartphone by a translucent teal protective shield. Clean light pastel gradient backdrop.
+Style: premium 3D editorial diagram, crisp object separation, no human, no text.
+
+TARGET: guide-ai-voice-clone-emergency.webp
+Use case: photorealistic-natural
+Primary request: an Indonesian middle-aged adult sitting in a warm living room receiving an urgent phone call, pausing thoughtfully while a younger family member beside them uses a second separate smartphone to verify the caller's identity.
+Visual cue: two separate phones, calm verification, peaceful Indonesian home atmosphere.
+
+TARGET: guide-quishing-qris-palsu.webp
+Use case: photorealistic-natural
+Primary request: an Indonesian small business merchant and customer at a tidy shop counter, closely inspecting an acrylic tabletop QRIS payment stand together. Merchant points at the registered shop name printed on the card while customer looks at smartphone before paying.
+Visual cue: verification moment at counter, official seal inspection, no readable brand logos.
+
+TARGET: guide-webapk-update-palsu.webp
+Use case: stylized-concept
+Primary request: a generic smartphone on a clean surface with a browser popup showing an unknown app download icon that is blocked by a protective translucent teal security shield. Clean soft pastel gradient background with subtle purple and amber accents.
+Style: minimalist modern 3D editorial visualization, crisp elements, no human, no readable text.

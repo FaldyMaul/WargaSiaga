@@ -37,6 +37,10 @@ GUIDE VISUALS — 3:2
 - guide-deepfake-impersonation.webp
 - guide-illegal-online-loan.webp
 - guide-romance-scam.webp
+- guide-sms-blaster-fake-bts.webp
+- guide-ai-voice-clone-emergency.webp
+- guide-quishing-qris-palsu.webp
+- guide-webapk-update-palsu.webp
   Exact prompts, alt intent, and filenames: guide-visual-image-prompts.txt
 
 READABLE CASE RECONSTRUCTIONS — 4:5 SVG
@@ -53,9 +57,17 @@ READABLE CASE RECONSTRUCTIONS — 4:5 SVG
 - capture-deepfake-impersonation.svg
 - capture-illegal-online-loan.svg
 - capture-romance-scam.svg
+- capture-sms-blaster-fake-bts.svg
+- capture-ai-voice-clone-emergency.svg
+- capture-quishing-qris-palsu.svg
+- capture-webapk-update-palsu.svg
   Layout and privacy contract: 01-case-capture-layout-spec.md
   Exact copy, explanation, alt text, and research links: assets/js/case-captures.mjs
   Rebuild command: npm run captures:build
+
+REALISTIC CASE CAPTURES — 9:16 WEBP
+- capture-real-*-v1.webp (17/17 moduses supported with fallback to SVG)
+
 
 SOURCE POLICY
 - Editable PNG generations are retained in assets/images/sources/.
