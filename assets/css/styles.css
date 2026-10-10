@@ -107,7 +107,7 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
 .nav-link { display: inline-flex; align-items: center; min-height: 42px; padding: 0 13px; border-radius: 9px; color: #3b4855; font-size: 14px; font-weight: 650; }
 .nav-link:hover, .nav-link.active { color: var(--brand-deep); background: #f1f3f8; }
 .header-actions { display: flex; align-items: center; gap: 8px; }
-.icon-button { width: 42px; height: 42px; display: inline-grid; place-items: center; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); cursor: pointer; }
+.icon-button { width: 44px; height: 44px; min-width: 44px; min-height: 44px; display: inline-grid; place-items: center; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); cursor: pointer; }
 .icon-button:hover { background: var(--surface-soft); }
 .icon-button:active { background:var(--brand-soft); }
 .icon-button svg { width: 20px; height: 20px; }
@@ -1108,6 +1108,7 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
   .category-header { flex-direction:column; gap:2px; }
   .category-tab { min-height:38px; padding:5px 11px; font-size:12px; }
   .catalog-step-label { align-items:flex-start; flex-direction:column; gap:4px; }
+  .view-toggle-group { display: none !important; }
   .urgent-banner { grid-template-columns:auto 1fr; }
   .urgent-banner .btn { grid-column:1/-1; width:100%; }
   .article-head, .article-content, .form-card { padding:20px; }

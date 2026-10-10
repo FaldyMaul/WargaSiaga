@@ -810,10 +810,16 @@ const CAPTURE_IMAGE_URLS=Object.fromEntries(Object.keys({...CAPTURE_SVG_URLS,...
       toggle.innerHTML = icon(open ? "close" : "menu");
       if (returnFocus) toggle.focus();
     }
-    toggle?.addEventListener("click", () => setMenu(!menu.classList.contains("open")));
-    menu?.addEventListener("click", event=>{if(event.target.closest("a"))setMenu(false);});
-    document.addEventListener("keydown", event=>{if(event.key==="Escape"&&menu?.classList.contains("open"))setMenu(false,true);});
-    document.addEventListener("click", event=>{if(menu?.classList.contains("open")&&!event.target.closest(".site-header"))setMenu(false);});
+    toggle?.addEventListener("click", event => {
+      event.stopPropagation();
+      setMenu(!menu.classList.contains("open"));
+    });
+    menu?.addEventListener("click", event => {
+      event.stopPropagation();
+      if (event.target.closest("a")) setMenu(false);
+    });
+    document.addEventListener("keydown", event => { if (event.key === "Escape" && menu?.classList.contains("open")) setMenu(false, true); });
+    document.addEventListener("click", event => { if (menu?.classList.contains("open") && event.target.isConnected && !event.target.closest(".site-header")) setMenu(false); });
     const contrast = document.getElementById("contrast-toggle");
     let saved = false;
     try { saved = localStorage.getItem("ws-contrast") === "high"; } catch (_) {}

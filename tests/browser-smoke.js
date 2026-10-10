@@ -124,9 +124,13 @@ async function run() {
     toggle.click(); const menuOpened=menu.classList.contains('open')&&toggle.getAttribute('aria-expanded')==='true'&&toggle.getAttribute('aria-label')==='Tutup menu';
     document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
     const escapeClosed=!menu.classList.contains('open')&&document.activeElement===toggle;
-    toggle.click(); document.querySelector('main').click();
+    // Test inner icon touch / click bubbling
+    const svgIcon = toggle.querySelector('svg');
+    (svgIcon?.querySelector('line') || svgIcon || toggle).dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    const iconOpened = menu.classList.contains('open') && toggle.getAttribute('aria-expanded') === 'true';
+    document.querySelector('main').click();
     const outsideClosed=!menu.classList.contains('open');
-    return {contrastOn,contrastOff,menuOpened,escapeClosed,outsideClosed};
+    return {contrastOn,contrastOff,menuOpened,escapeClosed,iconOpened,outsideClosed};
   })()`);
   if (Object.values(shellControls).some((value) => !value)) throw new Error(`Shared shell controls failed: ${JSON.stringify(shellControls)}`);
   await evaluate("document.querySelector('#toast').classList.remove('show'); document.querySelector('#toast').textContent='';");
