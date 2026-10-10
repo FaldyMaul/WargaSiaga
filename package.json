@@ -4,6 +4,7 @@
   "private": true,
   "description": "Multi-page WargaSiaga application with a guarded server-side AI consultation",
   "scripts": {
+    "logo:build": "python scripts/build-logo-assets.py",
     "icons:build": "node scripts/build-lucide-icons.mjs",
     "captures:build": "node scripts/generate-case-captures.mjs",
     "literacy:build": "python scripts/extract-literacy-pdf-assets.py",
